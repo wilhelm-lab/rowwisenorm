@@ -5,33 +5,30 @@
 \title{normalize_row}
 \usage{
 normalize_row(
-  intensities,
+  lowest_level_df,
   exp_design,
   active = FALSE,
   ref = NULL,
-  performTotalSum = F,
-  refFunc = median,
+  refFunc = "median",
   na.rm = TRUE
 )
 }
 \arguments{
-\item{intensities}{lowest-level data frame}
+\item{lowest_level_df}{lowest-level data frame}
 
 \item{exp_design}{experimental design data frame}
 
-\item{active}{set as TRUE for interactive mode}
+\item{active}{Boolean that can be set as TRUE for interactive mode}
 
-\item{ref}{references can be directly set here}
+\item{ref}{references can be set here as Strings inside a vector}
 
-\item{performTotalSum}{set as TRUE for total sum scaling}
+\item{refFunc}{String that can be set as "median" or "sum"}
 
-\item{refFunc}{can be set as median or sum}
-
-\item{na.rm}{tells whether NA values are removed}
+\item{na.rm}{Boolean that tells whether NA values are removed}
 }
 \value{
 row-wise normalized lowest-level data frame
 }
 \description{
-Row-wise normalization
+Row-wise normalization of the lowest-level data
 }

@@ -4,16 +4,16 @@
 \alias{sum.normalize}
 \title{sum.normalize}
 \usage{
-\method{sum}{normalize}(data, refFunc = sum, norm = T, na.rm = T)
+\method{sum}{normalize}(data, refFunc = "sum", norm = T, na.rm = T)
 }
 \arguments{
 \item{data}{lowest-level data frame}
 
-\item{refFunc}{default is sum}
+\item{refFunc}{String that is to be set as "sum"}
 
 \item{norm}{scaling of values}
 
-\item{na.rm}{tells whether NA values are removed}
+\item{na.rm}{Boolean that tells whether NA values are removed}
 }
 \value{
 scaled lowest-level data frame

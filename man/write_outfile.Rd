@@ -9,7 +9,7 @@ write_outfile(lowest_level_df, additional_cols = NULL, filename = "")
 \arguments{
 \item{lowest_level_df}{lowest-level data frame}
 
-\item{additional_cols}{append the additional columns from the input file}
+\item{additional_cols}{optionally append the additional columns from the input file}
 
 \item{filename}{can be optionally specified}
 }

@@ -4,10 +4,10 @@
 \alias{log2_transform}
 \title{log2_transform}
 \usage{
-log2_transform(intensities)
+log2_transform(lowest_level_df)
 }
 \arguments{
-\item{intensities}{lowest-level data frame}
+\item{lowest_level_df}{lowest-level data frame}
 }
 \value{
 log2 transformed lowest-level data frame

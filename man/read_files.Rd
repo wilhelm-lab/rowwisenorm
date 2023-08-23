@@ -5,17 +5,17 @@
 \title{read_files}
 \usage{
 read_files(
-  file1,
-  file2,
+  data,
+  design,
   rm_only_by_site = TRUE,
   rm_reverse = TRUE,
   rm_contaminant = TRUE
 )
 }
 \arguments{
-\item{file1}{proteinGroups.txt file}
+\item{data}{data}
 
-\item{file2}{file of the experimental design}
+\item{design}{file of the experimental design}
 
 \item{rm_only_by_site}{remove rows being positive for only by site}
 
@@ -25,7 +25,7 @@ read_files(
 }
 \value{
 A list storing the lowest-level data frame, the data frame for the experimental design
-and a data frame with the remaining columns if present
+and a data frame with the remaining columns if present in this exact order
 }
 \description{
 Reading of the input files

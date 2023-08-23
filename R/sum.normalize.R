@@ -4,14 +4,22 @@
 #' Total sum normalization of the lowest-level data frame
 #'
 #' @param data lowest-level data frame
-#' @param refFunc default is sum
+#' @param refFunc String that is to be set as "sum"
 #' @param norm scaling of values
-#' @param na.rm tells whether NA values are removed
+#' @param na.rm Boolean that tells whether NA values are removed
 #'
 #' @return scaled lowest-level data frame
 #'
 
-sum.normalize <- function(data, refFunc = sum, norm=T, na.rm=T) {
+sum.normalize <- function(data, refFunc = "sum", norm=T, na.rm=T) {
+  # safety
+  if(trimws(refFunc) == "sum"){
+    refFunc <- sum
+  }
+  else {
+    stop("Please use sum as refFunc.")
+  }
+
   data_id <- data$row.number
   data <- data[, !colnames(data) %in% "row.number"]  # exclude ID column
 

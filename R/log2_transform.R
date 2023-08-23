@@ -1,13 +1,13 @@
 #' @title log2_transform
 #'
-#' @param intensities lowest-level data frame
+#' @param lowest_level_df lowest-level data frame
 #'
 #' @return log2 transformed lowest-level data frame
 #'
 
 
-log2_transform <- function(intensities){
+log2_transform <- function(lowest_level_df){
   # log2 modify without ID column
-  intensities[, !colnames(intensities) %in% "row.number"] <- log2(intensities[, !colnames(intensities) %in% "row.number"])
-  return(intensities)
+  lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"] <- log2(lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"])
+  return(lowest_level_df)
 }

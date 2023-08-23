@@ -8,7 +8,7 @@ normalize_row_ref(
   lowest_level_df,
   exp_design,
   ref,
-  refFunc = median,
+  refFunc = "median",
   na.rm = TRUE
 )
 }
@@ -17,11 +17,11 @@ normalize_row_ref(
 
 \item{exp_design}{experimental design data frame}
 
-\item{ref}{vector of references}
+\item{ref}{references can be set here as Strings inside a vector}
 
-\item{refFunc}{can be set as median or sum}
+\item{refFunc}{String that can be set as "median" or "sum"}
 
-\item{na.rm}{tells whether NA values are removed}
+\item{na.rm}{Boolean that tells whether NA values are removed}
 }
 \value{
 row-wise normalized lowest-level data frame
