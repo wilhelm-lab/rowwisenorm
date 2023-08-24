@@ -4,8 +4,23 @@
 \alias{panel.cor}
 \title{panel.cor}
 \usage{
-panel.cor(x, y, digits = 2, prefix = "", cex.cor, ...)
+panel.cor(x, y, digits = 2, prefix = "", cex.cor)
+}
+\arguments{
+\item{x}{numeric vector, the first variable, provided by pairs}
+
+\item{y}{numeric vector, the second variable, provided by pairs}
+
+\item{digits}{how many digits to use on the pairs plot for the correlations}
+
+\item{prefix}{text to prefix the correlation coefficients}
+
+\item{cex.cor}{character expansion factor}
+}
+\value{
+correlation coefficients for pairs
 }
 \description{
-Helper function for generating plots
+Panel function used in the pairs() plot (correlation plot)
+- Used as upper.panel
 }

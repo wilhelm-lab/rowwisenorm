@@ -13,10 +13,29 @@ panel.smooth2(
   cex = 1,
   col.smooth = "red",
   span = 2/3,
-  iter = 3,
-  ...
+  iter = 3
 )
 }
+\arguments{
+\item{x}{numeric vector of the same length as y}
+
+\item{y}{numeric vector of the same length as x}
+
+\item{col}{numeric or character code for the color(s) of the points}
+
+\item{bg}{background color for symbol used for the points}
+
+\item{pch}{symbol used for the points}
+
+\item{cex}{expansion factor used for the points}
+
+\item{col.smooth}{color to be used by lines for drawing the smooths}
+
+\item{span}{smoothing parameter f for lowess()}
+
+\item{iter}{number of robustness iterations for lowess()}
+}
 \description{
-Helper function for generating plots
+Panel function used in the pairs() plot (correlation plot)
+- Used as lower.panel
 }

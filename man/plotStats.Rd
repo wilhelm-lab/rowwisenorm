@@ -6,6 +6,14 @@
 \usage{
 plotStats(data, main = "")
 }
+\arguments{
+\item{data}{lowest-level data frame}
+
+\item{main}{title for the plots}
+}
+\value{
+creates correlation plot, heatmap, component plot, and PCA plot
+}
 \description{
-Generates the plots with the help of the other helper functions
+Generates plots
 }

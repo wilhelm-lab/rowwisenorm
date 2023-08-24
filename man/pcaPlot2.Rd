@@ -6,6 +6,14 @@
 \usage{
 pcaPlot2(data, main = "")
 }
+\arguments{
+\item{data}{lowest-level data frame}
+
+\item{main}{title for the plot}
+}
+\value{
+creates a PCA plot
+}
 \description{
 Helper function for generating PCA plot with principal components
 }

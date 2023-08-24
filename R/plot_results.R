@@ -25,7 +25,10 @@ plot_results <- function(lowest_level_df, main="", output_dir="results"){
     dir.create(output_dir)
   }
 
-  filename <- paste0("./", output_dir, "/", filename, sep="")
+  if (trimws(output_dir) != ""){
+    filename <- paste0(output_dir, "/", filename, sep="")
+  }
+
   pdf(filename, width=10, height=10)
   plotStats(intensities, main=main)
   dev.off()

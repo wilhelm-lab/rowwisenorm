@@ -6,6 +6,14 @@
 \usage{
 pcaPlot(data, main = "")
 }
+\arguments{
+\item{data}{lowest-level data frame}
+
+\item{main}{title for the plot}
+}
+\value{
+creates a component plot
+}
 \description{
 Helper function for generating the component plot
 }

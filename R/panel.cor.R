@@ -1,12 +1,19 @@
 #' @title panel.cor
 #'
 #' @description
-#' Helper function for generating plots
+#' Panel function used in the pairs() plot (correlation plot)
+#' - Used as upper.panel
 #'
+#' @param x numeric vector, the first variable, provided by pairs
+#' @param y numeric vector, the second variable, provided by pairs
+#' @param digits how many digits to use on the pairs plot for the correlations
+#' @param prefix text to prefix the correlation coefficients
+#' @param cex.cor character expansion factor
 #'
+#' @return correlation coefficients for pairs
 #'
 
-panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {
+panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor) {
   usr <- par("usr"); on.exit(par(usr))
   par(usr = c(0, 1, 0, 1))
   r <- abs(cor(x, y, use="p", method="p"))

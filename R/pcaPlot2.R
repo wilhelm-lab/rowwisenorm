@@ -3,6 +3,11 @@
 #' @description
 #' Helper function for generating PCA plot with principal components
 #'
+#' @param data lowest-level data frame
+#' @param main title for the plot
+#'
+#' @return creates a PCA plot
+#'
 
 
 pcaPlot2 <- function(data, main="") {

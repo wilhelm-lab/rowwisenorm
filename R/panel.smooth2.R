@@ -1,10 +1,21 @@
 #' @title panel.smooth2
 #'
 #' @description
-#' Helper function for generating plots
+#' Panel function used in the pairs() plot (correlation plot)
+#' - Used as lower.panel
+#'
+#' @param x numeric vector of the same length as y
+#' @param y numeric vector of the same length as x
+#' @param col numeric or character code for the color(s) of the points
+#' @param bg background color for symbol used for the points
+#' @param pch symbol used for the points
+#' @param cex expansion factor used for the points
+#' @param col.smooth color to be used by lines for drawing the smooths
+#' @param span smoothing parameter f for lowess()
+#' @param iter number of robustness iterations for lowess()
 #'
 
-panel.smooth2 <- function(x, y, col = par("col"), bg = NA, pch = ".", cex = 1, col.smooth = "red", span = 2/3, iter = 3, ...) {
+panel.smooth2 <- function(x, y, col = par("col"), bg = NA, pch = ".", cex = 1, col.smooth = "red", span = 2/3, iter = 3) {
   idxs <- sample(1:length(x), max(length(x)*0.10, min(1000, length(x))))
   points(x[idxs], y[idxs], pch = pch, col = col, bg = bg, cex = cex)
   ok <- is.finite(x) & is.finite(y)
