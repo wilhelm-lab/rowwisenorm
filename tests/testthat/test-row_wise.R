@@ -22,5 +22,9 @@ test_that("read_files() returns a list of length 3", {
 # --> call 'devtools::check()' to check if package works on various operating systems
 # -> this shows what exactly needs to be modified in the code
 
-# --> call 'rhub::check_for_cran()' to check for CRAN specific requirements
+# --> call 'rhub::check_for_cran()' to check for CRAN specific requirements:
+# ----> use this: rhub::check_for_cran(path="C:/Users/User/Documents/rowwisenorm", email="sina.mohrenweis@t-online.de")
+# -> needs validated email
+# -> validate_email(), get token via this email
+# -> list_validated_emails() shows validated emails with their token
 

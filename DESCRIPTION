@@ -2,8 +2,8 @@ Package: rowwisenorm
 Type: Package
 Title: Row-wise normalization
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: Sina Mohrenweis
+Maintainer: Sina Mohrenweis <sina.mohrenweis@t-online.de>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
