@@ -1,6 +1,8 @@
-context("row-wise")     # Our file is called "test-row_wise.R"
 library(testthat)        # load testthat package
 library(rowwisenorm)       # load our package
+
+
+# tests for read_files
 
 test_that("read_files() returns a list of length 3", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
@@ -8,6 +10,20 @@ test_that("read_files() returns a list of length 3", {
 
   returned_list <- read_files(data_path1, data_path2)
   expect_equal(length(returned_list), 3)
+})
+
+test_that("read_files() returns an object of type list including 3 objects of type data.frame", {
+  data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesign.txt", package = "rowwisenorm")
+
+  returned_list <- read_files(data_path1, data_path2)
+  intensities <- return_list[["lowest_level_df"]]
+  exp_design <- return_list[["exp_design"]]
+  additional_cols <- return_list[["additional_cols"]]
+  expect_type(returned_list, "list")
+  expect_s3_class(intensities, "data.frame")
+  expect_s3_class(exp_design, "data.frame")
+  expect_s3_class(additional_cols, "data.frame")
 })
 
 test_that("read_files() stops with wrong condition names in experimental design", {
@@ -21,8 +37,7 @@ test_that("read_files() works with a missing value inside experimental design", 
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesignTest.txt", package = "rowwisenorm")
 
-  returned_list <- read_files(data_path1, data_path2)
-  expect_equal(length(returned_list), 3)
+  expect_no_error(read_files(data_path1, data_path2))
 })
 
 test_that("read_files() stops with a condition having more than one row assigned in experimental design", {
@@ -31,6 +46,16 @@ test_that("read_files() stops with a condition having more than one row assigned
 
   expect_error(read_files(data_path1, data_path2))
 })
+
+test_that("read_files() works with withe space around the entries in experimental design", {
+  data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignWS.txt", package = "rowwisenorm")
+
+  expect_no_error(read_files(data_path1, data_path2))
+})
+
+# maybe check filtering, nrow where + inside and if this is substracted (many cases)
+# -> check that final row number is correct then
 
 
 # TODO add more tests

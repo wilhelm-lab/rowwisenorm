@@ -29,7 +29,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   # sanity checks
   colnames_sub <- gsub("[.]", " ", colnames(proteingroups))  # column names without "."
   for (i in 1:nrow(exp_design)){
-    cond <- exp_design[i,1]  # condition for this row
+    cond <- trimws(exp_design[i,1])  # condition for this row
     for (j in 2:ncol(exp_design)){
       entry <- trimws(exp_design[i,j])  # remove white space at start and end
       # proof that all mentioned column names are present in the data
