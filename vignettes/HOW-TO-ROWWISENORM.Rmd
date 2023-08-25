@@ -18,4 +18,106 @@ knitr::opts_chunk$set(
 library(rowwisenorm)
 ```
 
-TODO: make here the test calls 
+
+1. Preparation
+
+Reading of the input files
+```{r}
+data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
+data_path2 <- system.file("extdata", "experimentalDesign.txt", package = "rowwisenorm")
+
+returned_list <- read_files(data_path1, data_path2)
+```
+
+Grab the three data frames out of the returned list
+```{r}
+lowest_level_df <- return_list[["lowest_level_df"]]
+exp_design <- return_list[["exp_design"]]
+additional_cols <- return_list[["additional_cols"]]
+```
+
+Optionally view the tables
+```{r}
+View(lowest_level_df)
+View(exp_design)
+```
+
+Log2 transformation
+```{r}
+lowest_level_df <- log2_transform(lowest_level_df)
+```
+
+Filtering out rows
+```{r}
+lowest_level_df <- filter_rows(lowest_level_df)
+```
+
+Optionally view the lowest-level data frame again now
+```{r}
+View(lowest_level_df)
+```
+
+Optionally do total sum normalization 
+```{r}
+lowest_level_df <- sum.normalize(lowest_level_df)
+```
+
+
+2. Normalization
+
+Option 1: references get automatically set
+```{r}
+lowest_level_df_norm <- normalize_row(lowest_level_df, exp_design)
+```
+
+Option 2: set references as parameter
+```{r}
+lowest_level_df_norm <- normalize_row(lowest_level_df, exp_design, ref=c("L", "M", "H"))
+```
+
+Option 3: set references interactively
+```{r}
+lowest_level_df_norm <- normalize_row(lowest_level_df, exp_design, active = TRUE)
+```
+
+Option 4: use 'sum' as refFunc
+```{r}
+lowest_level_df_norm <- normalize_row(lowest_level_df, exp_design, refFunc = "sum")
+```
+
+
+3. Output file
+
+Option 1: Only write the lowest-level data frame with the desired columns into a file
+```{r}
+write_outfile(lowest_level_df = lowest_level_df_norm)
+```
+
+Option 2: Combination of the desired columns with all remaining not-modified columns of the input file
+```{r}
+write_outfile(lowest_level_df = lowest_level_df_norm, additional_cols = additional_cols)
+```
+
+
+4. PDF file with plots
+
+Option 1: default values for name and location of the file
+```{r}
+plot_results(lowest_level_df = lowest_level_df_norm)
+```
+
+Option 2: set the name and the directory for the file
+```{r}
+plot_results(lowest_level_df = lowest_level_df_norm, main = "my_rowwisenorm_result", output_dir = "res")
+```
+
+Option 3: set the directory with default name of the file 
+```{r}
+plot_results(lowest_level_df = lowest_level_df_norm, output_dir = "res")
+```
+
+Option 4: set the name with the file being saved in current directory
+```{r}
+plot_results(lowest_level_df = lowest_level_df_norm, main = "my_rowwisenorm_result")
+```
+
