@@ -26,13 +26,19 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   }
   exp_design <- read.table(design, header = FALSE, sep = "\t", na.strings = "NaN")
 
-  # sanity check
+  # sanity checks
   colnames_sub <- gsub("[.]", " ", colnames(proteingroups))  # column names without "."
   for (i in 1:nrow(exp_design)){
+    cond <- exp_design[i,1]  # condition for this row
     for (j in 2:ncol(exp_design)){
       entry <- trimws(exp_design[i,j])  # remove white space at start and end
+      # proof that all mentioned column names are present in the data
       if (! (entry %in% colnames_sub | entry == "")){
         stop("The experimental design file does not match the column names of the data.")
+      }
+      # proof that condition names in first column match the other columns
+      if (! (grepl(paste0("\\b", cond, "\\b"), entry) | entry == "")){
+        stop("A condition name specified in the first column of the experimental design does not match the other columns of its row.")
       }
     }
   }
@@ -118,3 +124,4 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   return_list <- list("lowest_level_df" = lowest_df, "exp_design" = exp_design, "additional_cols" = additional_cols)
   return(return_list)
 }
+

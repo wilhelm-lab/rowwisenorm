@@ -10,7 +10,27 @@ test_that("read_files() returns a list of length 3", {
   expect_equal(length(returned_list), 3)
 })
 
+test_that("read_files() stops with wrong condition names in experimental design", {
+  data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignCond.txt", package = "rowwisenorm")
 
+  expect_error(read_files(data_path1, data_path2))
+})
+
+test_that("read_files() works with a missing value inside experimental design", {
+  data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignTest.txt", package = "rowwisenorm")
+
+  returned_list <- read_files(data_path1, data_path2)
+  expect_equal(length(returned_list), 3)
+})
+
+test_that("read_files() stops with a condition having more than one row assigned in experimental design", {
+  data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignTest2.txt", package = "rowwisenorm")
+
+  expect_error(read_files(data_path1, data_path2))
+})
 
 
 # TODO add more tests
