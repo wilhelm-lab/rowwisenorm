@@ -28,3 +28,7 @@ test_that("read_files() returns a list of length 3", {
 # -> validate_email(), get token via this email
 # -> list_validated_emails() shows validated emails with their token
 
+# --> call 'devtools::build(path="C:/Users/User/Documents/rowwisenorm")' to build the package
+# -> .tar.gz folder gets created
+
+# MAY add '@keywords internal' to the functions that should be internal

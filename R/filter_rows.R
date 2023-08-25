@@ -8,6 +8,7 @@
 #'
 #' @return filtered lowest-level data frame
 #'
+#'
 
 filter_rows <- function(data, keep_only_rows_with_x_valid_ratio=0.5){
   num_na_per_row <- rowSums(is.na(data[, !colnames(data) %in% "row.number"]))

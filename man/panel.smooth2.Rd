@@ -13,7 +13,8 @@ panel.smooth2(
   cex = 1,
   col.smooth = "red",
   span = 2/3,
-  iter = 3
+  iter = 3,
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ panel.smooth2(
 \item{span}{smoothing parameter f for lowess()}
 
 \item{iter}{number of robustness iterations for lowess()}
+
+\item{...}{further arguments}
 }
 \description{
 Panel function used in the pairs() plot (correlation plot)

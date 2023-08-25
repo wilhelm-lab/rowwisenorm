@@ -4,7 +4,7 @@
 \alias{panel.cor}
 \title{panel.cor}
 \usage{
-panel.cor(x, y, digits = 2, prefix = "", cex.cor)
+panel.cor(x, y, digits = 2, prefix = "", cex.cor, ...)
 }
 \arguments{
 \item{x}{numeric vector, the first variable, provided by pairs}
@@ -16,6 +16,8 @@ panel.cor(x, y, digits = 2, prefix = "", cex.cor)
 \item{prefix}{text to prefix the correlation coefficients}
 
 \item{cex.cor}{character expansion factor}
+
+\item{...}{further arguments}
 }
 \value{
 correlation coefficients for pairs

@@ -1,6 +1,6 @@
 Package: rowwisenorm
 Type: Package
-Title: Row-wise normalization
+Title: Row-Wise Normalization
 Version: 0.1.0
 Author: Sina Mohrenweis
 Maintainer: Sina Mohrenweis <sina.mohrenweis@t-online.de>
