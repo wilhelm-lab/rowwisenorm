@@ -1,0 +1,3 @@
+L		Intensity L R2	Intensity L R3	Intensity L R4
+M	Intensity M R1		Intensity M R3	Intensity M R4
+H	Intensity H R1	Intensity H R2		Intensity H R4

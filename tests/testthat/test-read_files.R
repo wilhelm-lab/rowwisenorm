@@ -1,5 +1,5 @@
-library(testthat)        # load testthat package
-library(rowwisenorm)       # load our package
+library(testthat)
+library(rowwisenorm)
 
 
 # tests for read_files
@@ -8,20 +8,20 @@ test_that("read_files() returns a list of length 3", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesign.txt", package = "rowwisenorm")
 
-  returned_list <- read_files(data_path1, data_path2)
-  expect_equal(length(returned_list), 3)
+  return_list <- read_files(data_path1, data_path2)
+  expect_equal(length(return_list), 3)
 })
 
-test_that("read_files() returns an object of type list including 3 objects of type data.frame", {
+test_that("read_files() returns an object of type list including 3 objects of class data.frame", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesign.txt", package = "rowwisenorm")
 
-  returned_list <- read_files(data_path1, data_path2)
-  intensities <- return_list[["lowest_level_df"]]
+  return_list <- read_files(data_path1, data_path2)
+  lowest_level_df <- return_list[["lowest_level_df"]]
   exp_design <- return_list[["exp_design"]]
   additional_cols <- return_list[["additional_cols"]]
-  expect_type(returned_list, "list")
-  expect_s3_class(intensities, "data.frame")
+  expect_type(return_list, "list")
+  expect_s3_class(lowest_level_df, "data.frame")
   expect_s3_class(exp_design, "data.frame")
   expect_s3_class(additional_cols, "data.frame")
 })
@@ -54,8 +54,43 @@ test_that("read_files() works with withe space around the entries in experimenta
   expect_no_error(read_files(data_path1, data_path2))
 })
 
-# maybe check filtering, nrow where + inside and if this is substracted (many cases)
-# -> check that final row number is correct then
+# filtering check works only trying with this example data
+test_that("read_files() filters out the correct number of rows", {
+  data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignWS.txt", package = "rowwisenorm")
+
+  return_list <- read_files(data_path1, data_path2, rm_only_by_site=F, rm_reverse=F, rm_contaminant=F)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  expect_equal(nrow(lowest_level_df), 8069)
+
+  return_list <- read_files(data_path1, data_path2, rm_only_by_site=T, rm_reverse=F, rm_contaminant=F)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  expect_equal(nrow(lowest_level_df), 7352)
+
+  return_list <- read_files(data_path1, data_path2, rm_only_by_site=F, rm_reverse=T, rm_contaminant=F)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  expect_equal(nrow(lowest_level_df), 7822)
+
+  return_list <- read_files(data_path1, data_path2, rm_only_by_site=F, rm_reverse=F, rm_contaminant=T)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  expect_equal(nrow(lowest_level_df), 7949)
+
+  return_list <- read_files(data_path1, data_path2, rm_only_by_site=T, rm_reverse=T, rm_contaminant=F)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  expect_equal(nrow(lowest_level_df), 7280)
+
+  return_list <- read_files(data_path1, data_path2, rm_only_by_site=F, rm_reverse=T, rm_contaminant=T)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  expect_equal(nrow(lowest_level_df), 7703)
+
+  return_list <- read_files(data_path1, data_path2, rm_only_by_site=T, rm_reverse=F, rm_contaminant=T)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  expect_equal(nrow(lowest_level_df), 7244)
+
+  return_list <- read_files(data_path1, data_path2, rm_only_by_site=T, rm_reverse=T, rm_contaminant=T)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  expect_equal(nrow(lowest_level_df), 7172)
+})
 
 
 # TODO add more tests

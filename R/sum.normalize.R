@@ -13,11 +13,16 @@
 
 sum.normalize <- function(data, refFunc = "sum", norm=T, na.rm=T) {
   # safety
-  if(trimws(refFunc) == "sum"){
+  refFunc <- trimws(refFunc)
+  refFunc <- tolower(refFunc)
+  if(refFunc == "median"){
+    refFunc <- median
+  }
+  else if(refFunc == "sum"){
     refFunc <- sum
   }
   else {
-    stop("Please use sum as refFunc.")
+    stop("Please enter 'median' or 'sum' as refFunc.")
   }
 
   data_id <- data$row.number
