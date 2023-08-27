@@ -54,7 +54,7 @@ test_that("read_files() works with withe space around the entries in experimenta
   expect_no_error(read_files(data_path1, data_path2))
 })
 
-# filtering check works only trying with this example data
+# filtering check specific for this example data
 test_that("read_files() filters out the correct number of rows", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesignWS.txt", package = "rowwisenorm")
