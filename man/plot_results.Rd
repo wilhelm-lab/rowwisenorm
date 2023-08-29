@@ -4,14 +4,14 @@
 \alias{plot_results}
 \title{plot_results}
 \usage{
-plot_results(lowest_level_df, main = "", output_dir = "results")
+plot_results(lowest_level_df, main = "", output_dir = "")
 }
 \arguments{
 \item{lowest_level_df}{lowest-level data frame}
 
-\item{main}{title for the plots that is also included in the name of the output file}
+\item{main}{optionally specify the name of the output file and title for the plots}
 
-\item{output_dir}{the directory in which the output file will be saved}
+\item{output_dir}{optionally specify the directory in which the output file will be saved}
 }
 \value{
 Creates an output pdf file containing the generated plots

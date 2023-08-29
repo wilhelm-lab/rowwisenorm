@@ -4,6 +4,8 @@
 #'
 #' @return log2 transformed lowest-level data frame
 #'
+#' @export
+#'
 
 
 log2_transform <- function(lowest_level_df){

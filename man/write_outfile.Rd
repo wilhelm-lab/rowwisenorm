@@ -4,14 +4,21 @@
 \alias{write_outfile}
 \title{write_outfile}
 \usage{
-write_outfile(lowest_level_df, additional_cols = NULL, filename = "")
+write_outfile(
+  lowest_level_df,
+  additional_cols = NULL,
+  filename = "",
+  output_dir = ""
+)
 }
 \arguments{
 \item{lowest_level_df}{lowest-level data frame}
 
 \item{additional_cols}{optionally append the additional columns from the input file}
 
-\item{filename}{can be optionally specified}
+\item{filename}{optionally specify the name of the output file}
+
+\item{output_dir}{optionally specify the directory in which the output file will be saved}
 }
 \value{
 Creating an output file

@@ -8,6 +8,7 @@
 #'
 #' @return filtered lowest-level data frame
 #'
+#' @export
 #'
 
 filter_rows <- function(data, keep_only_rows_with_x_valid_ratio=0.5){

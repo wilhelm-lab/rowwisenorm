@@ -12,6 +12,8 @@
 #'
 #' @return row-wise normalized lowest-level data frame
 #'
+#' @export
+#'
 
 normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, refFunc="median", na.rm = TRUE){
   # list of conditions that can be used as references (present for each repeat in exp design)

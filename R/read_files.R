@@ -12,6 +12,7 @@
 #' @return A list storing the lowest-level data frame, the data frame for the experimental design
 #' and a data frame with the remaining columns if present in this exact order
 #'
+#' @export
 #'
 
 read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_contaminant=TRUE){

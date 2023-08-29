@@ -4,10 +4,12 @@
 #' Function to be called to generate all plots and save them inside an output pdf file
 #'
 #' @param lowest_level_df lowest-level data frame
-#' @param main title for the plots that is also included in the name of the output file
-#' @param output_dir the directory in which the output file will be saved
+#' @param main optionally specify the name of the output file and title for the plots
+#' @param output_dir optionally specify the directory in which the output file will be saved
 #'
 #' @return Creates an output pdf file containing the generated plots
+#'
+#' @export
 #'
 
 plot_results <- function(lowest_level_df, main="", output_dir=""){

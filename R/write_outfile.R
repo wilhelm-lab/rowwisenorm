@@ -5,9 +5,12 @@
 #'
 #' @param lowest_level_df lowest-level data frame
 #' @param additional_cols optionally append the additional columns from the input file
-#' @param filename can be optionally specified
+#' @param filename optionally specify the name of the output file
+#' @param output_dir optionally specify the directory in which the output file will be saved
 #'
 #' @return Creating an output file
+#'
+#' @export
 #'
 
 write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", output_dir=""){

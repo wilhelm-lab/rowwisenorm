@@ -1,4 +1,4 @@
-#' @title sum.normalize
+#' @title sum_normalize
 #'
 #' @description
 #' Total sum normalization of the lowest-level data frame
@@ -10,8 +10,10 @@
 #'
 #' @return scaled lowest-level data frame
 #'
+#' @export
+#'
 
-sum.normalize <- function(data, refFunc = "sum", norm=T, na.rm=T) {
+sum_normalize <- function(data, refFunc = "sum", norm=T, na.rm=T) {
   # safety
   refFunc <- trimws(refFunc)
   refFunc <- tolower(refFunc)
