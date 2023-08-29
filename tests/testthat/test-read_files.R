@@ -93,8 +93,6 @@ test_that("read_files() filters out the correct number of rows", {
 })
 
 
-# TODO add more tests
-
 
 # --> call 'devtools::test()' in console to run these tests
 # csv files need to be stored in inst/extdata and not in /data, in /data use the rda format for any files
