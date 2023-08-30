@@ -8,6 +8,9 @@
 #'
 #' @return creates a component plot
 #'
+#' @importFrom stats biplot cor median na.omit prcomp princomp
+#' @importFrom graphics lines pairs par points strwidth text
+#'
 
 pcaPlot <- function(data, main="") {
   data <- data[!apply(data, 1, function(d) any(is.na(d))),]  # remove rows with NA inside

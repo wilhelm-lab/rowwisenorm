@@ -13,6 +13,7 @@
 #' @return row-wise normalized lowest-level data frame
 #'
 #' @export
+#' @importFrom stats median na.omit
 #'
 
 normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, refFunc="median", na.rm = TRUE){

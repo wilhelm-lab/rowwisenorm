@@ -8,6 +8,9 @@
 #'
 #' @return creates a PCA plot
 #'
+#' @importFrom stats biplot cor median na.omit prcomp princomp
+#' @importFrom graphics lines pairs par points strwidth text
+#'
 
 
 pcaPlot2 <- function(data, main="") {

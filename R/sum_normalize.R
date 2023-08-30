@@ -12,6 +12,8 @@
 #'
 #' @export
 #'
+#' @importFrom stats median
+#'
 
 sum_normalize <- function(data, refFunc = "sum", norm=T, na.rm=T) {
   # safety

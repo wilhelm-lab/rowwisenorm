@@ -13,6 +13,9 @@
 #'
 #' @return correlation coefficients for pairs
 #'
+#' @importFrom stats biplot cor median na.omit prcomp princomp
+#' @importFrom graphics lines pairs par points strwidth text
+#'
 
 panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {
   usr <- par("usr"); on.exit(par(usr))

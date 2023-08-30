@@ -11,6 +11,7 @@
 #' @return Creating an output file
 #'
 #' @export
+#' @importFrom utils write.table
 #'
 
 write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", output_dir=""){

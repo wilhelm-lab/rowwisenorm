@@ -15,8 +15,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Imports:
-    devtools
-Depends:
+    devtools,
     pheatmap
 VignetteBuilder: knitr
 Config/testthat/edition: 3

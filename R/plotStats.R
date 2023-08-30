@@ -8,9 +8,13 @@
 #'
 #' @return creates correlation plot, heatmap, component plot, and PCA plot
 #'
+#' @importFrom pheatmap pheatmap
+#' @importFrom graphics lines pairs par points strwidth text
+#' @importFrom stats biplot cor median na.omit prcomp princomp
+#'
 
 plotStats <- function(data, main="") {
-  require(pheatmap)
+  # require(pheatmap)
   n <- dim(data)[2]
   if (dim(data)[2] > 15) {
     # only draws first 15 columns, otherwise the plot might be too dense and result in an error

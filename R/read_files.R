@@ -13,6 +13,8 @@
 #' and a data frame with the remaining columns if present in this exact order
 #'
 #' @export
+#' @importFrom utils read.csv2 read.table
+#' @importFrom stats median na.omit
 #'
 
 read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_contaminant=TRUE){

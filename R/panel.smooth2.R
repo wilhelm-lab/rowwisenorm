@@ -15,6 +15,9 @@
 #' @param iter number of robustness iterations for lowess()
 #' @param ... further arguments
 #'
+#' @importFrom stats biplot cor median na.omit prcomp princomp
+#' @importFrom graphics lines pairs par points strwidth text
+#'
 
 panel.smooth2 <- function(x, y, col = par("col"), bg = NA, pch = ".", cex = 1, col.smooth = "red", span = 2/3, iter = 3, ...) {
   idxs <- sample(1:length(x), max(length(x)*0.10, min(1000, length(x))))

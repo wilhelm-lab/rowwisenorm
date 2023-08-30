@@ -11,6 +11,8 @@
 #'
 #' @return row-wise normalized lowest-level data frame
 #'
+#' @importFrom stats median na.omit
+#'
 
 normalize_row_ref <- function(lowest_level_df, exp_design, ref, refFunc="median", na.rm = TRUE){
   intensities <- lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"]  # without ID column

@@ -10,6 +10,7 @@
 #' @return Creates an output pdf file containing the generated plots
 #'
 #' @export
+#' @importFrom grDevices dev.off pdf
 #'
 
 plot_results <- function(lowest_level_df, main="", output_dir=""){
