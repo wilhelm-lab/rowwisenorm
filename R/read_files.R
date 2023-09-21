@@ -64,7 +64,9 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
                          perl = TRUE)  # perl allows pattern search
 
     # exclude the rows where a "+" is in this column
-    proteingroups <- proteingroups[!proteingroups[[matching_col]] %in% c('+'),]
+    if(length(matching_col) > 0){  # important: only if the column is present - otherwise an error would occur here (matching_col would be integer(0))
+      proteingroups <- proteingroups[!proteingroups[[matching_col]] %in% c('+'),]
+    }
   }
   if (rm_reverse){
     search_string <- "reverse"
@@ -74,7 +76,9 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
                         colnames(proteingroups), value = TRUE, ignore.case = TRUE, perl = TRUE)
 
     # exclude the rows where a "+" is in this column
-    proteingroups <- proteingroups[!proteingroups[[reverse_col]] %in% c('+'),]
+    if(length(reverse_col) > 0){
+      proteingroups <- proteingroups[!proteingroups[[reverse_col]] %in% c('+'),]
+    }
   }
   if (rm_contaminant){
     search_string <- "contaminant"
@@ -84,7 +88,9 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
                             colnames(proteingroups), value = TRUE, ignore.case = TRUE, perl = TRUE)
 
     # exclude the rows where a "+" is in this column
-    proteingroups <- proteingroups[!proteingroups[[contaminant_col]] %in% c('+'),]
+    if(length(contaminant_col) > 0){
+      proteingroups <- proteingroups[!proteingroups[[contaminant_col]] %in% c('+'),]
+    }
   }
 
 
