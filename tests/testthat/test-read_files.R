@@ -47,7 +47,7 @@ test_that("read_files() stops with a condition having more than one row assigned
   expect_error(read_files(data_path1, data_path2))
 })
 
-test_that("read_files() works with withe space around the entries in experimental design", {
+test_that("read_files() works with white space around the entries in experimental design", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesignWS.txt", package = "rowwisenorm")
 
@@ -90,6 +90,14 @@ test_that("read_files() filters out the correct number of rows", {
   return_list <- read_files(data_path1, data_path2, rm_only_by_site=T, rm_reverse=T, rm_contaminant=T)
   lowest_level_df <- return_list[["lowest_level_df"]]
   expect_equal(nrow(lowest_level_df), 7172)
+})
+
+# file from processed folder
+test_that("read_files() works when some of the columns to be filtered for (e.g. reverse) are missing in the file", {
+  data_path1 <- system.file("extdata", "proteingroups.csv", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignProcessed.txt", package = "rowwisenorm")
+
+  expect_no_error(read_files(data_path1, data_path2))
 })
 
 
