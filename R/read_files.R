@@ -64,8 +64,12 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
                          perl = TRUE)  # perl allows pattern search
 
     # exclude the rows where a "+" is in this column
-    if(length(matching_col) > 0){  # important: only if the column is present - otherwise an error would occur here (matching_col would be integer(0))
+    if(length(matching_col) == 1){  # important: only if there is exactly one matching column
+      matching_col <- matching_col[1]  # note: matching_col originally is a vector with the matching column name as an element inside
       proteingroups <- proteingroups[!proteingroups[[matching_col]] %in% c('+'),]
+    }
+    else {  # warning for the user that the desired filtering was not possible
+      warning("There is no or more than one column present for the feature 'only by site'. No filtering was done for this feature.")
     }
   }
   if (rm_reverse){
@@ -76,8 +80,12 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
                         colnames(proteingroups), value = TRUE, ignore.case = TRUE, perl = TRUE)
 
     # exclude the rows where a "+" is in this column
-    if(length(reverse_col) > 0){
+    if(length(reverse_col) == 1){
+      reverse_col <- reverse_col[1]
       proteingroups <- proteingroups[!proteingroups[[reverse_col]] %in% c('+'),]
+    }
+    else {
+      warning("There is no or more than one column present for the feature 'reverse'. No filtering was done for this feature.")
     }
   }
   if (rm_contaminant){
@@ -88,8 +96,12 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
                             colnames(proteingroups), value = TRUE, ignore.case = TRUE, perl = TRUE)
 
     # exclude the rows where a "+" is in this column
-    if(length(contaminant_col) > 0){
+    if(length(contaminant_col) == 1){
+      contaminant_col <- contaminant_col[1]
       proteingroups <- proteingroups[!proteingroups[[contaminant_col]] %in% c('+'),]
+    }
+    else {
+      warning("There is no or more than one column present for the feature 'contaminant'. No filtering was done for this feature.")
     }
   }
 

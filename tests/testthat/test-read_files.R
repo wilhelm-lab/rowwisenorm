@@ -97,7 +97,7 @@ test_that("read_files() works when some of the columns to be filtered for (e.g. 
   data_path1 <- system.file("extdata", "proteingroups.csv", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesignProcessed.txt", package = "rowwisenorm")
 
-  expect_no_error(read_files(data_path1, data_path2))
+  expect_no_error(read_files(data_path1, data_path2, F, F, F))
 })
 
 
