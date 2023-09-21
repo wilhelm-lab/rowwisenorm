@@ -22,7 +22,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   exp_design <- data.frame()
 
   if (grepl(".csv", data, fixed = TRUE)){
-    proteingroups <- read.csv2(data, header = TRUE, na.strings = "NaN")
+    proteingroups <- read.csv(data, header = TRUE, sep = ",", stringsAsFactors = FALSE, na.strings = "NaN")
   }
   else {
     proteingroups <- read.table(data, header = TRUE, sep = "\t", na.strings = "NaN")

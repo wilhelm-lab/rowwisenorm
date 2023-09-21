@@ -93,6 +93,7 @@ test_that("read_files() filters out the correct number of rows", {
 })
 
 
+# setwd("C:/Users/User/Documents/rowwisenorm")
 
 # --> call 'devtools::test()' in console to run these tests
 # csv files need to be stored in inst/extdata and not in /data, in /data use the rda format for any files
@@ -108,5 +109,8 @@ test_that("read_files() filters out the correct number of rows", {
 
 # --> call 'devtools::build(path="C:/Users/User/Documents/rowwisenorm")' to build the package
 # -> .tar.gz folder gets created
+
+# --> install with: install.packages("C:/Users/User/Documents/rowwisenorm/rowwisenorm_0.1.0.tar.gz", repos = NULL, type = 'source')
+# -> then: library(rowwisenorm)
 
 # MAY add '@keywords internal' to the functions that should be internal
