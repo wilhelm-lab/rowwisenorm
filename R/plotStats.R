@@ -8,12 +8,15 @@
 #'
 #' @return creates correlation plot, heatmap, component plot, and PCA plot
 #'
+#' @export
 #' @importFrom pheatmap pheatmap
 #' @importFrom graphics lines pairs par points strwidth text
 #' @importFrom stats biplot cor median na.omit prcomp princomp
 #'
 
 plotStats <- function(data, main="") {
+  data <- data[, !colnames(data) %in% "row.number"]
+
   # require(pheatmap)
   n <- dim(data)[2]
   if (dim(data)[2] > 15) {

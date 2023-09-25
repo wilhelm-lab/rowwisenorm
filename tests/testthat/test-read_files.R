@@ -26,6 +26,20 @@ test_that("read_files() returns an object of type list including 3 objects of cl
   expect_s3_class(additional_cols, "data.frame")
 })
 
+test_that("read_files() returns an object of type list including 3 objects of class data.frame even when additional_cols only includes one column", {
+  data_path1 <- system.file("extdata", "proteingroups.csv", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignProcessed.txt", package = "rowwisenorm")
+
+  return_list <- read_files(data_path1, data_path2, F, F, F)
+  lowest_level_df <- return_list[["lowest_level_df"]]
+  exp_design <- return_list[["exp_design"]]
+  additional_cols <- return_list[["additional_cols"]]
+  expect_type(return_list, "list")
+  expect_s3_class(lowest_level_df, "data.frame")
+  expect_s3_class(exp_design, "data.frame")
+  expect_s3_class(additional_cols, "data.frame")
+})
+
 test_that("read_files() stops with wrong condition names in experimental design", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesignCond.txt", package = "rowwisenorm")
@@ -104,6 +118,7 @@ test_that("read_files() works when some of the columns to be filtered for (e.g. 
 # setwd("C:/Users/User/Documents/rowwisenorm")
 
 # --> call 'devtools::test()' in console to run these tests
+# -> or e.g. 'devtools::test_file("./tests/testthat/test-read_files.R")' for this file
 # csv files need to be stored in inst/extdata and not in /data, in /data use the rda format for any files
 
 # --> call 'devtools::check()' to check if package works on various operating systems
@@ -117,6 +132,9 @@ test_that("read_files() works when some of the columns to be filtered for (e.g. 
 
 # --> call 'devtools::build(path="C:/Users/User/Documents/rowwisenorm")' to build the package
 # -> .tar.gz folder gets created
+
+# remove.packages("rowwisenorm")
+# detach("package:rowwisenorm", unload = TRUE)
 
 # --> install with: install.packages("C:/Users/User/Documents/rowwisenorm/rowwisenorm_0.1.0.tar.gz", repos = NULL, type = 'source')
 # -> then: library(rowwisenorm)

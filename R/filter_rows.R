@@ -11,6 +11,7 @@
 #' @export
 #'
 
+# TODO handle when a string was entered for ratio? sanity check that between 0 and 1?
 filter_rows <- function(data, keep_only_rows_with_x_valid_ratio=0.5){
   num_na_per_row <- rowSums(is.na(data[, !colnames(data) %in% "row.number"]))
   threshold_na <- (1-keep_only_rows_with_x_valid_ratio) * ncol(data[, !colnames(data) %in% "row.number"])  # e.g. 0.5 * 12 = 6

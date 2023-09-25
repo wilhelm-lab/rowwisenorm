@@ -142,6 +142,15 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   additional_cols <- proteingroups[, ! colnames(proteingroups) %in% desired_colnames_dots]
   additional_cols <- additional_cols[, ! colnames(additional_cols) %in% c("row.number")]  # exclude row number ID, because additional_cols never gets modified and we already saved the current row numbers inside lowest_df
 
+  # if additional_cols only stores one single column, it is no longer a data frame - convert to a data frame
+  if (! is.data.frame(additional_cols)){
+    additional_cols <- data.frame(Column1 = additional_cols)  # make it a data frame
+    other_colnames <- c(desired_colnames_dots, "row.number")  # all the other column names
+    add_colname_index <- ! colnames(proteingroups) %in% other_colnames  # index of the single column
+    add_colname <- colnames(proteingroups[add_colname_index])  # the column name of the single column
+    colnames(additional_cols) <- add_colname
+  }
+
   return_list <- list("lowest_level_df" = lowest_df, "exp_design" = exp_design, "additional_cols" = additional_cols)
   return(return_list)
 }
