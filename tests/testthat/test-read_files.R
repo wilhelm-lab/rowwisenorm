@@ -130,6 +130,9 @@ test_that("read_files() works when some of the columns to be filtered for (e.g. 
 # -> validate_email(), get token via this email
 # -> list_validated_emails() shows validated emails with their token
 
+
+# ! --> always devtools::document() when modified the code, so that the changes are accepted
+
 # --> call 'devtools::build(path="C:/Users/User/Documents/rowwisenorm")' to build the package
 # -> .tar.gz folder gets created
 
@@ -138,5 +141,8 @@ test_that("read_files() works when some of the columns to be filtered for (e.g. 
 
 # --> install with: install.packages("C:/Users/User/Documents/rowwisenorm/rowwisenorm_0.1.0.tar.gz", repos = NULL, type = 'source')
 # -> then: library(rowwisenorm)
+
+# -> when changes not there: restart R, load the package new with library
+# -> maybe unloadNamespace("rowwisenorm") before newly loading library
 
 # MAY add '@keywords internal' to the functions that should be internal

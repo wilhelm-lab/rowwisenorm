@@ -41,9 +41,24 @@ write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", ou
       file <- paste0(output_dir, "/", file, sep="")
     }
 
+    # special case: if additional_cols only stores one single column: save this column name in a variable (because in next step, the additional_cols is no longer a data.frame and loses this column name)
+    single_col <- FALSE
+    add_colname <- ""
+    if (ncol(additional_cols) == 1){
+      single_col <- TRUE
+      add_colname <- colnames(additional_cols)[1]
+    }
+
     # reduce additional cols to the rows named in row.number column (those not filtered out)
     rows_to_keep <- lowest_level_df$row.number
-    additional_cols <- additional_cols[rows_to_keep, ]
+    additional_cols <- additional_cols[rows_to_keep, ]  # special case: if additional_cols has only 1 column, after this step it is no longer a data.frame but gets converted into a vector here
+
+    # special case: if additional_cols only stores one single column: back convert it to a data.frame and set the saved column name back
+    if (single_col){
+      additional_cols <- data.frame(Column1 = additional_cols)
+      colnames(additional_cols) <- add_colname
+    }
+
     # merge
     comb <- cbind(lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"], additional_cols)
     write.table(comb, file, row.names=F, col.names=T, sep=",")
