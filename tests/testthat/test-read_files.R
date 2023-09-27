@@ -61,6 +61,13 @@ test_that("read_files() stops with a condition having more than one row assigned
   expect_error(read_files(data_path1, data_path2))
 })
 
+test_that("read_files() stops when a condition name is missing in the first column in experimental design", {
+  data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignMissingCond.txt", package = "rowwisenorm")
+
+  expect_error(read_files(data_path1, data_path2))
+})
+
 test_that("read_files() works with white space around the entries in experimental design", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesignWS.txt", package = "rowwisenorm")

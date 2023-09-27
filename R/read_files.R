@@ -13,7 +13,7 @@
 #' and a data frame with the remaining columns if present in this exact order
 #'
 #' @export
-#' @importFrom utils read.csv2 read.table
+#' @importFrom utils read.csv read.table
 #' @importFrom stats median na.omit
 #'
 
@@ -33,6 +33,9 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   colnames_sub <- gsub("[.]", " ", colnames(proteingroups))  # column names without "."
   for (i in 1:nrow(exp_design)){
     cond <- trimws(exp_design[i,1])  # condition for this row
+    if (cond == ""){
+      stop("A condition name is missing for the first column of at least one row inside the experimental design.")
+    }
     for (j in 2:ncol(exp_design)){
       entry <- trimws(exp_design[i,j])  # remove white space at start and end
       # proof that all mentioned column names are present in the data

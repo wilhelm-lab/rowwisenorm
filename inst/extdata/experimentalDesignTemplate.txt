@@ -1,0 +1,4 @@
+<condition1>	<column name condition1 repeat1>	<column name condition1 repeat2>	etc.
+<condition2>	<column name condition2 repeat1>	<column name condition2 repeat2>	etc.
+<condition3>	<column name condition3 repeat1>	<column name condition3 repeat2>	etc.
+etc.			
