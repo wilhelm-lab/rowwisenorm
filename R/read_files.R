@@ -146,6 +146,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   additional_cols <- additional_cols[, ! colnames(additional_cols) %in% c("row.number")]  # exclude row number ID, because additional_cols never gets modified and we already saved the current row numbers inside lowest_df
 
   # if additional_cols only stores one single column, it is no longer a data frame - convert to a data frame
+  # (this is only for exactly 1 column - if additional_cols has 0 columns it still is a data.frame with ncol = 0)
   if (! is.data.frame(additional_cols)){
     additional_cols <- data.frame(Column1 = additional_cols)  # make it a data frame
     other_colnames <- c(desired_colnames_dots, "row.number")  # all the other column names
