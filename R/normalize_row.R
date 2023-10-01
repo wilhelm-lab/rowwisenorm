@@ -17,6 +17,19 @@
 #'
 
 normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, refFunc="median", na.rm = TRUE){
+  # safety check
+  refFunc <- trimws(refFunc)
+  refFunc <- tolower(refFunc)
+  if(refFunc == "median"){
+    refFunc <- median
+  }
+  else if(refFunc == "sum"){
+    refFunc <- sum
+  }
+  else {
+    stop("Please enter 'median' or 'sum' as refFunc.")
+  }
+
   # list of conditions that can be used as references (present for each repeat in exp design)
   possible_refs <- c()
   for (i in 1:nrow(exp_design)){
@@ -35,13 +48,14 @@ normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, r
 
   # if empty, directly stop program
   if (length(possible_refs) == 0){
-    stop("None of the conditions can be used as reference.")
+    stop("None of the conditions can be used as reference. No normalization was carried out.")
   }
 
   if (active){
     # ask for shared sample/pool
     cat("Do you have a shared sample? (y/n) \n")
     reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
+    reference_boolean <- tolower(reference_boolean)  # make case-insensitive
     while(reference_boolean != "y" && reference_boolean != "n"){
       cat("Please answer with 'y' for yes or 'n' for no")
       reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
@@ -60,13 +74,14 @@ normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, r
         reference <- scan(n = 1, what = character(), quiet = TRUE)
       }
 
-      references <- append(references, reference)  # append this reference
+      references <- append(references, reference)  # append this reference (shared sample)
 
       # ask for further shared samples
       another <- TRUE
       while (another == TRUE){
         cat("Do you have another shared sample? (y/n) \n")
         reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
+        reference_boolean <- tolower(reference_boolean)  # make case-insensitive
         while(reference_boolean != "y" && reference_boolean != "n"){
           cat("Please answer with 'y' for yes or 'n' for no")
           reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)

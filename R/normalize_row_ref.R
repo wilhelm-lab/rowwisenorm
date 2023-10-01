@@ -17,18 +17,12 @@
 normalize_row_ref <- function(lowest_level_df, exp_design, ref, refFunc="median", na.rm = TRUE){
   intensities <- lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"]  # without ID column
 
-  # safety check
-  refFunc <- trimws(refFunc)
-  refFunc <- tolower(refFunc)
-  if(refFunc == "median"){
-    refFunc <- median
-  }
-  else if(refFunc == "sum"){
-    refFunc <- sum
-  }
-  else {
-    stop("Please enter 'median' or 'sum' as refFunc.")
-  }
+  # could do again the safety checks to validate the entry of refFunc (but: theoretically, any function can be set here)
+  # and check if the refs inside ref are possible
+
+  # TODO list of repeats: what if a repeat has a column without ANY condition?
+  # e.g. LR1, LR3, LR4, MR1, MR2, MR3, HR1, HR3, HR4, R2 -> then R2 not covered in repeats() vector
+  # or: what if column names do not contain the conditions at all? is that allowed?
 
   # list of repeats
   repeats <- c()
@@ -42,10 +36,8 @@ normalize_row_ref <- function(lowest_level_df, exp_design, ref, refFunc="median"
 
   # column names of the references
   ref_colnames <- c()
-  refs <- c()  # refs themselves
   for (reference in ref){
     ref_colnames <- append(ref_colnames, colnames(intensities[, grepl(paste0("\\b", reference, "\\b"), colnames(intensities))]))
-    refs <- append(refs, reference)
   }
 
   smeans <- matrix(NA, dim(intensities)[1], length(repeats))
