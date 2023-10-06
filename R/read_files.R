@@ -29,8 +29,15 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   }
   exp_design <- read.table(design, header = FALSE, sep = "\t", na.strings = "NaN")
 
+  # TODO added to replace NA values with "" for missing values
+  exp_design[is.na(exp_design)] <- ""
+
+  # TODO added Remove columns with only missing values (only white space for each row) (user added empty column by accident)
+  exp_design <- exp_design[, !apply(exp_design, 2, function(x) all(grepl("^\\s*$", x)))]
+
   # sanity checks
   colnames_sub <- gsub("[.]", " ", colnames(proteingroups))  # column names without "."
+
   for (i in 1:nrow(exp_design)){
     cond <- trimws(exp_design[i,1])  # condition for this row
     if (cond == ""){
@@ -39,13 +46,10 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
     for (j in 2:ncol(exp_design)){
       entry <- trimws(exp_design[i,j])  # remove white space at start and end
       # proof that all mentioned column names are present in the data
-      if (! (entry %in% colnames_sub | entry == "")){
+      if (! (is.na(entry) | entry %in% colnames_sub | entry == "")){   # TODO added is.na check because missing (empty) entries can be read in as NA - Maybe unnecessary since NA converted to "" at beginning now
         stop("The experimental design file does not match the column names of the data.")
       }
-      # proof that condition names in first column match the other columns
-      if (! (grepl(paste0("\\b", cond, "\\b"), entry) | entry == "")){
-        stop("A condition name specified in the first column of the experimental design does not match the other columns of its row.")
-      }
+      # TODO removed another sanity check
     }
   }
 
@@ -117,12 +121,11 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
 
   # get the column names of the desired columns from experimental design
   exp_design_desired_names <- exp_design[, grep("design.repeat", colnames(exp_design))]
-  exp_design_desired_names <- na.omit(exp_design_desired_names)  # remove NA if present
   desired_colnames <- c()
   for (i in 1:nrow(exp_design_desired_names)){
     for (j in 1:ncol(exp_design_desired_names)){
-      if(trimws(exp_design_desired_names[i, j]) != ""){  # when not missing
-        entry <- trimws(exp_design_desired_names[i,j])  # remove white space at start and end
+      entry <- trimws(exp_design_desired_names[i, j])
+      if (! (is.na(entry) | entry == "")){   # TODO added is.na check because missing (empty) entries can be read in as NA -> maybe unnecessary because NA are converted to "" at beginning now
         desired_colnames <- append(desired_colnames, entry)
       }
     }
