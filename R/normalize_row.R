@@ -20,13 +20,7 @@ normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, r
   # safety check
   refFunc <- trimws(refFunc)
   refFunc <- tolower(refFunc)
-  if(refFunc == "median"){
-    refFunc <- median
-  }
-  else if(refFunc == "sum"){
-    refFunc <- sum
-  }
-  else {
+  if(! (refFunc == "median" | refFunc == "sum")){
     stop("Please enter 'median' or 'sum' as refFunc.")
   }
 
@@ -111,16 +105,20 @@ normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, r
     references <- unique(references)  # make unique in case the same reference was two times entered
     references <- trimws(references)  # remove white space at start and end
     # safety check: when refs are set by the user, check that they are possible
+    refs_ok <- TRUE
     for (refer in references){
       if (! refer %in% possible_refs){
+        refs_ok <- FALSE
         c <- paste(possible_refs, collapse = " ")
-        m <- paste("One or more of the entered conditions is not a possible reference. Possible references are: ", c)
-        stop(m)
+        m <- paste("One or more of the entered conditions is not a possible reference. Possible references are: ", c, " \n No normalization was done.")
+        warning(m)
       }
     }
-    data_norm <- normalize_row_ref(lowest_level_df = lowest_level_df, exp_design = exp_design, ref=references, refFunc = refFunc, na.rm = na.rm)
+    if(refs_ok){  # normalization only if all entered refs are possible
+      data_norm <- normalize_row_ref(lowest_level_df = lowest_level_df, exp_design = exp_design, ref=references, refFunc = refFunc, na.rm = na.rm)
+    }
   }
-  else {  # no reference(s) (shared sample(s)) set - automatically set all possible references
+  else {  # no reference(s) (shared sample(s)) set - automatically use all possible references
     data_norm <- normalize_row_ref(lowest_level_df = lowest_level_df, exp_design = exp_design, ref=possible_refs, refFunc = refFunc, na.rm = na.rm)
   }
 
