@@ -16,3 +16,8 @@ User is asked to create the second file as a **tsv** file according to *experime
 > - **Important:** If a certain condition is not present for a certain batch, leave the respective place empty and go on with a second tab.  
 > - **Important:** Add an empty line at the end of the file
 
+Example look of the experimental design:
+
+Attempt | #1 | #2 | #3 | #4 | #5 | #6 | #7 | #8 | #9 | #10 | #11
+--- | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
+Seconds | 301 | 283 | 290 | 286 | 289 | 285 | 287 | 287 | 272 | 276 | 269
