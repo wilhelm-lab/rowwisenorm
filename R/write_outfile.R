@@ -14,32 +14,13 @@
 #' @importFrom utils write.table
 #'
 
-write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", output_dir=""){
+write_outfile2 <- function(lowest_level_df, additional_cols=NULL, filename="", output_dir=""){
   if (is.null(additional_cols)){
     if(trimws(filename) == "") file <- "output_rowwisenorm" else file <- trimws(filename)
-    file <- paste(file, ".csv", sep = "")
-
-    output_dir <- trimws(output_dir)
-    if (output_dir != ""){
-      if(! dir.exists(output_dir)){
-        dir.create(output_dir)
-      }
-      file <- paste0(output_dir, "/", file, sep="")
-    }
-
-    write.table(lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"], file, row.names=F, col.names=T, sep=",")
+    data <- lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"]
   }
   else {
     if(trimws(filename) == "") file <- "output_rowwisenorm_complete" else file <- trimws(filename)
-    file <- paste(file, ".csv", sep = "")
-
-    output_dir <- trimws(output_dir)
-    if (output_dir != ""){
-      if(! dir.exists(output_dir)){
-        dir.create(output_dir)
-      }
-      file <- paste0(output_dir, "/", file, sep="")
-    }
 
     # special case: if additional_cols only stores one single column: save this column name in a variable (because in next step, the additional_cols is no longer a data.frame and loses this column name)
     single_col <- FALSE
@@ -60,7 +41,19 @@ write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", ou
     }
 
     # merge
-    comb <- cbind(lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"], additional_cols)
-    write.table(comb, file, row.names=F, col.names=T, sep=",")
+    data <- cbind(lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"], additional_cols)
   }
+
+  file <- paste(file, ".csv", sep = "")
+
+  output_dir <- trimws(output_dir)
+  if (output_dir != ""){
+    if(! dir.exists(output_dir)){
+      dir.create(output_dir)
+    }
+    file <- paste0(output_dir, "/", file, sep="")
+  }
+
+  write.table(data, file, row.names=F, col.names=T, sep=",")
+
 }

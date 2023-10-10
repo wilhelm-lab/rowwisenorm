@@ -29,7 +29,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   }
   exp_design <- read.table(design, header = FALSE, sep = "\t", na.strings = "NaN")
 
-  # TODO added to replace NA values with "" for missing values
+  # TODO added to replace NA values with "" for missing values (possibly empty fields were read in as NAs)
   exp_design[is.na(exp_design)] <- ""
 
   # TODO added Remove columns with only missing values (only white space for each row) (user added empty column by accident)
@@ -46,7 +46,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
     for (j in 2:ncol(exp_design)){
       entry <- trimws(exp_design[i,j])  # remove white space at start and end
       # proof that all mentioned column names are present in the data
-      if (! (is.na(entry) | entry %in% colnames_sub | entry == "")){   # TODO added is.na check because missing (empty) entries can be read in as NA - Maybe unnecessary since NA converted to "" at beginning now
+      if (! (entry %in% colnames_sub | entry == "")){
         stop("The experimental design file does not match the column names of the data.")
       }
       # TODO removed another sanity check
@@ -116,16 +116,16 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   # set column names of exp_design df
   colnames(exp_design)[1] <- "design.conditions"
   for (i in 2:length(exp_design)){
-    colnames(exp_design)[i] <- paste0("design.repeat", i-1)
+    colnames(exp_design)[i] <- paste0("design.batch", i-1)  # TODO changed to design.batch instead design.repeat
   }
 
   # get the column names of the desired columns from experimental design
-  exp_design_desired_names <- exp_design[, grep("design.repeat", colnames(exp_design))]
+  exp_design_desired_names <- exp_design[, grep("design.batch", colnames(exp_design))]  # TODO changed to design.batch instead design.repeat
   desired_colnames <- c()
   for (i in 1:nrow(exp_design_desired_names)){
     for (j in 1:ncol(exp_design_desired_names)){
       entry <- trimws(exp_design_desired_names[i, j])
-      if (! (is.na(entry) | entry == "")){   # TODO added is.na check because missing (empty) entries can be read in as NA -> maybe unnecessary because NA are converted to "" at beginning now
+      if (entry != ""){
         desired_colnames <- append(desired_colnames, entry)
       }
     }

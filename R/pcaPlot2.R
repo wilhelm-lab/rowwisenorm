@@ -8,12 +8,15 @@
 #'
 #' @return creates a PCA plot
 #'
+#' @export
 #' @importFrom stats biplot cor median na.omit prcomp princomp
 #' @importFrom graphics lines pairs par points strwidth text
 #'
 
 
 pcaPlot2 <- function(data, main="") {
+  data <- data[, !colnames(data) %in% "row.number"]
+
   data <- data[!apply(data, 1, function(d) any(is.na(d))),]
   fit2 <- prcomp(t(data))
   plot(fit2$x[,1],fit2$x[,2],
