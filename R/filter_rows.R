@@ -11,10 +11,26 @@
 #' @export
 #'
 
-# TODO handle when a string was entered for ratio? sanity check that between 0 and 1?
 filter_rows <- function(data, keep_only_rows_with_x_valid_ratio=0.5){
-  num_na_per_row <- rowSums(is.na(data[, !colnames(data) %in% "row.number"]))
-  threshold_na <- (1-keep_only_rows_with_x_valid_ratio) * ncol(data[, !colnames(data) %in% "row.number"])  # e.g. 0.5 * 12 = 6
-  data <- data[num_na_per_row < threshold_na, ]  # e.g. only rows with < 6 (5 or less) NA, meaning at least 7 (> 50%) non-NA
+  ratio_ok <- TRUE
+  if (is.character(keep_only_rows_with_x_valid_ratio)){
+    ratio_ok <- FALSE
+    warning("The ratio needs to be entered as a numeric. No filtering was done.")
+  }
+  if (keep_only_rows_with_x_valid_ratio < 0 | keep_only_rows_with_x_valid_ratio > 1){
+    ratio_ok <- FALSE
+    warning("The ratio needs to be between 0 and 1. No filtering was done.")
+  }
+  if (ratio_ok){
+    num_na_per_row <- rowSums(is.na(data[, !colnames(data) %in% "row.number"]))
+    threshold_na <- (1-keep_only_rows_with_x_valid_ratio) * ncol(data[, !colnames(data) %in% "row.number"])  # e.g. 0.5 * 12 = 6
+    # TODO handle edge cases this way: ? maybe only for ratio=1, because "more than 0%" valid means not all cols NA (should be the way with <)
+    if (keep_only_rows_with_x_valid_ratio == 0 | keep_only_rows_with_x_valid_ratio == 1){
+      data <- data[num_na_per_row <= threshold_na, ]
+    }
+    else {
+      data <- data[num_na_per_row < threshold_na, ]  # e.g. only rows with < 6 (5 or less) NA, meaning at least 7 (> 50%) non-NA
+    }
+  }
   return(data)
 }
