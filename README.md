@@ -21,7 +21,7 @@ User is asked to create the second file as a **tsv** file according to *experime
 - Two repeats: R1, R2
 - Two batches: Represented by the second and third column
 
-| <!-- -->    | <!-- -->                  | <!-- -->                |
+|             |                           |                         |
 |-------------|---------------------------|-------------------------|
 | C1 R1       | column_name_c1r1_batch1   | column_name_c1r1_batch2 |
 | C1 R2       | column_name_c1r2_batch1   | column_name_c1r2_batch2 |
