@@ -1,3 +1,0 @@
-Light	Intensity L R1	Intensity L R2	Intensity L R3	Intensity L R4
-Medium	Intensity M R1	Intensity M R2	Intensity M R3	Intensity M R4
-Heavy	Intensity H R1	Intensity H R2	Intensity H R3	Intensity H R4

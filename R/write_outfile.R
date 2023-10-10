@@ -14,7 +14,7 @@
 #' @importFrom utils write.table
 #'
 
-write_outfile2 <- function(lowest_level_df, additional_cols=NULL, filename="", output_dir=""){
+write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", output_dir=""){
   if (is.null(additional_cols)){
     if(trimws(filename) == "") file <- "output_rowwisenorm" else file <- trimws(filename)
     data <- lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"]
