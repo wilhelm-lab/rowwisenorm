@@ -21,10 +21,10 @@ normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, r
   refFunc <- trimws(refFunc)
   refFunc <- tolower(refFunc)
   if(! (refFunc == "median" | refFunc == "sum")){
-    stop("Please enter 'median' or 'sum' as refFunc.")
+    stop("Please enter 'median' or 'sum' as refFunc.")  # TODO here also do warning() and use a boolean? -> later check if(pos_refs_present && refFunc_ok) two in one
   }
 
-  # list of conditions that can be used as references (present for each repeat in exp design)
+  # list of conditions that can be used as references (present for each batch in exp design)
   possible_refs <- c()
   for (i in 1:nrow(exp_design)){
     counter <- 0  # counts how many columns have a value for this row
@@ -40,86 +40,94 @@ normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, r
   possible_refs <- unique(possible_refs)  # safety
   possible_refs <- trimws(possible_refs)  # safety
 
-  # if empty, directly stop program
+  # if empty, skip normalization
+  pos_refs_present <- TRUE   # using a Boolean to avoid using stop() here (stop is not recommended for shiny)
   if (length(possible_refs) == 0){
-    stop("None of the conditions can be used as reference. No normalization was carried out.")
-  }
-
-  if (active){
-    # ask for shared sample/pool
-    cat("Do you have a shared sample? (y/n) \n")
-    reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
-    reference_boolean <- tolower(reference_boolean)  # make case-insensitive
-    while(reference_boolean != "y" && reference_boolean != "n"){
-      cat("Please answer with 'y' for yes or 'n' for no")
-      reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
-      reference_boolean <- tolower(reference_boolean)  # make case-insensitive
-    }
-
-    references <- NULL # default for negative case if user sets no shared samples
-
-    # if yes, get the shared samples as references
-    if (reference_boolean == "y"){
-      references <- c()
-
-      reference <- ""
-      while (! reference %in% possible_refs){
-        cat("Please enter one of the possible references: ", possible_refs, "\n", sep = " ")
-        reference <- scan(n = 1, what = character(), quiet = TRUE)
-      }
-
-      references <- append(references, reference)  # append this reference (shared sample)
-
-      # ask for further shared samples
-      another <- TRUE
-      while (another == TRUE){
-        cat("Do you have another shared sample? (y/n) \n")
-        reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
-        reference_boolean <- tolower(reference_boolean)  # make case-insensitive
-        while(reference_boolean != "y" && reference_boolean != "n"){
-          cat("Please answer with 'y' for yes or 'n' for no")
-          reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
-          reference_boolean <- tolower(reference_boolean)  # make case-insensitive
-        }
-        if(reference_boolean == "y"){
-          reference <- ""
-          while (! reference %in% possible_refs){
-            cat("Please enter one of the possible references: ", possible_refs, "\n", sep = " ")
-            reference <- scan(n = 1, what = character(), quiet = TRUE)
-          }
-          references <- append(references, reference)  # append this reference
-        }
-        else {
-          another <- FALSE
-        }
-      }
-
-    }
-  }
-  else {  # passive mode
-    references <- ref  # argument "ref" in function call, default is NULL
+    pos_refs_present <- FALSE
+    warning("None of the conditions can be used as reference. No normalization was carried out.")
   }
 
   data_norm <- data.frame()
-  if (! is.null(references)){  # reference(s) (shared sample(s)) was set
-    references <- unique(references)  # make unique in case the same reference was two times entered
-    references <- trimws(references)  # remove white space at start and end
-    # safety check: when refs are set by the user, check that they are possible
-    refs_ok <- TRUE
-    for (refer in references){
-      if (! refer %in% possible_refs){
-        refs_ok <- FALSE
-        c <- paste(possible_refs, collapse = " ")
-        m <- paste("One or more of the entered conditions is not a possible reference. Possible references are: ", c, " \n No normalization was done.")
-        warning(m)
+
+  # only go on if possible refs are present - otherwise nothing is done anymore
+  if(pos_refs_present){
+
+    if (active){
+      # ask for shared sample/pool
+      cat("Do you have a shared sample? (y/n) \n")
+      reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
+      reference_boolean <- tolower(reference_boolean)  # make case-insensitive
+      while(reference_boolean != "y" && reference_boolean != "n"){
+        cat("Please answer with 'y' for yes or 'n' for no")
+        reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
+        reference_boolean <- tolower(reference_boolean)  # make case-insensitive
+      }
+
+      references <- NULL # default for negative case if user sets no shared samples
+
+      # if yes, get the shared samples as references
+      if (reference_boolean == "y"){
+        references <- c()
+
+        reference <- ""
+        while (! reference %in% possible_refs){
+          cat("Please enter one of the possible references: ", possible_refs, "\n", sep = " ")
+          reference <- scan(n = 1, what = character(), quiet = TRUE)
+        }
+
+        references <- append(references, reference)  # append this reference (shared sample)
+
+        # ask for further shared samples
+        another <- TRUE
+        while (another == TRUE){
+          cat("Do you have another shared sample? (y/n) \n")
+          reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
+          reference_boolean <- tolower(reference_boolean)  # make case-insensitive
+          while(reference_boolean != "y" && reference_boolean != "n"){
+            cat("Please answer with 'y' for yes or 'n' for no")
+            reference_boolean <- scan(n = 1, what = character(), quiet = TRUE)
+            reference_boolean <- tolower(reference_boolean)  # make case-insensitive
+          }
+          if(reference_boolean == "y"){
+            reference <- ""
+            while (! reference %in% possible_refs){
+              cat("Please enter one of the possible references: ", possible_refs, "\n", sep = " ")
+              reference <- scan(n = 1, what = character(), quiet = TRUE)
+            }
+            references <- append(references, reference)  # append this reference
+          }
+          else {
+            another <- FALSE
+          }
+        }
+
       }
     }
-    if(refs_ok){  # normalization only if all entered refs are possible
-      data_norm <- normalize_row_ref(lowest_level_df = lowest_level_df, exp_design = exp_design, ref=references, refFunc = refFunc, na.rm = na.rm)
+    else {  # passive mode
+      references <- ref  # argument "ref" in function call, default is NULL
     }
-  }
-  else {  # no reference(s) (shared sample(s)) set - automatically use all possible references
-    data_norm <- normalize_row_ref(lowest_level_df = lowest_level_df, exp_design = exp_design, ref=possible_refs, refFunc = refFunc, na.rm = na.rm)
+
+    if (! is.null(references)){  # reference(s) (shared sample(s)) was set
+      references <- unique(references)  # make unique in case the same reference was two times entered
+      references <- trimws(references)  # remove white space at start and end
+      # safety check: when refs are set by the user, check that they are possible
+      refs_ok <- TRUE
+      for (refer in references){
+        if (! refer %in% possible_refs){
+          refs_ok <- FALSE
+          c <- paste(possible_refs, collapse = ", ")
+          m <- paste("One or more of the entered conditions is not a possible reference. Possible references are: ", c, " \n No normalization was done.")
+          warning(m)
+        }
+      }
+      if(refs_ok){  # normalization only if all entered refs are possible
+        data_norm <- normalize_row_ref(lowest_level_df = lowest_level_df, exp_design = exp_design, ref=references, refFunc = refFunc, na.rm = na.rm)
+      }
+    }
+    else {  # no reference(s) (shared sample(s)) set - automatically use all possible references
+      data_norm <- normalize_row_ref(lowest_level_df = lowest_level_df, exp_design = exp_design, ref=possible_refs, refFunc = refFunc, na.rm = na.rm)
+    }
+
   }
 
   return(data_norm)  # normalized lowest level df
