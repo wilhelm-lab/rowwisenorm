@@ -55,7 +55,7 @@ pcaPlot2 <- function(data, exp_design, main="") {
   # print("column_colors")
   # print(column_colors)
 
-  par(mar = c(3, 3, 3, 7), xpd = TRUE) # set margins before plot
+  par(mar = c(6, 6, 3, 6), xpd = TRUE) # set margins before plot
 
   data <- data[!apply(data, 1, function(d) any(is.na(d))),]
   fit2 <- prcomp(t(data))
