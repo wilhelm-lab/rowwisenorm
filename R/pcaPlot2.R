@@ -13,19 +13,63 @@
 #' @importFrom graphics lines pairs par points strwidth text
 #'
 
+# TODO added exp_design, need to change in all others: plotStats, plot_results, calls of those in shiny app (overgive exp design df)
 
-pcaPlot2 <- function(data, main="") {
+pcaPlot2 <- function(data, exp_design, main="") {
   data <- data[, !colnames(data) %in% "row.number"]
+
+  number_batches <- ncol(exp_design) -1
+
+  vec1 <- c()
+  vec2 <- c()
+  vec3 <- c()
+  for (i in 1:number_batches){
+    var_name <- paste("batch", i, sep="")
+    var_value <- exp_design[, i+1]  # batch 1 is stored in column 2
+    var_value <- gsub(" ", ".", var_value)  # again make the names in exp design and column names match
+    var_value <- gsub("\\(", ".", var_value)
+    var_value <- gsub("\\)", ".", var_value)
+    var_value <- gsub("-", ".", var_value)
+
+    assign(var_name, var_value)
+
+    vec1 <- append(vec1, length(var_value))  # maybe check when a missing field inside exp design
+    vec2 <- append(vec2, var_value)
+    vec3 <- append(vec3, var_name)
+  }
+
+  #my_colors <- colors()[1:number_batches]
+  my_colors <- sample(colors(), number_batches)  # random pick as much colors as batches
+
+  colors <- rep(my_colors, vec1)
+  column_colors <- colors[match(names(data), vec2)]
+
+  # print("vec1")
+  # print(vec1)
+  # print("vec2")
+  # print(vec2)
+  # print("vec3")
+  # print(vec3)
+  # print("colors")
+  # print(colors)
+  # print("column_colors")
+  # print(column_colors)
+
+  par(mar = c(3, 3, 3, 7), xpd = TRUE) # set margins before plot
 
   data <- data[!apply(data, 1, function(d) any(is.na(d))),]
   fit2 <- prcomp(t(data))
   plot(fit2$x[,1],fit2$x[,2],
+       col = column_colors,  # added
        main=main,
-       xlab=paste("PCA1 (",round((max(fit2$x[,1])-min(fit2$x[,1])), digits=1),"% )"),
+       xlab=paste("PCA1 (",round((max(fit2$x[,1])-min(fit2$x[,1])), digits=1),"% )"), # TODO check labels, should be together not > 100% ?
        ylab=paste("PCA2 (",round((max(fit2$x[,2])-min(fit2$x[,2])), digits=1),"% )"),
        pch=7,
        cex=1.5,
        xlim = c(min(fit2$x[,1]+(min(fit2$x[,1])*0.1)),max(fit2$x[,1]+(max(fit2$x[,1])*0.1))),
        ylim = c(min(fit2$x[,2]+(min(fit2$x[,2])*0.1)),max(fit2$x[,2]+(max(fit2$x[,2])*0.1))))
   text(fit2$x[,1],fit2$x[,2], labels=rownames(fit2$x), font=2, pos=1, lwd=2, cex=1.5, offset=1)
+
+  legend("topright", inset = c(-0.3, 0.1), legend = vec3, col = my_colors, pch = 19)  # added
+
 }
