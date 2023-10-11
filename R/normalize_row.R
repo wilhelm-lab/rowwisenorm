@@ -21,7 +21,7 @@ normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, r
   refFunc <- trimws(refFunc)
   refFunc <- tolower(refFunc)
   if(! (refFunc == "median" | refFunc == "sum")){
-    stop("Please enter 'median' or 'sum' as refFunc.")  # TODO here also do warning() and use a boolean? -> later check if(pos_refs_present && refFunc_ok) two in one
+    stop("Please enter 'median' or 'sum' as refFunc.")
   }
 
   # list of conditions that can be used as references (present for each batch in exp design)
