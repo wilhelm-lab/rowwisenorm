@@ -36,7 +36,9 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   exp_design <- exp_design[, !apply(exp_design, 2, function(x) all(grepl("^\\s*$", x)))]
 
   # sanity checks
-  colnames_sub <- gsub("[.]", " ", colnames(proteingroups))  # column names without "."
+  # TODO remove:
+  #colnames_sub <- gsub("[.]", " ", colnames(proteingroups))  # column names without "."
+
 
   for (i in 1:nrow(exp_design)){
     cond <- trimws(exp_design[i,1])  # condition for this row
@@ -45,8 +47,13 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
     }
     for (j in 2:ncol(exp_design)){
       entry <- trimws(exp_design[i,j])  # remove white space at start and end
+      # TODO sanity now uses modified exp design names, which all characters need to be replaced?
+      entry <- gsub(" ", ".", entry)  # replace with dots for matching with read in data columns
+      entry <- gsub("\\(", ".", entry)
+      entry <- gsub("\\)", ".", entry)
+      entry <- gsub("-", ".", entry)
       # proof that all mentioned column names are present in the data
-      if (! (entry %in% colnames_sub | entry == "")){
+      if (! (entry %in% colnames(proteingroups) | entry == "")){  # TODO changed to colnames(proteingroups)
         stop("The experimental design file does not match the column names of the data.")
       }
       # TODO removed another sanity check
