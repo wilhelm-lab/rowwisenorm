@@ -79,7 +79,7 @@ lowest_level_df_norm <- normalize_row(lowest_level_df, exp_design, refFunc = "su
 
 Default file name: 'output_rowwisenorm.csv' for lowest level, 
                   'output_rowwisenorm_complete.csv' for complete data
-Default location: current directory
+Default location: current working directory
 
 Option 1: Only write the lowest-level data frame with the desired columns into a file
 ```{r}
@@ -100,25 +100,25 @@ write_outfile(lowest_level_df = lowest_level_df_norm, additional_cols = addition
 4. PDF file with plots
 
 Default file name: 'result_rowwisenorm.pdf'
-Default location: current directory
+Default location: current working directory
 
 Option 1: Default values for name and location of the file
 ```{r}
-plot_results(lowest_level_df = lowest_level_df_norm)
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design)
 ```
 
 Option 2: Set the name and the directory for the file
 ```{r}
-plot_results(lowest_level_df = lowest_level_df_norm, main = "my_rowwisenorm_result", output_dir = "res")
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, main = "my_rowwisenorm_result", output_dir = "res")
 ```
 
 Option 3: Set the directory with default name of the file 
 ```{r}
-plot_results(lowest_level_df = lowest_level_df_norm, output_dir = "res")
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, output_dir = "res")
 ```
 
 Option 4: Set the name with the file being saved in current directory
 ```{r}
-plot_results(lowest_level_df = lowest_level_df_norm, main = "my_rowwisenorm_result")
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, main = "my_rowwisenorm_result")
 ```
 

@@ -4,14 +4,27 @@
 \alias{plot_results}
 \title{plot_results}
 \usage{
-plot_results(lowest_level_df, main = "", output_dir = "")
+plot_results(
+  lowest_level_df,
+  exp_design,
+  main = "",
+  output_dir = "",
+  show_labels = T,
+  legend_shift = 20
+)
 }
 \arguments{
 \item{lowest_level_df}{lowest-level data frame}
 
+\item{exp_design}{experimental design data frame}
+
 \item{main}{optionally specify the name of the output file and title for the plots}
 
 \item{output_dir}{optionally specify the directory in which the output file will be saved}
+
+\item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
+
+\item{legend_shift}{states how much the second legend is shifted to the right inside the PCA plot inside PDF}
 }
 \value{
 Creates an output pdf file containing the generated plots
