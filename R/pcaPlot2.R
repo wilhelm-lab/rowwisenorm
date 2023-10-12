@@ -4,18 +4,20 @@
 #' Helper function for generating PCA plot with principal components
 #'
 #' @param data lowest-level data frame
+#' @param exp_design experimental design data frame
 #' @param main title for the plot
+#' @param show_labels states whether the labels for the data points are shown
+#' @param legend_shift states how much the second legend is shifted to the right inside PDF
+#' @param pdf_mode used for adjusting the plot for the PDF when generated in plot_results
 #'
 #' @return creates a PCA plot
 #'
 #' @export
 #' @importFrom stats biplot cor median na.omit prcomp princomp
-#' @importFrom graphics lines pairs par points strwidth text
+#' @importFrom graphics lines pairs par points strwidth text legend
 #'
 
-# TODO added exp_design, need to change in all others: plotStats, plot_results, calls of those in shiny app (overgive exp design df)
-
-pcaPlot2 <- function(data, exp_design, main="") {
+pcaPlot2 <- function(data, exp_design, main="", show_labels=T, legend_shift=20, pdf_mode=F) {
   data <- data[, !colnames(data) %in% "row.number"]
 
   number_batches <- ncol(exp_design) -1
@@ -92,23 +94,56 @@ pcaPlot2 <- function(data, exp_design, main="") {
   # print("column_symbols")
   # print(column_symbols)
 
-  par(mar = c(6, 6, 3, 6), xpd = TRUE) # set margins before plot
+  if(pdf_mode){
+    par(mar = c(15, 6, 6, 15), xpd = TRUE) # set margins before plot
+  }
+  else {
+    par(mar = c(6, 6, 3, 6), xpd = TRUE) # set margins before plot
+  }
+
 
   data <- data[!apply(data, 1, function(d) any(is.na(d))),]
   fit2 <- prcomp(t(data))
+
+  if(show_labels){
+    my_labels <- rownames(fit2$x)  # column names of the data
+  }
+  else {
+    my_labels <- ""
+  }
+
   plot(fit2$x[,1],fit2$x[,2],
        col = column_colors,  # added
        pch = column_symbols,  # added
        main=main,
-       xlab=paste("PCA1 (",round((max(fit2$x[,1])-min(fit2$x[,1])), digits=1),"% )"), # TODO check labels, should be together not > 100% ?
+       xlab=paste("PCA1 (",round((max(fit2$x[,1])-min(fit2$x[,1])), digits=1),"% )"), # TODO check axes labels, should be together not > 100% ?
        ylab=paste("PCA2 (",round((max(fit2$x[,2])-min(fit2$x[,2])), digits=1),"% )"),
        #pch=7,
        cex=1.5,
        xlim = c(min(fit2$x[,1]+(min(fit2$x[,1])*0.1)),max(fit2$x[,1]+(max(fit2$x[,1])*0.1))),
        ylim = c(min(fit2$x[,2]+(min(fit2$x[,2])*0.1)),max(fit2$x[,2]+(max(fit2$x[,2])*0.1))))
-  text(fit2$x[,1],fit2$x[,2], labels=rownames(fit2$x), font=2, pos=1, lwd=2, cex=1.5, offset=1)
+  text(fit2$x[,1],fit2$x[,2], labels=my_labels, font=2, pos=1, lwd=2, cex=1.5, offset=1)  # show the labels depending on user's choice
 
-  legend("topright", title = "Batches", inset = c(-0.3, 0.0), legend = vec3, col = my_colors, pch = 19)  # added
-  legend("bottomright", title = "Conditions", inset = c(-0.3, 0.0), legend = vec33, col = "black", pch = my_symbols)  # added
+  usr <- par("usr")
+  if(pdf_mode){
+    # Set the x and y coordinates for the legend relative to the user coordinates
+    x_legend <- usr[2] # right border
+    y_legend <- usr[4] # top border
+    # alternatively: and removing shift for second
+    # x_legend <- usr[1] # left border
+    # y_legend <- usr[3]  # bottom border
+    legend(x = x_legend, y = y_legend, title = "Batches", inset = c(-0.3, 0.0), legend = vec3, col = my_colors, pch = 19)  # added
+    # legend("bottomleft", title = "Batches", inset = c(-0.3, 0.0), legend = vec3, col = my_colors, pch = 19)  # added
+
+    # Update the x-coordinate and the y-coordinate for the second legend
+    x_legend <- usr[2] + legend_shift # right border with shift parameter
+    y_legend <- usr[4] # top border
+    legend(x = x_legend, y = y_legend, title = "Conditions", inset = c(-0.3, 0.0), legend = vec33, col = "black", pch = my_symbols)  # added
+    # legend("topright", title = "Conditions", inset = c(-0.3, 0.0), legend = vec33, col = "black", pch = my_symbols)  # added
+  }
+  else {
+    legend("bottomleft", title = "Batches", inset = c(-0.3, 0.0), legend = vec3, col = my_colors, pch = 19)  # added
+    legend("topright", title = "Conditions", inset = c(-0.3, 0.0), legend = vec33, col = "black", pch = my_symbols)  # added
+  }
 
 }
