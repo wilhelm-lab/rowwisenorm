@@ -115,12 +115,19 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=T, legend_shift=20, 
     my_labels <- ""
   }
 
+  # percentages for PC1 and PC2
+  variance_explained <- round((fit2$sdev^2 / sum(fit2$sdev^2)) * 100, digits = 1)
+  my_xlab = paste("PC1 (", variance_explained[1], "% )")
+  my_ylab = paste("PC2 (", variance_explained[2], "% )")
+
   plot(fit2$x[,1],fit2$x[,2],
        col = column_colors,  # added
        pch = column_symbols,  # added
        main=main,
-       xlab=paste("PCA1 (",round((max(fit2$x[,1])-min(fit2$x[,1])), digits=1),"% )"), # TODO check axes labels, should be together not > 100% ?
-       ylab=paste("PCA2 (",round((max(fit2$x[,2])-min(fit2$x[,2])), digits=1),"% )"),
+       #xlab=paste("PCA1 (",round((max(fit2$x[,1])-min(fit2$x[,1])), digits=1),"% )"),
+       #ylab=paste("PCA2 (",round((max(fit2$x[,2])-min(fit2$x[,2])), digits=1),"% )"),
+       xlab=my_xlab,  # added
+       ylab=my_ylab,  # added
        #pch=7,
        cex=1.5,
        xlim = c(min(fit2$x[,1]+(min(fit2$x[,1])*0.1)),max(fit2$x[,1]+(max(fit2$x[,1])*0.1))),
