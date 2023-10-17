@@ -23,10 +23,8 @@ write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", ou
     if(trimws(filename) == "") file <- "output_rowwisenorm_complete" else file <- trimws(filename)
 
     # special case: if additional_cols only stores one single column: save this column name in a variable (because in next step, the additional_cols is no longer a data.frame and loses this column name)
-    single_col <- FALSE
     add_colname <- ""
     if (ncol(additional_cols) == 1){
-      single_col <- TRUE
       add_colname <- colnames(additional_cols)[1]
     }
 
@@ -35,7 +33,7 @@ write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", ou
     additional_cols <- additional_cols[rows_to_keep, ]  # special case: if additional_cols has only 1 column, after this step it is no longer a data.frame but gets converted into a vector here
 
     # special case: if additional_cols only stores one single column: back convert it to a data.frame and set the saved column name back
-    if (single_col){
+    if (!is.data.frame(additional_cols)){  # only the case when having exactly one column
       additional_cols <- data.frame(Column1 = additional_cols)
       colnames(additional_cols) <- add_colname
     }
