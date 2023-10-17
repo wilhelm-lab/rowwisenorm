@@ -32,9 +32,6 @@ normalize_row_ref <- function(lowest_level_df, exp_design, ref, refFunc="median"
 
 
   smeans <- matrix(NA, dim(intensities)[1], (ncol(exp_design)-1))
-  # colnames(smeans) <- unique(repeats)
-  # rownames(smeans) <- rownames(intensities)
-
 
   # indices of those rows in exp_design that correspond to a ref
   row_indices_refs <- which(exp_design[, 1] %in% ref)
@@ -43,7 +40,8 @@ normalize_row_ref <- function(lowest_level_df, exp_design, ref, refFunc="median"
   for (i in 2:ncol(exp_design)) {
     j <- i-1
     cols <- exp_design[row_indices_refs, i] # column names for the current batch with condition being a ref
-    cols <- gsub("\\s", ".", cols)  # replace white space with dots
+    #cols <- gsub("\\s", ".", cols)  # replace white space with dots
+    cols <- cols[cols != ""]  # only safety - missing fields are not allowed for reference conditions so should not occur here
 
     if (length(cols) > 1) {  # (otherwise only one ref, median must not be calculated)
       smeans[,j] <- apply(intensities[, cols], 1, function(d) refFunc(d, na.rm=na.rm))  # median or sum across refs per-batch (row-wise) -> smeans column 1 saves medians for refs of R1 (per row), column 2 for R2 etc
@@ -60,7 +58,8 @@ normalize_row_ref <- function(lowest_level_df, exp_design, ref, refFunc="median"
   for (i in 2:ncol(exp_design)) {
     j <- i-1
     cols <- exp_design[, i]  # column names for respective batch
-    cols <- gsub("\\s", ".", cols)  # replace white space with dots
+    #cols <- gsub("\\s", ".", cols)  # replace white space with dots
+    cols <- cols[cols != ""]  # exclude missing fields, otherwise might be an error when trying to access
 
     intensities_normalized[, cols] <- intensities[, cols]/(smeans[,j]/bmeans)
   }
