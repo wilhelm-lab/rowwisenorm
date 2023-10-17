@@ -29,34 +29,36 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   }
   exp_design <- read.table(design, header = FALSE, sep = "\t", na.strings = "NaN")
 
-  # TODO added to replace NA values with "" for missing values (possibly empty fields were read in as NAs)
+  # replace NA values with "" for missing values (possibly empty fields were read in as NAs)
   exp_design[is.na(exp_design)] <- ""
 
-  # TODO added Remove columns with only missing values (only white space for each row) (user added empty column by accident)
+  # remove columns with only missing values (only white space for each row) (user added empty column by accident)
   exp_design <- exp_design[, !apply(exp_design, 2, function(x) all(grepl("^\\s*$", x)))]
 
+
+  # replace all non-letter and non-number characters (brackets, etc) with a dot
+  # ... in column names of data (so that this is always the case) and in exp_design to match
+  colnames(proteingroups) <- gsub("[^A-Za-z0-9]", ".", colnames(proteingroups))
+  exp_design <- as.data.frame(apply(exp_design, 2, function(x) gsub("[^A-Za-z0-9]", ".", trimws(x))))  # removing white space at beginning and end
+
+
   # sanity checks
-  # TODO remove:
-  #colnames_sub <- gsub("[.]", " ", colnames(proteingroups))  # column names without "."
-
-
   for (i in 1:nrow(exp_design)){
     cond <- trimws(exp_design[i,1])  # condition for this row
     if (cond == ""){
       stop("A condition name is missing for the first column of at least one row inside the experimental design.")
     }
     for (j in 2:ncol(exp_design)){
-      entry <- trimws(exp_design[i,j])  # remove white space at start and end
-      # TODO sanity now uses modified exp design names, which all characters need to be replaced?
-      entry <- gsub(" ", ".", entry)  # replace with dots for matching with read in data columns
-      entry <- gsub("\\(", ".", entry)
-      entry <- gsub("\\)", ".", entry)
-      entry <- gsub("-", ".", entry)
+      entry <- trimws(exp_design[i,j])  # remove white space at start and end (only safety)
+      # TODO alternatively: replace here entries of exp_design (better not)
+      # entry <- gsub(" ", ".", entry)  # replace with dots for matching with read in data columns
+      # entry <- gsub("\\(", ".", entry)
+      # entry <- gsub("\\)", ".", entry)
+      # entry <- gsub("-", ".", entry)
       # proof that all mentioned column names are present in the data
-      if (! (entry %in% colnames(proteingroups) | entry == "")){  # TODO changed to colnames(proteingroups)
+      if (! (entry %in% colnames(proteingroups) | entry == "")){
         stop("The experimental design file does not match the column names of the data.")
       }
-      # TODO removed another sanity check
     }
   }
 
@@ -83,7 +85,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
       proteingroups <- proteingroups[!proteingroups[[matching_col]] %in% c('+'),]
     }
     else {  # warning for the user that the desired filtering was not possible
-      warning("There is no or more than one column present for the feature 'only by site'. No filtering was done for this feature.")
+      warning("There was no or more than one column found for the feature 'only by site'. No filtering was done for this feature.")
     }
   }
   if (rm_reverse){
@@ -99,7 +101,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
       proteingroups <- proteingroups[!proteingroups[[reverse_col]] %in% c('+'),]
     }
     else {
-      warning("There is no or more than one column present for the feature 'reverse'. No filtering was done for this feature.")
+      warning("There was no or more than one column found for the feature 'reverse'. No filtering was done for this feature.")
     }
   }
   if (rm_contaminant){
@@ -115,23 +117,21 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
       proteingroups <- proteingroups[!proteingroups[[contaminant_col]] %in% c('+'),]
     }
     else {
-      warning("There is no or more than one column present for the feature 'contaminant'. No filtering was done for this feature.")
+      warning("There was no or more than one column found for the feature 'contaminant'. No filtering was done for this feature.")
     }
   }
-
 
   # set column names of exp_design df
   colnames(exp_design)[1] <- "design.conditions"
   for (i in 2:length(exp_design)){
-    colnames(exp_design)[i] <- paste0("design.batch", i-1)  # TODO changed to design.batch instead design.repeat
+    colnames(exp_design)[i] <- paste0("design.batch", i-1)
   }
 
   # get the column names of the desired columns from experimental design
-  exp_design_desired_names <- exp_design[, grep("design.batch", colnames(exp_design))]  # TODO changed to design.batch instead design.repeat
   desired_colnames <- c()
-  for (i in 1:nrow(exp_design_desired_names)){
-    for (j in 1:ncol(exp_design_desired_names)){
-      entry <- trimws(exp_design_desired_names[i, j])
+  for (i in 1:nrow(exp_design)){
+    for (j in 2:ncol(exp_design)){  # start in column 2
+      entry <- trimws(exp_design[i, j])
       if (entry != ""){
         desired_colnames <- append(desired_colnames, entry)
       }
@@ -139,27 +139,31 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   }
 
   # reformat these column names
-  desired_colnames_dots <- gsub(" ", ".", desired_colnames)
+  # not longer necessary
+  # desired_colnames_dots <- gsub(" ", ".", desired_colnames)
+  # desired_colnames_dots <- gsub("\\(", ".", desired_colnames_dots)
+  # desired_colnames_dots <- gsub("\\)", ".", desired_colnames_dots)
+  # desired_colnames_dots <- gsub("-", ".", desired_colnames_dots)
 
   # add "ID" column with the current row numbers to the data before further filtering out rows -> saves the current row numbers before lowest level df gets more filtered
   row_numbers <- seq_along(proteingroups[,1])
   proteingroups <- cbind(row.number = row_numbers, proteingroups)
 
   # lowest-level df
-  lowest_df <- cbind(proteingroups["row.number"], proteingroups[, desired_colnames_dots])
+  lowest_df <- cbind(proteingroups["row.number"], proteingroups[, desired_colnames])
 
   # replace all 0 values inside lowest-level df with NaN
   lowest_df[, !colnames(lowest_df) %in% "row.number"] <- replace(lowest_df[, !colnames(lowest_df) %in% "row.number"], lowest_df[, !colnames(lowest_df) %in% "row.number"] == 0, NaN)
 
   # all remaining columns if present
-  additional_cols <- proteingroups[, ! colnames(proteingroups) %in% desired_colnames_dots]
+  additional_cols <- proteingroups[, ! colnames(proteingroups) %in% desired_colnames]
   additional_cols <- additional_cols[, ! colnames(additional_cols) %in% c("row.number")]  # exclude row number ID, because additional_cols never gets modified and we already saved the current row numbers inside lowest_df
 
   # if additional_cols only stores one single column, it is no longer a data frame - convert to a data frame
   # (this is only for exactly 1 column - if additional_cols has 0 columns it still is a data.frame with ncol = 0)
   if (! is.data.frame(additional_cols)){
     additional_cols <- data.frame(Column1 = additional_cols)  # make it a data frame
-    other_colnames <- c(desired_colnames_dots, "row.number")  # all the other column names
+    other_colnames <- c(desired_colnames, "row.number")  # all the other column names
     add_colname_index <- ! colnames(proteingroups) %in% other_colnames  # index of the single column
     add_colname <- colnames(proteingroups[add_colname_index])  # the column name of the single column
     colnames(additional_cols) <- add_colname
