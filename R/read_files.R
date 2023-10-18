@@ -50,11 +50,6 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
     }
     for (j in 2:ncol(exp_design)){
       entry <- trimws(exp_design[i,j])  # remove white space at start and end (only safety)
-      # TODO alternatively: replace here entries of exp_design (better not)
-      # entry <- gsub(" ", ".", entry)  # replace with dots for matching with read in data columns
-      # entry <- gsub("\\(", ".", entry)
-      # entry <- gsub("\\)", ".", entry)
-      # entry <- gsub("-", ".", entry)
       # proof that all mentioned column names are present in the data
       if (! (entry %in% colnames(proteingroups) | entry == "")){
         stop("The experimental design file does not match the column names of the data.")
@@ -137,13 +132,6 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
       }
     }
   }
-
-  # reformat these column names
-  # not longer necessary
-  # desired_colnames_dots <- gsub(" ", ".", desired_colnames)
-  # desired_colnames_dots <- gsub("\\(", ".", desired_colnames_dots)
-  # desired_colnames_dots <- gsub("\\)", ".", desired_colnames_dots)
-  # desired_colnames_dots <- gsub("-", ".", desired_colnames_dots)
 
   # add "ID" column with the current row numbers to the data before further filtering out rows -> saves the current row numbers before lowest level df gets more filtered
   row_numbers <- seq_along(proteingroups[,1])
