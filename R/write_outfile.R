@@ -16,11 +16,11 @@
 
 write_outfile <- function(lowest_level_df, additional_cols=NULL, filename="", output_dir=""){
   if (is.null(additional_cols)){
-    if(trimws(filename) == "") file <- "output_rowwisenorm" else file <- trimws(filename)
+    if(trimws(filename) == "") file <- "output" else file <- trimws(filename)
     data <- lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"]
   }
   else {
-    if(trimws(filename) == "") file <- "output_rowwisenorm_complete" else file <- trimws(filename)
+    if(trimws(filename) == "") file <- "output_complete" else file <- trimws(filename)
 
     # special case: if additional_cols only stores one single column: save this column name in a variable (because in next step, the additional_cols is no longer a data.frame and loses this column name)
     add_colname <- ""
