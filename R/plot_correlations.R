@@ -16,11 +16,7 @@
 plot_correlations <- function(data, main=""){
   data <- data[, !colnames(data) %in% "row.number"]
 
-  n <- dim(data)[2]
-  if (dim(data)[2] > 15) {
-    # only draws first 15 columns, otherwise the plot might be too dense and result in an error
-    n <- 15
-  }
-  pairs(data[,1:min(n, dim(data)[2])], lower.panel = panel.smooth2, upper.panel = panel.cor, main=main)
+  # only draws at most first 15 columns, otherwise the plot might be too dense and result in an error
+  pairs(data[,1:min(15, dim(data)[2])], lower.panel = panel.smooth2, upper.panel = panel.cor, main=main)
 
 }
