@@ -25,23 +25,43 @@ plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", sh
 
   # plots
   if (main == ""){
-    filename <- "result_rowwisenorm"
+    filename <- "results"
   }
   else {
     filename <- main
   }
 
-  filename <- paste(filename, ".pdf", sep = "")
+  # filename_pdf <- paste(filename, ".pdf", sep = "")
+  # filename_svg <- paste(filename, ".svg", sep = "")
 
   if (output_dir != ""){
     if(! dir.exists(output_dir)){
       dir.create(output_dir)
     }
     filename <- paste0(output_dir, "/", filename, sep="")
+    # filename_pdf <- paste0(output_dir, "/", filename_pdf, sep="")
+    # filename_svg <- paste0(output_dir, "/", filename_svg, sep="")
+
   }
+
+  # wanted_devices <- c("pdf", "svg")  # could also do png here
+  #
+  # plotStats(data, exp_design, main=main, show_labels=show_labels, legend_shift=legend_shift, pdf_mode=T)  # set here pdf_mode True for adjusted legends
+  #
+  # # Loop over all devices and copy the plots there
+  # for (device in wanted_devices) {
+  #   dev.copy(
+  #     eval(parse(text = device)),
+  #     paste(filename, device, sep = ".")
+  #   )
+  #   dev.off()
+  # }
 
   pdf(filename, width=10, height=10)
   plotStats(data, exp_design, main=main, show_labels=show_labels, legend_shift=legend_shift, pdf_mode=T)  # set here pdf_mode True for adjusted legends
-
   dev.off()
+
+  # svg(filename_svg, width = 10, height = 10)
+  # plotStats(data, exp_design, main=main, show_labels=show_labels, legend_shift=legend_shift, pdf_mode=T)  # set here pdf_mode True for adjusted legends
+  # dev.off()
 }
