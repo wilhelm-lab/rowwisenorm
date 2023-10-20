@@ -70,10 +70,10 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F) {
   column_symbols <- symbols[match(names(data), vec22)]
 
   if(pdf_mode){
-    par(mar = c(15, 15, 15, 15), xpd = TRUE) # set margins before plot
+    par(mar = c(15, 15, 15, 15), xpd = TRUE) # set margins before plot - bottom, left, top, right
   }
   else {
-    par(mar = c(6, 6, 3, 6), xpd = TRUE) # set margins before plot
+    par(mar = c(12, 6, 3, 12), xpd = TRUE) # set margins before plot
   }
 
   data <- data[!apply(data, 1, function(d) any(is.na(d))),]
