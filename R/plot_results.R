@@ -8,7 +8,6 @@
 #' @param main optionally specify the name of the output file and title for the plots
 #' @param output_dir optionally specify the directory in which the output file will be saved
 #' @param show_labels states whether the labels for the data points are shown inside the PCA plot
-#' @param legend_shift states how much the second legend is shifted to the right inside the PCA plot inside PDF
 #'
 #' @return Creates an output pdf file containing the generated plots
 #'
@@ -16,7 +15,7 @@
 #' @importFrom grDevices dev.off pdf
 #'
 
-plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", show_labels=T, legend_shift=20){
+plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", show_labels=T){
   data <- lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"]
 
   # important: trim white space at start and end of users entry
@@ -58,7 +57,7 @@ plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", sh
   # }
 
   pdf(filename, width=10, height=10)
-  plotStats(data, exp_design, main=main, show_labels=show_labels, legend_shift=legend_shift, pdf_mode=T)  # set here pdf_mode True for adjusted legends
+  plotStats(data, exp_design, main=main, show_labels=show_labels, pdf_mode=T)  # set here pdf_mode True for adjusted margins
   dev.off()
 
   # svg(filename_svg, width = 10, height = 10)
