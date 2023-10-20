@@ -7,7 +7,6 @@
 #' @param exp_design experimental design data frame
 #' @param main title for the plots
 #' @param show_labels states whether the labels for the data points are shown inside the PCA plot
-#' @param legend_shift states how much the second legend is shifted to the right inside the PCA plot inside PDF
 #' @param pdf_mode used for adjusting the PCA plot for the PDF when generated in plot_results
 #'
 #' @return creates correlation plot, heatmap, component plot, and PCA plot
@@ -18,12 +17,12 @@
 #' @importFrom stats biplot cor median na.omit prcomp princomp
 #'
 
-plotStats <- function(data, exp_design, main="", show_labels=T, legend_shift=20, pdf_mode=F) {
+plotStats <- function(data, exp_design, main="", show_labels=T, pdf_mode=F) {
   data <- data[, !colnames(data) %in% "row.number"]
 
   # calling the four helper functions
   plot_correlations(data=data, main=main)  # correlation plot
   plot_heatmap(data, main=main)  # heatmap
   try(pcaPlot(data, main=main))  # component plot
-  try(pcaPlot2(data, exp_design, main=main, show_labels=show_labels, legend_shift=legend_shift, pdf_mode=pdf_mode))  # PCA plot
+  try(pcaPlot2(data, exp_design, main=main, show_labels=show_labels, pdf_mode=pdf_mode))  # PCA plot
 }
