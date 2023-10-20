@@ -16,7 +16,7 @@ sum_normalize(data, refFunc = "sum", norm = T, na.rm = T)
 \item{na.rm}{Boolean that tells whether NA values are removed}
 }
 \value{
-scaled lowest-level data frame
+sum normalized lowest-level data frame
 }
 \description{
 Total sum normalization of the lowest-level data frame

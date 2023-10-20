@@ -4,14 +4,7 @@
 \alias{pcaPlot2}
 \title{pcaPlot2}
 \usage{
-pcaPlot2(
-  data,
-  exp_design,
-  main = "",
-  show_labels = T,
-  legend_shift = 20,
-  pdf_mode = F
-)
+pcaPlot2(data, exp_design, main = "", show_labels = F, pdf_mode = F)
 }
 \arguments{
 \item{data}{lowest-level data frame}
@@ -21,8 +14,6 @@ pcaPlot2(
 \item{main}{title for the plot}
 
 \item{show_labels}{states whether the labels for the data points are shown}
-
-\item{legend_shift}{states how much the second legend is shifted to the right inside PDF}
 
 \item{pdf_mode}{used for adjusting the plot for the PDF when generated in plot_results}
 }

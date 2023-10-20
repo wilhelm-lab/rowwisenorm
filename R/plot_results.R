@@ -15,7 +15,7 @@
 #' @importFrom grDevices dev.off pdf
 #'
 
-plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", show_labels=T){
+plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", show_labels=F){
   data <- lowest_level_df[, !colnames(lowest_level_df) %in% "row.number"]
 
   # important: trim white space at start and end of users entry

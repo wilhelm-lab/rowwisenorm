@@ -2,6 +2,7 @@
 
 export(filter_rows)
 export(log2_transform)
+export(median_normalize)
 export(normalize_row)
 export(pcaPlot)
 export(pcaPlot2)

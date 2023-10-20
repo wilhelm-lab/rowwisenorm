@@ -9,8 +9,7 @@ plot_results(
   exp_design,
   main = "",
   output_dir = "",
-  show_labels = T,
-  legend_shift = 20
+  show_labels = F
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ plot_results(
 \item{output_dir}{optionally specify the directory in which the output file will be saved}
 
 \item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
-
-\item{legend_shift}{states how much the second legend is shifted to the right inside the PCA plot inside PDF}
 }
 \value{
 Creates an output pdf file containing the generated plots

@@ -13,5 +13,5 @@ log2_transform(lowest_level_df)
 log2 transformed lowest-level data frame
 }
 \description{
-log2_transform
+Logarithmic transformation that can optionally be applied to the lowest-level data
 }

@@ -4,14 +4,7 @@
 \alias{plotStats}
 \title{plotStats}
 \usage{
-plotStats(
-  data,
-  exp_design,
-  main = "",
-  show_labels = T,
-  legend_shift = 20,
-  pdf_mode = F
-)
+plotStats(data, exp_design, main = "", show_labels = T, pdf_mode = F)
 }
 \arguments{
 \item{data}{lowest-level data frame}
@@ -21,8 +14,6 @@ plotStats(
 \item{main}{title for the plots}
 
 \item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
-
-\item{legend_shift}{states how much the second legend is shifted to the right inside the PCA plot inside PDF}
 
 \item{pdf_mode}{used for adjusting the PCA plot for the PDF when generated in plot_results}
 }
