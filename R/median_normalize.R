@@ -14,9 +14,9 @@
 
 
 median_normalize <- function(data){
-  data_noID <- data[, !colnames(data) %in% "row.number"]  # exclude ID column
+  data_n <- data[, !colnames(data) %in% "row.number"]  # exclude ID column
 
-  data_n <- as.data.frame(lapply(data_noID, function(col) col/median(col, na.rm = T)))
+  data_n <- as.data.frame(lapply(data_n, function(col) col/median(col, na.rm = T)))
   data_n <- cbind(row.number = data$row.number, data_n)  # add ID column back
 
   return(data_n)
