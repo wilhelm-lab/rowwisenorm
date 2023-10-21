@@ -28,10 +28,6 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F) {
   for (i in 1:number_batches){
     var_name <- paste("batch", i, sep="")
     var_value <- exp_design[, i+1]  # batch 1 is stored in column 2
-    var_value <- gsub(" ", ".", var_value)  # TODO remove: again make the names in exp design and column names match
-    var_value <- gsub("\\(", ".", var_value)
-    var_value <- gsub("\\)", ".", var_value)
-    var_value <- gsub("-", ".", var_value)
 
     vec1 <- append(vec1, length(var_value))  # maybe check when a missing field inside exp design -> filter empty (white space) places out of var_value before?
     vec2 <- append(vec2, var_value)
@@ -48,16 +44,7 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F) {
   vec33  <- c()
   for (i in 1:number_conds){
     var_name <- exp_design[i, 1]  # name of the cond
-    var_name <- gsub(" ", ".", var_name)
-    var_name <- gsub("\\(", ".", var_name)
-    var_name <- gsub("\\)", ".", var_name)
-    var_name <- gsub("-", ".", var_name)
-
     var_value <- exp_design[i, 2:ncol(exp_design)]
-    var_value <- gsub(" ", ".", var_value)  # again make the names in exp design and column names match
-    var_value <- gsub("\\(", ".", var_value)
-    var_value <- gsub("\\)", ".", var_value)
-    var_value <- gsub("-", ".", var_value)
 
     vec11 <- append(vec11, length(var_value))  # maybe check when a missing field inside exp design -> filter empty (white space) places out of var_value before?
     vec22 <- append(vec22, var_value)
