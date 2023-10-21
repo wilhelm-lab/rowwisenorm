@@ -25,4 +25,5 @@ plotStats <- function(data, exp_design, main="", show_labels=T, pdf_mode=F) {
   plot_heatmap(data, main=main)  # heatmap
   try(pcaPlot(data, main=main))  # component plot
   try(pcaPlot2(data, exp_design, main=main, show_labels=show_labels, pdf_mode=pdf_mode))  # PCA plot
+
 }
