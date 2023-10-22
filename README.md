@@ -1,5 +1,5 @@
 # rowwisenorm
-Row-wise normalization R package
+Row-Wise Normalization R package
 
 **Required input files:**
 1. Data as for example proteinGroups.txt from MaxQuant
@@ -23,8 +23,9 @@ User is asked to create the second file as a **tsv** file according to *experime
 
 |             |                           |                         |
 |-------------|---------------------------|-------------------------|
-| C1 R1       | column_name_c1r1_batch1   | column_name_c1r1_batch2 |
-| C1 R2       | column_name_c1r2_batch1   | column_name_c1r2_batch2 |
-| C2 R1       | column_name_c2r1_batch1   | column_name_c2r1_batch2 |
-| C2 R2       | column_name_c2r2_batch1   | column_name_c2r2_batch2 |
+| C1 R1       | column name C1R1 batch1   | column name C1R1 batch2 |
+| C1 R2       | column name C1R2 batch1   | column name C1R2 batch2 |
+| C2 R1       | column name C2R1 batch1   | column name C2R1 batch2 |
+| C2 R2       | column name C2R2 batch1   | column name C2R2 batch2 |
+|             |                           |                         |
 
