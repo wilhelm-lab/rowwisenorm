@@ -9,7 +9,8 @@ plot_results(
   exp_design,
   main = "",
   output_dir = "",
-  show_labels = F
+  show_labels = F,
+  svg = F
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ plot_results(
 \item{output_dir}{optionally specify the directory in which the output file will be saved}
 
 \item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
+
+\item{svg}{states whether a svg file is created for each of the plots additionally}
 }
 \value{
 Creates an output pdf file containing the generated plots

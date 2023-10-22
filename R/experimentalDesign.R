@@ -1,4 +1,4 @@
-#' Experimental design file matching the MaxQuant output file proteinGroups.txt
+#' Experimental design file matching the column names of the data
 #'
 #' @docType data
 #'
@@ -7,7 +7,7 @@
 #' @format An object of class \code{"data.frame"}
 #' \describe{
 #'  Contains the conditions inside the first column and all column names inside
-#'  the MaxQuant file that are desired for the lowest-level data frame
+#'  the data that are desired for the lowest-level data frame
 #' }
 #'
 #' @references reference
