@@ -13,7 +13,7 @@
 #' @return Creates an output pdf file containing the generated plots
 #'
 #' @export
-#' @importFrom grDevices dev.off pdf
+#' @importFrom grDevices dev.off pdf svg
 #'
 
 plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", show_labels=F, svg=F){
@@ -23,7 +23,7 @@ plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", sh
   main <- trimws(main)
   output_dir <- trimws(output_dir)
 
-  # plots
+  # file name and directory path
   if (main == ""){
     filename <- "results"
   }
@@ -50,12 +50,5 @@ plot_results <- function(lowest_level_df, exp_design, main="", output_dir="", sh
     plotStats(data, exp_design, main=main, show_labels=show_labels, pdf_mode=F)  # set here pdf_mode F
     dev.off()
   }
-
-  # * for only PDF
-  # filename <- paste(filename, ".pdf", sep = "")  # TODO remove this when applying multiple file formats
-
-  # pdf(filename, width=10, height=10)
-  # plotStats(data, exp_design, main=main, show_labels=show_labels, pdf_mode=T)  # set here pdf_mode True for adjusted margins
-  # dev.off()
 
 }
