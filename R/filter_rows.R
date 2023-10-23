@@ -17,7 +17,7 @@ filter_rows <- function(data, keep_only_rows_with_x_valid_ratio=0.5){
     ratio_ok <- FALSE
     warning("The ratio needs to be entered as a numeric. No filtering was done.")
   }
-  if (keep_only_rows_with_x_valid_ratio < 0 | keep_only_rows_with_x_valid_ratio > 1){
+  else if (keep_only_rows_with_x_valid_ratio < 0 | keep_only_rows_with_x_valid_ratio > 1){
     ratio_ok <- FALSE
     warning("The ratio needs to be between 0 and 1. No filtering was done.")
   }
