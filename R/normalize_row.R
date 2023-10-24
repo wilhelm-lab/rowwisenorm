@@ -41,7 +41,7 @@ normalize_row <- function(lowest_level_df, exp_design, active=FALSE, ref=NULL, r
   possible_refs <- trimws(possible_refs)  # safety
 
   # if empty, skip normalization
-  pos_refs_present <- TRUE   # using a Boolean to avoid using stop() here (stop is not recommended for shiny)
+  pos_refs_present <- TRUE   # using a Boolean to avoid using stop() here
   if (length(possible_refs) == 0){
     pos_refs_present <- FALSE
     warning("None of the conditions can be used as reference. No normalization was carried out.")
