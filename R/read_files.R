@@ -171,7 +171,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   if (number_batches <= length(colors_not_white)) {
     my_colors <- sample(colors_not_white, number_batches, replace = FALSE)  # pick no color two times
   } else {
-    my_colors <- sample(colors_not_white, number_batches)  # if more batches than colors, colors are picked more than once
+    my_colors <- sample(colors_not_white, number_batches, replace = TRUE)  # if more batches than colors, allow that a color is picked twice
   }
 
   # symbols for the conditions that can be used for PCA plot
@@ -179,7 +179,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   if (number_conds <= 18) {
     my_symbols <- sample(1:18, number_conds, replace = FALSE)  # pick no symbol two times
   } else {
-    my_symbols <- sample(1:18, number_conds)  # if more conditions than symbols, symbols are picked more than once
+    my_symbols <- sample(1:18, number_conds, replace = TRUE)  # if more conditions than symbols, allow that a symbol is picked twice
   }
 
   return_list <- list("lowest_level_df" = lowest_df, "exp_design" = exp_design,

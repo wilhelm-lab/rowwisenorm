@@ -51,7 +51,7 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F, set_c
     if (number_batches <= length(colors_not_white)) {
       my_colors <- sample(colors_not_white, number_batches, replace = FALSE)  # pick no color two times
     } else {
-      my_colors <- sample(colors_not_white, number_batches)  # if more batches than colors, colors are picked more than once
+      my_colors <- sample(colors_not_white, number_batches, replace = TRUE)  # if more batches than colors, allow a color is picked twice
     }
   }
 
@@ -78,7 +78,7 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F, set_c
     if (number_conds <= 18) {
       my_symbols <- sample(1:18, number_conds, replace = FALSE)  # pick no symbol two times
     } else {
-      my_symbols <- sample(1:18, number_conds)  # if more conditions than symbols, symbols are picked more than once
+      my_symbols <- sample(1:18, number_conds, replace = TRUE)  # if more conditions than symbols, allow that a symbol is picked twice
     }  }
 
   symbols <- rep(my_symbols, vec11)
