@@ -4,15 +4,15 @@ library(rowwisenorm)
 
 # tests for read_files
 
-test_that("read_files() returns a list of length 3", {
+test_that("read_files() returns a list of length 5", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesign.txt", package = "rowwisenorm")
 
   return_list <- read_files(data_path1, data_path2)
-  expect_equal(length(return_list), 3)
+  expect_equal(length(return_list), 5)
 })
 
-test_that("read_files() returns an object of type list including 3 objects of class data.frame", {
+test_that("read_files() returns an object of type list including 3 objects of class data.frame, one object of class character and one object of class integer", {
   data_path1 <- system.file("extdata", "proteinGroups.txt", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesign.txt", package = "rowwisenorm")
 
@@ -20,23 +20,25 @@ test_that("read_files() returns an object of type list including 3 objects of cl
   lowest_level_df <- return_list[["lowest_level_df"]]
   exp_design <- return_list[["exp_design"]]
   additional_cols <- return_list[["additional_cols"]]
+  pca_colors <- return_list[["pca_colors"]]
+  pca_symbols <- return_list[["pca_symbols"]]
+
   expect_type(return_list, "list")
   expect_s3_class(lowest_level_df, "data.frame")
   expect_s3_class(exp_design, "data.frame")
   expect_s3_class(additional_cols, "data.frame")
+  expect_true(typeof(pca_colors) == "character")
+  expect_true(typeof(pca_symbols) == "integer")
 })
 
-test_that("read_files() returns an object of type list including 3 objects of class data.frame even when additional_cols only includes one column", {
+test_that("read_files() returns an object of type list including the additional cols as class data.frame even when additional_cols only includes one column", {
   data_path1 <- system.file("extdata", "proteingroups.csv", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesignProcessed.txt", package = "rowwisenorm")
 
   return_list <- read_files(data_path1, data_path2, F, F, F)
-  lowest_level_df <- return_list[["lowest_level_df"]]
-  exp_design <- return_list[["exp_design"]]
   additional_cols <- return_list[["additional_cols"]]
+
   expect_type(return_list, "list")
-  expect_s3_class(lowest_level_df, "data.frame")
-  expect_s3_class(exp_design, "data.frame")
   expect_s3_class(additional_cols, "data.frame")
 })
 
@@ -107,11 +109,25 @@ test_that("read_files() filters out the correct number of rows", {
 })
 
 # file from processed folder
-test_that("read_files() works when some of the columns to be filtered for (e.g. reverse) are missing in the file", {
+test_that("read_files() makes a warning when feature 'reverse' should be filtered but is missing in the file", {
   data_path1 <- system.file("extdata", "proteingroups.csv", package = "rowwisenorm")
   data_path2 <- system.file("extdata", "experimentalDesignProcessed.txt", package = "rowwisenorm")
 
-  expect_no_error(read_files(data_path1, data_path2, F, F, F))
+  expect_warning(read_files(data_path1, data_path2, rm_reverse = T, rm_only_by_site = F, rm_contaminant = F))
+})
+
+test_that("read_files() makes a warning when feature 'only by site' should be filtered but is missing in the file", {
+  data_path1 <- system.file("extdata", "proteingroups.csv", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignProcessed.txt", package = "rowwisenorm")
+
+  expect_warning(read_files(data_path1, data_path2, rm_reverse = F, rm_only_by_site = T, rm_contaminant = F))
+})
+
+test_that("read_files() makes a warning when feature 'contaminant' should be filtered but is missing in the file", {
+  data_path1 <- system.file("extdata", "proteingroups.csv", package = "rowwisenorm")
+  data_path2 <- system.file("extdata", "experimentalDesignProcessed.txt", package = "rowwisenorm")
+
+  expect_warning(read_files(data_path1, data_path2, rm_reverse = F, rm_only_by_site = F, rm_contaminant = T))
 })
 
 

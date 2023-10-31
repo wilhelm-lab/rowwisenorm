@@ -4,7 +4,15 @@
 \alias{plotStats}
 \title{plotStats}
 \usage{
-plotStats(data, exp_design, main = "", show_labels = T, pdf_mode = F)
+plotStats(
+  data,
+  exp_design,
+  main = "",
+  show_labels = T,
+  pdf_mode = F,
+  set_colors = NULL,
+  set_symbols = NULL
+)
 }
 \arguments{
 \item{data}{lowest-level data frame}
@@ -16,6 +24,10 @@ plotStats(data, exp_design, main = "", show_labels = T, pdf_mode = F)
 \item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
 
 \item{pdf_mode}{used for adjusting the PCA plot for the PDF when generated in plot_results}
+
+\item{set_colors}{optionally set colors for the batches inside the PCA plot}
+
+\item{set_symbols}{optionally set symbols for the conditions inside the PCA plot}
 }
 \value{
 creates correlation plot, heatmap, component plot, and PCA plot

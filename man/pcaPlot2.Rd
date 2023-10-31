@@ -4,7 +4,15 @@
 \alias{pcaPlot2}
 \title{pcaPlot2}
 \usage{
-pcaPlot2(data, exp_design, main = "", show_labels = F, pdf_mode = F)
+pcaPlot2(
+  data,
+  exp_design,
+  main = "",
+  show_labels = F,
+  pdf_mode = F,
+  set_colors = NULL,
+  set_symbols = NULL
+)
 }
 \arguments{
 \item{data}{lowest-level data frame}
@@ -16,6 +24,10 @@ pcaPlot2(data, exp_design, main = "", show_labels = F, pdf_mode = F)
 \item{show_labels}{states whether the labels for the data points are shown}
 
 \item{pdf_mode}{used for adjusting the plot for the PDF when generated in plot_results}
+
+\item{set_colors}{optionally set colors for the batches as a vector}
+
+\item{set_symbols}{optionally set symbols for the conditions as a vector}
 }
 \value{
 creates a PCA plot

@@ -9,12 +9,14 @@
 #' @param rm_reverse remove rows being positive for reverse
 #' @param rm_contaminant remove rows being positive for a contaminant
 #'
-#' @return A list storing the lowest-level data frame, the data frame for the experimental design
-#' and a data frame with the remaining columns if present in this exact order
+#' @return A list storing the lowest-level data frame, the data frame for the experimental design,
+#'  a data frame with the remaining columns if present, a vector of colors that can be used for the batches in the PCA plot,
+#'  and a vector of symbols that can be used for the conditions in the PCA plot
 #'
 #' @export
 #' @importFrom utils read.csv read.table
 #' @importFrom stats median na.omit
+#' @importFrom grDevices colors
 #'
 
 read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_contaminant=TRUE){
@@ -157,7 +159,31 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
     colnames(additional_cols) <- add_colname
   }
 
-  return_list <- list("lowest_level_df" = lowest_df, "exp_design" = exp_design, "additional_cols" = additional_cols)
+
+  # colors for the batches that can be used each time a PCA plot is produced
+  is_white_or_nearly_white <- function(color) {
+    color <- tolower(color)
+    return(color == "white" || color == "snow" || grepl("^white|^whitesmoke|^whitesmoke$", color))
+  }
+  # use no white colors
+  colors_not_white <- setdiff(colors(), colors()[sapply(colors(), is_white_or_nearly_white)])
+  number_batches <- ncol(exp_design)-1
+  if (number_batches <= length(colors_not_white)) {
+    my_colors <- sample(colors_not_white, number_batches, replace = FALSE)  # pick no color two times
+  } else {
+    my_colors <- sample(colors_not_white, number_batches)  # if more batches than colors, colors are picked more than once
+  }
+
+  # symbols for the conditions that can be used for PCA plot
+  number_conds <- nrow(exp_design)
+  if (number_conds <= 18) {
+    my_symbols <- sample(1:18, number_conds, replace = FALSE)  # pick no symbol two times
+  } else {
+    my_symbols <- sample(1:18, number_conds)  # if more conditions than symbols, symbols are picked more than once
+  }
+
+  return_list <- list("lowest_level_df" = lowest_df, "exp_design" = exp_design,
+                      "additional_cols" = additional_cols, "pca_colors" = my_colors, "pca_symbols" = my_symbols)
   return(return_list)
 }
 

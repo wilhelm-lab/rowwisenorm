@@ -8,15 +8,18 @@
 #' @param main title for the plot
 #' @param show_labels states whether the labels for the data points are shown
 #' @param pdf_mode used for adjusting the plot for the PDF when generated in plot_results
+#' @param set_colors optionally set colors for the batches as a vector
+#' @param set_symbols optionally set symbols for the conditions as a vector
 #'
 #' @return creates a PCA plot
 #'
 #' @export
 #' @importFrom stats biplot cor median na.omit prcomp princomp
 #' @importFrom graphics lines pairs par points strwidth text legend
+#' @importFrom grDevices colors
 #'
 
-pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F) {
+pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F, set_colors=NULL, set_symbols=NULL) {
   data <- data[, !colnames(data) %in% "row.number"]
 
   number_batches <- ncol(exp_design) -1
@@ -35,7 +38,22 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F) {
     vec3 <- append(vec3, var_name)  # batch1, batch2 etc
   }
 
-  my_colors <- sample(colors(), number_batches)  # random pick as much colors as batches
+  is_white_or_nearly_white <- function(color) {
+    color <- tolower(color)
+    return(color == "white" || color == "snow" || grepl("^white|^whitesmoke|^whitesmoke$", color))
+  }
+
+  if (! is.null(set_colors)){
+    my_colors <- set_colors
+  } else {
+    # generate colors - use no white colors
+    colors_not_white <- setdiff(colors(), colors()[sapply(colors(), is_white_or_nearly_white)])
+    if (number_batches <= length(colors_not_white)) {
+      my_colors <- sample(colors_not_white, number_batches, replace = FALSE)  # pick no color two times
+    } else {
+      my_colors <- sample(colors_not_white, number_batches)  # if more batches than colors, colors are picked more than once
+    }
+  }
 
   colors <- rep(my_colors, vec1)  # repeat each of the chosen colors as often as there are conditions for each of the batches
   column_colors <- colors[match(names(data), vec2)]  # assign to column names of data
@@ -53,7 +71,15 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F) {
     vec33 <- append(vec33, var_name)  # names of the conditions
   }
 
-  my_symbols <- sample(1:18, number_conds)
+  if (! is.null(set_symbols)){
+    my_symbols <- set_symbols
+  } else {
+    # generate symbols
+    if (number_conds <= 18) {
+      my_symbols <- sample(1:18, number_conds, replace = FALSE)  # pick no symbol two times
+    } else {
+      my_symbols <- sample(1:18, number_conds)  # if more conditions than symbols, symbols are picked more than once
+    }  }
 
   symbols <- rep(my_symbols, vec11)
   column_symbols <- symbols[match(names(data), vec22)]

@@ -24,8 +24,9 @@ read_files(
 \item{rm_contaminant}{remove rows being positive for a contaminant}
 }
 \value{
-A list storing the lowest-level data frame, the data frame for the experimental design
-and a data frame with the remaining columns if present in this exact order
+A list storing the lowest-level data frame, the data frame for the experimental design,
+ a data frame with the remaining columns if present, a vector of colors that can be used for the batches in the PCA plot,
+ and a vector of symbols that can be used for the conditions in the PCA plot
 }
 \description{
 Reading of the input files

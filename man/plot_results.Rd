@@ -10,7 +10,9 @@ plot_results(
   main = "",
   output_dir = "",
   show_labels = F,
-  svg = F
+  svg = F,
+  set_colors = NULL,
+  set_symbols = NULL
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ plot_results(
 \item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
 
 \item{svg}{states whether a svg file is created for each of the plots additionally}
+
+\item{set_colors}{optionally set colors for the batches inside the PCA plot}
+
+\item{set_symbols}{optionally set symbols for the conditions inside the PCA plot}
 }
 \value{
 Creates an output pdf file containing the generated plots
