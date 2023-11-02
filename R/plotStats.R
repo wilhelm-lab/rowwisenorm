@@ -24,7 +24,7 @@ plotStats <- function(data, exp_design, main="", show_labels=T, pdf_mode=F, set_
 
   # calling the four helper functions
   plot_correlations(data=data, main=main)  # correlation plot
-  plot_heatmap(data, main=main)  # heatmap
+  plot_heatmap(data, exp_design, main=main)  # heatmap
   try(pcaPlot(data, main=main))  # component plot
   try(pcaPlot2(data, exp_design, main=main, show_labels=show_labels, pdf_mode=pdf_mode,
                set_colors=set_colors, set_symbols=set_symbols))  # PCA plot
