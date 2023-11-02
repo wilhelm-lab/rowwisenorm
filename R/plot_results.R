@@ -9,7 +9,7 @@
 #' @param output_dir optionally specify the directory in which the output file will be saved
 #' @param show_labels states whether the labels for the data points are shown inside the PCA plot
 #' @param svg states whether a svg file is created for each of the plots additionally
-#' @param set_colors optionally set colors for the batches inside the PCA plot
+#' @param set_colors optionally set colors for the batches inside the PCA plot and inside the heatmap
 #' @param set_symbols optionally set symbols for the conditions inside the PCA plot
 #'
 #' @return Creates an output pdf file containing the generated plots

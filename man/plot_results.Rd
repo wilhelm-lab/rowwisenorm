@@ -28,7 +28,7 @@ plot_results(
 
 \item{svg}{states whether a svg file is created for each of the plots additionally}
 
-\item{set_colors}{optionally set colors for the batches inside the PCA plot}
+\item{set_colors}{optionally set colors for the batches inside the PCA plot and inside the heatmap}
 
 \item{set_symbols}{optionally set symbols for the conditions inside the PCA plot}
 }

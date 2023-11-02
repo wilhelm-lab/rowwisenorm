@@ -25,7 +25,7 @@ plotStats(
 
 \item{pdf_mode}{used for adjusting the PCA plot for the PDF when generated in plot_results}
 
-\item{set_colors}{optionally set colors for the batches inside the PCA plot}
+\item{set_colors}{optionally set colors for the batches inside the PCA plot and inside the heatmap}
 
 \item{set_symbols}{optionally set symbols for the conditions inside the PCA plot}
 }

@@ -8,7 +8,7 @@
 #' @param main title for the plots
 #' @param show_labels states whether the labels for the data points are shown inside the PCA plot
 #' @param pdf_mode used for adjusting the PCA plot for the PDF when generated in plot_results
-#' @param set_colors optionally set colors for the batches inside the PCA plot
+#' @param set_colors optionally set colors for the batches inside the PCA plot and inside the heatmap
 #' @param set_symbols optionally set symbols for the conditions inside the PCA plot
 #'
 #' @return creates correlation plot, heatmap, component plot, and PCA plot
@@ -24,7 +24,7 @@ plotStats <- function(data, exp_design, main="", show_labels=T, pdf_mode=F, set_
 
   # calling the four helper functions
   plot_correlations(data=data, main=main)  # correlation plot
-  plot_heatmap(data, exp_design, main=main)  # heatmap
+  plot_heatmap(data, exp_design, batch_colors=set_colors, main=main)  # heatmap with same colors as PCA if set
   try(pcaPlot(data, main=main))  # component plot
   try(pcaPlot2(data, exp_design, main=main, show_labels=show_labels, pdf_mode=pdf_mode,
                set_colors=set_colors, set_symbols=set_symbols))  # PCA plot
