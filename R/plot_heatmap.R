@@ -20,9 +20,8 @@ plot_heatmap <- function(data, exp_design, main="", batch_colors=NULL){
   # require(pheatmap)
   data <- data[, !colnames(data) %in% "row.number"]
 
-  names <- colnames(data)
   annotation_df <- data.frame(matrix(NA, nrow = ncol(data), ncol = 2))
-  rownames(annotation_df) <- names
+  rownames(annotation_df) <- colnames(data)
   colnames(annotation_df) <- c("batch", "condition")
 
   # fill annotation data frame
