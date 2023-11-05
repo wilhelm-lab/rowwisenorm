@@ -177,9 +177,9 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   # symbols for the conditions that can be used for PCA plot
   number_conds <- nrow(exp_design)
   if (number_conds <= 18) {
-    my_symbols <- sample(1:18, number_conds, replace = FALSE)  # pick no symbol two times
+    my_symbols <- sample(0:18, number_conds, replace = FALSE)  # pick no symbol two times
   } else {
-    my_symbols <- sample(1:18, number_conds, replace = TRUE)  # if more conditions than symbols, allow that a symbol is picked twice
+    my_symbols <- sample(0:18, number_conds, replace = TRUE)  # if more conditions than symbols, allow that a symbol is picked twice
   }
 
   return_list <- list("lowest_level_df" = lowest_df, "exp_design" = exp_design,

@@ -76,9 +76,9 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F, set_c
   } else {
     # generate symbols
     if (number_conds <= 18) {
-      my_symbols <- sample(1:18, number_conds, replace = FALSE)  # pick no symbol two times
+      my_symbols <- sample(0:18, number_conds, replace = FALSE)  # pick no symbol two times
     } else {
-      my_symbols <- sample(1:18, number_conds, replace = TRUE)  # if more conditions than symbols, allow that a symbol is picked twice
+      my_symbols <- sample(0:18, number_conds, replace = TRUE)  # if more conditions than symbols, allow that a symbol is picked twice
     }  }
 
   symbols <- rep(my_symbols, vec11)
