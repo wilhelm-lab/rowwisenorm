@@ -129,4 +129,70 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F, set_c
   # second legend:  shifted next to other legend with shift being the width of first legend
   legend(x=greatest_x + right_shift + legend_width, y=usr[4], title = "Conditions", legend = vec33, col = "black", pch = my_symbols)
 
+
+  # score:
+  # coordinates of data points
+  x <- fit2$x[,1]  # x axis
+  y <- fit2$x[,2]  # y axis
+
+  my_labels <- rownames(fit2$x)  # newly define here since vector is set empty in case of show_labels=F
+  data_coordinates <- data.frame(x, y, label = my_labels)  # assign coordinates to labels
+
+  label_conds <- c()  # assign conditions to labels
+  for (label in my_labels){
+    matching_row <- apply(exp_design, 1, function(row) any(row == label))  # which row of exp_design contains the label (in read_files sanity check ensures that each label (= column of data) only once in exp_design)
+    cond <- exp_design[matching_row, 1]  # first entry of this row (= the condition for this label)
+    label_conds <- append(label_conds, cond)
+  }
+  data_coordinates$condition <- label_conds
+
+  # mean x and y values for each condition - data frame 1
+  mean_values <- aggregate(cbind(x, y) ~ condition, data = data_coordinates, FUN = mean)
+
+  # merge the mean values into the data frame - data frame 2
+  data_coordinates <- merge(data_coordinates, mean_values, by = "condition", suffixes = c("", ".mean.cond"))
+
+  # loop over data frame 1: pairwise distances between mean coordinates of conditions, summed up
+  distance_across <- 0
+  for (i in 1:(nrow(mean_values) -1)){  # current row - run until one row less so not out of border
+    print(paste("i = ", i) )
+    index_next <- i+1
+    for (j in index_next: nrow(mean_values)){  # remaining rows
+      print(paste("j = ", j) )
+      print(mean_values[i, "x"])
+      print(mean_values[j, "x"])
+      print(mean_values[i, "y"])
+      print(mean_values[j, "y"])
+      print("---")
+      distance_across <- distance_across +
+        (mean_values[i, "x"] - mean_values[j, "x"])^2 + (mean_values[i, "y"] - mean_values[j, "y"])^2
+
+    }
+  }
+
+  print(mean_values)
+  print(">>>>>>>>>>>>>>>>>>>>")
+
+  # loop over data frame 2: pairwise distances from each point of a condition to its mean coordinates, summed up
+  distance_inner <- 0
+  for (i in 1: nrow(data_coordinates)){
+    print(data_coordinates[i, "x"])
+    print(data_coordinates[i, "x.mean.cond"])
+    print(data_coordinates[i, "y"])
+    print(data_coordinates[i, "y.mean.cond"])
+    print("---")
+    distance_inner <- distance_inner +
+      (data_coordinates[i, "x"] - data_coordinates[i, "x.mean.cond"])^2 +
+      (data_coordinates[i, "y"] - data_coordinates[i, "y.mean.cond"])^2
+  }
+
+  print(data_coordinates)
+
+  print(distance_across)
+  print(distance_inner)
+  print(distance_across/distance_inner)
+
+  score <- distance_across/distance_inner
+  return(score)
+
 }
