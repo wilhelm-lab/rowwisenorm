@@ -45,6 +45,7 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
 
 
   # sanity checks
+  entries <- c()
   for (i in 1:nrow(exp_design)){
     cond <- trimws(exp_design[i,1])  # condition for this row
     if (cond == ""){
@@ -56,10 +57,17 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
       if (! (entry %in% colnames(proteingroups) | entry == "")){
         stop("The experimental design file does not match the column names of the data.")
       }
+      entries <- append(entries, entry)
     }
   }
 
-  # sanity check: proof that only one row for each condition - otherwise perhaps wrongly assigning conditions as possible references in normalization
+  # sanity check: no entry occurs more than once (no column name two times in exp_design)
+  entries <- entries[entries != ""]
+  if (length(entries) != length(unique(entries))){  # when unique elements not the same number of elements
+    stop("At least one column name is assigned more than once in the experimental design.")
+  }
+
+  # sanity check: no condition name occurs more than once (only one row for each condition - otherwise perhaps wrongly assigning conditions as possible references in normalization)
   if(length(exp_design[,1]) > length(unique(exp_design[,1]))){
     stop("At least one condition is assigned to more than one row.")
   }
