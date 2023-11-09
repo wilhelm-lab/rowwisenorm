@@ -5,7 +5,6 @@
 #'
 #' @param data lowest-level data frame
 #' @param exp_design experimental design data frame
-#' @param main title for the plot
 #' @param batch_colors can be used to set the same batch colors as for the PCA plot
 #'
 #' @return creates a heatmap plot
@@ -16,7 +15,7 @@
 #' @importFrom graphics lines pairs par points strwidth text
 #'
 
-plot_heatmap <- function(data, exp_design, main="", batch_colors=NULL){
+plot_heatmap <- function(data, exp_design, batch_colors=NULL){
   # require(pheatmap)
   data <- data[, !colnames(data) %in% "row.number"]
 
@@ -38,12 +37,16 @@ plot_heatmap <- function(data, exp_design, main="", batch_colors=NULL){
     if (length(batch_colors) == (ncol(exp_design) -1)){  # sanity that as many colors as batches
       colors_for_batches <- setNames(batch_colors, seq(1, ncol(exp_design)-1))  # assign to batch numbers
       pheatmap(cor(data, use="p", method="p"), annotation_col = annotation_df,
-               annotation_colors = list(batch = colors_for_batches), main=main)
+               annotation_colors = list(batch = colors_for_batches),
+               main="Investigation of Batch Effect: Correlation Heatmap with Batch and Condition Labels",
+               fontsize = 6, fontsize_row = 10, fontsize_col = 10)
     }
   }
   else {
     # heatmap with automatically generated colors
-    pheatmap(cor(data, use="p", method="p"), annotation_col = annotation_df, main=main)
+    pheatmap(cor(data, use="p", method="p"), annotation_col = annotation_df,
+             main="Investigation of Batch Effect: Correlation Heatmap with Batch and Condition Labels",
+             fontsize = 6, fontsize_row = 10, fontsize_col = 10)
   }
 
 }

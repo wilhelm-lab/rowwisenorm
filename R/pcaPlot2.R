@@ -5,7 +5,6 @@
 #'
 #' @param data lowest-level data frame
 #' @param exp_design experimental design data frame
-#' @param main title for the plot
 #' @param show_labels states whether the labels for the data points are shown
 #' @param pdf_mode used for adjusting the plot for the PDF when generated in plot_results
 #' @param set_colors optionally set colors for the batches as a vector
@@ -19,7 +18,7 @@
 #' @importFrom grDevices colors
 #'
 
-pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F, set_colors=NULL, set_symbols=NULL) {
+pcaPlot2 <- function(data, exp_design, show_labels=F, pdf_mode=F, set_colors=NULL, set_symbols=NULL) {
   data <- data[, !colnames(data) %in% "row.number"]
 
   number_batches <- ncol(exp_design) -1
@@ -110,7 +109,7 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F, set_c
   plot(fit2$x[,1],fit2$x[,2],
        col = column_colors,  # added
        pch = column_symbols,  # added
-       main=main,
+       main="Check for Batch Effects: \n PCA Plot of Variables assigned to Batch and Condition",
        xlab=my_xlab,  # added
        ylab=my_ylab,  # added
        cex=1.5,
@@ -138,7 +137,7 @@ pcaPlot2 <- function(data, exp_design, main="", show_labels=F, pdf_mode=F, set_c
   my_labels <- rownames(fit2$x)  # newly define here since vector is set empty in case of show_labels=F
   data_coordinates <- data.frame(x, y, label = my_labels)  # assign coordinates to labels
 
-  label_conds <- c()  # assign conditions to labels
+  label_conds <- c()  # assign conditions to labels (data points)
   for (label in my_labels){
     matching_row <- apply(exp_design, 1, function(row) any(row == label))  # which row of exp_design contains the label (in read_files sanity check ensures that each label (= column of data) only once in exp_design)
     cond <- exp_design[matching_row, 1]  # first entry of this row (= the condition for this label)

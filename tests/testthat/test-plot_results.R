@@ -25,7 +25,7 @@ test_that("plot_results() creates PDF file correctly with specified name in spec
   lowest_level_df <- return_list[["lowest_level_df"]]
   exp_design <- return_list[["exp_design"]]
 
-  plot_results(lowest_level_df = lowest_level_df, exp_design = exp_design, main = "my_results", output_dir = "res")
+  plot_results(lowest_level_df = lowest_level_df, exp_design = exp_design, filename = "my_results", output_dir = "res")
   expected_file <- "res/my_results.pdf"
   expect_true(file.exists(expected_file))
 })

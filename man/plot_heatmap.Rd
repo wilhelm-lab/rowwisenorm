@@ -4,14 +4,12 @@
 \alias{plot_heatmap}
 \title{plot_heatmap}
 \usage{
-plot_heatmap(data, exp_design, main = "", batch_colors = NULL)
+plot_heatmap(data, exp_design, batch_colors = NULL)
 }
 \arguments{
 \item{data}{lowest-level data frame}
 
 \item{exp_design}{experimental design data frame}
-
-\item{main}{title for the plot}
 
 \item{batch_colors}{can be used to set the same batch colors as for the PCA plot}
 }

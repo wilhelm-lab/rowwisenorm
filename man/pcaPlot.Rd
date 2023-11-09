@@ -4,12 +4,10 @@
 \alias{pcaPlot}
 \title{pcaPlot}
 \usage{
-pcaPlot(data, main = "")
+pcaPlot(data)
 }
 \arguments{
 \item{data}{lowest-level data frame}
-
-\item{main}{title for the plot}
 }
 \value{
 creates a component plot

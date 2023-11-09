@@ -7,7 +7,6 @@
 plotStats(
   data,
   exp_design,
-  main = "",
   show_labels = T,
   pdf_mode = F,
   set_colors = NULL,
@@ -18,8 +17,6 @@ plotStats(
 \item{data}{lowest-level data frame}
 
 \item{exp_design}{experimental design data frame}
-
-\item{main}{title for the plots}
 
 \item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
 

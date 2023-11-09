@@ -4,12 +4,10 @@
 \alias{plot_correlations}
 \title{plot_correlations}
 \usage{
-plot_correlations(data, main = "")
+plot_correlations(data)
 }
 \arguments{
 \item{data}{lowest-level data frame}
-
-\item{main}{title for the plot}
 }
 \value{
 creates a correlation plot

@@ -7,7 +7,7 @@
 plot_results(
   lowest_level_df,
   exp_design,
-  main = "",
+  filename = "",
   output_dir = "",
   show_labels = F,
   svg = F,
@@ -20,7 +20,7 @@ plot_results(
 
 \item{exp_design}{experimental design data frame}
 
-\item{main}{optionally specify the name of the output file and title for the plots}
+\item{filename}{optionally specify the name of the output file}
 
 \item{output_dir}{optionally specify the directory in which the output file will be saved}
 

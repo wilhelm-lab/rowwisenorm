@@ -109,7 +109,7 @@ plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design)
 
 Option 2: Set the name and the directory for the file
 ```{r}
-plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, main = "my_rowwisenorm_result", output_dir = "res")
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, filename = "my_rowwisenorm_result", output_dir = "res")
 ```
 
 Option 3: Set the directory with default name of the file 
@@ -119,6 +119,6 @@ plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, ou
 
 Option 4: Set the name with the file being saved in current directory
 ```{r}
-plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, main = "my_rowwisenorm_result")
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, filename = "my_rowwisenorm_result")
 ```
 

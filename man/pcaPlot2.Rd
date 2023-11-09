@@ -7,7 +7,6 @@
 pcaPlot2(
   data,
   exp_design,
-  main = "",
   show_labels = F,
   pdf_mode = F,
   set_colors = NULL,
@@ -18,8 +17,6 @@ pcaPlot2(
 \item{data}{lowest-level data frame}
 
 \item{exp_design}{experimental design data frame}
-
-\item{main}{title for the plot}
 
 \item{show_labels}{states whether the labels for the data points are shown}
 
