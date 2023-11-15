@@ -37,7 +37,6 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
   # remove columns with only missing values (only white space for each row) (user added empty column by accident)
   exp_design <- exp_design[, !apply(exp_design, 2, function(x) all(grepl("^\\s*$", x)))]
 
-
   # replace all non-letter and non-number characters (brackets, etc) with a dot
   # ... in column names of data (so that this is always the case) and in exp_design to match
   colnames(proteingroups) <- gsub("[^A-Za-z0-9]", ".", colnames(proteingroups))
@@ -149,6 +148,12 @@ read_files <- function(data, design, rm_only_by_site=TRUE, rm_reverse=TRUE, rm_c
 
   # lowest-level df
   lowest_df <- cbind(proteingroups["row.number"], proteingroups[, desired_colnames])
+
+  # safety: make string "NA" to real NA values (reading might have read all values as character)
+  lowest_df[lowest_df == "NA"] <- NA
+
+  # safety: make lowest-level df contain numeric values (reading might have read values as character)
+  lowest_df <- data.frame(lapply(lowest_df, function(x) as.numeric(as.character(x))))
 
   # replace all 0 values inside lowest-level df with NaN
   lowest_df[, !colnames(lowest_df) %in% "row.number"] <- replace(lowest_df[, !colnames(lowest_df) %in% "row.number"], lowest_df[, !colnames(lowest_df) %in% "row.number"] == 0, NaN)
