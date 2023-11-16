@@ -1,0 +1,29 @@
+#' @title remove_common_prefix
+#'
+#' @description
+#' Helper function to remove the common prefix of a set of strings
+#'
+#' @param strings set of strings
+#'
+#' @return list of the common prefix and the set of strings without the common prefix
+#'
+
+remove_common_prefix <- function(strings){
+  if (length(strings) == 0) {
+    return("")
+  }
+  char_matrix <- strsplit(strings, NULL)  # split each string into characters
+  min_length <- min(sapply(char_matrix, length))   # minimum length of the strings
+
+  # compare characters across strings
+  for (i in 1:min_length) {
+    if (length(unique(sapply(char_matrix, `[`, i))) > 1) {
+      break  # if characters are not the same
+    }
+  }
+
+  common_prefix <- paste0(char_matrix[[1]][seq_len(i - 1)], collapse = "")    # combined common prefix
+  modified_strings <- sub(paste0("^", common_prefix), "", strings)  # remove the common prefix
+
+  return(list(common_prefix = common_prefix, strings_without_prefix = modified_strings))
+}
