@@ -12,13 +12,13 @@ remove_common_prefix <- function(strings){
   if (length(strings) == 0) {
     return("")
   }
-  char_matrix <- strsplit(strings, NULL)  # split each string into characters
+  char_matrix <- strsplit(strings, NULL)  # list of lists, storing the single characters of the strings
   min_length <- min(sapply(char_matrix, length))   # minimum length of the strings
 
-  # compare characters across strings
+  # compare characters one by one, across strings
   for (i in 1:min_length) {
     if (length(unique(sapply(char_matrix, `[`, i))) > 1) {
-      break  # if characters are not the same
+      break  # if characters are not the same at this index, the common prefix ends at the position before
     }
   }
 
