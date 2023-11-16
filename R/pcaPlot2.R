@@ -165,42 +165,21 @@ pcaPlot2 <- function(data, exp_design, show_labels=F, pdf_mode=F, set_colors=NUL
   # loop over data frame 1: pairwise distances between mean coordinates of conditions, summed up
   distance_across <- 0
   for (i in 1:(nrow(mean_values) -1)){  # current row - run until one row less so not out of border
-    # print(paste("i = ", i) )
     index_next <- i+1
     for (j in index_next: nrow(mean_values)){  # remaining rows
-      # print(paste("j = ", j) )
-      # print(mean_values[i, "x"])
-      # print(mean_values[j, "x"])
-      # print(mean_values[i, "y"])
-      # print(mean_values[j, "y"])
-      # print("---")
       distance_across <- distance_across +
         (mean_values[i, "x"] - mean_values[j, "x"])^2 + (mean_values[i, "y"] - mean_values[j, "y"])^2
 
     }
   }
 
-  # print(mean_values)
-  # print(">>>>>>>>>>>>>>>>>>>>")
-
   # loop over data frame 2: pairwise distances from each point of a condition to its mean coordinates, summed up
   distance_inner <- 0
   for (i in 1: nrow(data_coordinates)){
-    # print(data_coordinates[i, "x"])
-    # print(data_coordinates[i, "x.mean.cond"])
-    # print(data_coordinates[i, "y"])
-    # print(data_coordinates[i, "y.mean.cond"])
-    # print("---")
     distance_inner <- distance_inner +
       (data_coordinates[i, "x"] - data_coordinates[i, "x.mean.cond"])^2 +
       (data_coordinates[i, "y"] - data_coordinates[i, "y.mean.cond"])^2
   }
-
-  # print(data_coordinates)
-  #
-  # print(distance_across)
-  # print(distance_inner)
-  # print(distance_across/distance_inner)
 
   score <- round(distance_across/distance_inner, digits = 3)
   return(score)
