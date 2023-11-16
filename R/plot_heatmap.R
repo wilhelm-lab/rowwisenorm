@@ -19,6 +19,11 @@ plot_heatmap <- function(data, exp_design, batch_colors=NULL){
   # require(pheatmap)
   data <- data[, !colnames(data) %in% "row.number"]
 
+  # get common prefix of column names and cut it off
+  remove_prefix_list <- remove_common_prefix(colnames(data))
+  prefix <- remove_prefix_list[["common_prefix"]]
+  colnames(data) <- remove_prefix_list[["strings_without_prefix"]]
+
   annotation_df <- data.frame(matrix(NA, nrow = ncol(data), ncol = 2))
   rownames(annotation_df) <- colnames(data)
   colnames(annotation_df) <- c("batch", "condition")
@@ -27,6 +32,7 @@ plot_heatmap <- function(data, exp_design, batch_colors=NULL){
   for (i in 1:nrow(exp_design)){
     for (j in 2:ncol(exp_design)){
       entry <- exp_design[i, j]
+      entry <- sub(paste0("^", prefix), "", entry)  # remove the common prefix in exp_design entries
       annotation_df[entry, "batch"] <- j-1  # batch number
       annotation_df[entry, "condition"] <- exp_design[i, 1]  # condition name
     }
@@ -38,15 +44,13 @@ plot_heatmap <- function(data, exp_design, batch_colors=NULL){
       colors_for_batches <- setNames(batch_colors, seq(1, ncol(exp_design)-1))  # assign to batch numbers
       pheatmap(cor(data, use="p", method="p"), annotation_col = annotation_df,
                annotation_colors = list(batch = colors_for_batches),
-               main="Investigation of Batch Effect: Correlation Heatmap with Batch and Condition Labels",
-               fontsize = 6, fontsize_row = 10, fontsize_col = 10)
+               main="Pearson Correlation Heatmap")
     }
   }
   else {
     # heatmap with automatically generated colors
     pheatmap(cor(data, use="p", method="p"), annotation_col = annotation_df,
-             main="Investigation of Batch Effect: Correlation Heatmap with Batch and Condition Labels",
-             fontsize = 6, fontsize_row = 10, fontsize_col = 10)
+             main="Pearson Correlation Heatmap")
   }
 
 }

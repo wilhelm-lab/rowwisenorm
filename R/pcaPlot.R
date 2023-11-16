@@ -14,12 +14,13 @@
 
 pcaPlot <- function(data) {
   data <- data[, !colnames(data) %in% "row.number"]
+  colnames(data) <- remove_common_prefix(colnames(data))[["strings_without_prefix"]]  # remove common prefix of column names
 
   data <- data[!apply(data, 1, function(d) any(is.na(d))),]  # remove rows with NA inside
   fit <- princomp(data, cor=TRUE)
 
   par(mar = rep(5, 4))  # adjust margins
-  biplot(fit, main="PCA Biplot: \n Directions of the Variables in relation to Comp. 1 and Comp. 2")
+  biplot(fit, main="Biplot displaying variable relationships \n along principal components 1 and 2")
 }
 
 

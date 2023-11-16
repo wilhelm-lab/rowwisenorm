@@ -21,6 +21,17 @@
 pcaPlot2 <- function(data, exp_design, show_labels=F, pdf_mode=F, set_colors=NULL, set_symbols=NULL) {
   data <- data[, !colnames(data) %in% "row.number"]
 
+  # get common prefix of column names and cut it off
+  remove_prefix_list <- remove_common_prefix(colnames(data))
+  prefix <- remove_prefix_list[["common_prefix"]]
+  colnames(data) <- remove_prefix_list[["strings_without_prefix"]]
+  # remove the common prefix in exp_design entries
+  for (i in 1:nrow(exp_design)){
+    for (j in 2:ncol(exp_design)){
+      exp_design[i,j] <- sub(paste0("^", prefix), "", exp_design[i,j])
+    }
+  }
+
   number_batches <- ncol(exp_design) -1
   number_conds <- nrow(exp_design)
 
@@ -109,7 +120,7 @@ pcaPlot2 <- function(data, exp_design, show_labels=F, pdf_mode=F, set_colors=NUL
   plot(fit2$x[,1],fit2$x[,2],
        col = column_colors,  # added
        pch = column_symbols,  # added
-       main="Check for Batch Effects: \n PCA Plot of Variables assigned to Batch and Condition",
+       main="PCA Plot of principal components 1 and 2",
        xlab=my_xlab,  # added
        ylab=my_ylab,  # added
        cex=1.5,

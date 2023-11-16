@@ -14,9 +14,10 @@
 
 plot_correlations <- function(data){
   data <- data[, !colnames(data) %in% "row.number"]
+  colnames(data) <- remove_common_prefix(colnames(data))[["strings_without_prefix"]]  # remove common prefix of column names
 
   # only draws at most first 15 columns, otherwise the plot might be too dense and result in an error
   pairs(data[,1:min(15, dim(data)[2])], lower.panel = panel.smooth2, upper.panel = panel.cor,
-        main="Relationships between Pairs of Columns: \n Correlation Coefficient Matrix and Scatter Plots")
+        main="Pairwise relationships \n Pearson Correlation Coefficient Matrix and Scatter Plots")
 
 }
