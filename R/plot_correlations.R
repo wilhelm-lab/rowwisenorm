@@ -18,6 +18,7 @@ plot_correlations <- function(data){
 
   # only draws at most first 15 columns, otherwise the plot might be too dense and result in an error
   pairs(data[,1:min(15, dim(data)[2])], lower.panel = panel.smooth2, upper.panel = panel.cor,
-        main="Pairwise relationships \n Pearson Correlation Coefficient Matrix and Scatter Plots")
+        main="Pairwise relationships \n Pearson Correlation Coefficient Matrix and Scatter Plots",
+        oma = c(4, 4, 8, 4))  # increase top margin
 
 }
