@@ -141,9 +141,9 @@ pcaPlot2 <- function(data, exp_design, show_labels=F, pdf_mode=F, set_colors=NUL
 
 
   # score:
-  # coordinates of data points
-  x <- fit2$x[,1]  # x axis
-  y <- fit2$x[,2]  # y axis
+  # coordinates of data points - normalized: division by max x and max y
+  x <- fit2$x[,1] / greatest_x # x axis
+  y <- fit2$x[,2] / max(fit2$x[,2])  # y axis
 
   my_labels <- rownames(fit2$x)  # newly define here since vector is set empty in case of show_labels=F
   data_coordinates <- data.frame(x, y, label = my_labels)  # assign coordinates to labels
