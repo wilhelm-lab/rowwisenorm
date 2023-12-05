@@ -27,7 +27,7 @@ pcaPlot2(
 \item{set_symbols}{optionally set symbols for the conditions as a vector}
 }
 \value{
-creates a PCA plot
+the returned value is the score of the PCA plot, which is displayed by the function. The score describes how strictly the data points are clustered by condition.
 }
 \description{
 Helper function for generating PCA plot with principal components

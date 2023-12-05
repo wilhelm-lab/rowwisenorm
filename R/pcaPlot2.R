@@ -10,7 +10,7 @@
 #' @param set_colors optionally set colors for the batches as a vector
 #' @param set_symbols optionally set symbols for the conditions as a vector
 #'
-#' @return creates a PCA plot
+#' @return the returned value is the score of the PCA plot, which is displayed by the function. The score describes how strictly the data points are clustered by condition.
 #'
 #' @export
 #' @importFrom stats biplot cor median na.omit prcomp princomp
@@ -67,7 +67,7 @@ pcaPlot2 <- function(data, exp_design, show_labels=F, pdf_mode=F, set_colors=NUL
   }
 
   colors <- rep(my_colors, vec1)  # repeat each of the chosen colors as often as there are conditions for each of the batches
-  column_colors <- colors[match(names(data), vec2)]  # assign to column names of data
+  column_colors <- colors[match(names(data), vec2)]  # assign to column names of data (vec2 stores the column names batch after batch in the right order)
 
   vec11 <- c()
   vec22 <- c()
