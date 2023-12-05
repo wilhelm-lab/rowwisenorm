@@ -53,7 +53,8 @@ pcaPlot2 <- function(data, exp_design, show_labels=F, pdf_mode=F, set_colors=NUL
     return(color == "white" || color == "snow" || grepl("^white|^whitesmoke|^whitesmoke$", color))
   }
 
-  if (! is.null(set_colors)){
+  if (! is.null(set_colors) && length(set_colors) == number_batches){
+    # when correct number of colors specified, use them
     my_colors <- set_colors
   } else {
     # generate colors - use no white colors
@@ -81,7 +82,8 @@ pcaPlot2 <- function(data, exp_design, show_labels=F, pdf_mode=F, set_colors=NUL
     vec33 <- append(vec33, var_name)  # names of the conditions
   }
 
-  if (! is.null(set_symbols)){
+  if (! is.null(set_symbols) && length(set_symbols) == number_conds){
+    # when correct number of symbols specified, use them
     my_symbols <- set_symbols
   } else {
     # generate symbols
