@@ -10,7 +10,7 @@ pcaPlot(data)
 \item{data}{lowest-level data frame}
 }
 \value{
-creates a component plot
+creates a component plot with the first and second principal components
 }
 \description{
 Helper function for generating the component plot

@@ -4,9 +4,9 @@
 #' Total sum normalization of the lowest-level data frame
 #'
 #' @param data lowest-level data frame
-#' @param refFunc String that is to be set as "sum"
+#' @param refFunc String that can be set as "sum" or "median" defining the reference function
 #' @param norm scaling of values
-#' @param na.rm Boolean that tells whether NA values are removed
+#' @param na.rm Boolean that tells whether NA values are removed inside the reference function
 #'
 #' @return sum normalized lowest-level data frame
 #'

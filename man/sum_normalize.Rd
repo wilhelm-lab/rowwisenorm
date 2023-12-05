@@ -9,11 +9,11 @@ sum_normalize(data, refFunc = "sum", norm = T, na.rm = T)
 \arguments{
 \item{data}{lowest-level data frame}
 
-\item{refFunc}{String that is to be set as "sum"}
+\item{refFunc}{String that can be set as "sum" or "median" defining the reference function}
 
 \item{norm}{scaling of values}
 
-\item{na.rm}{Boolean that tells whether NA values are removed}
+\item{na.rm}{Boolean that tells whether NA values are removed inside the reference function}
 }
 \value{
 sum normalized lowest-level data frame
