@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 library(rowwisenorm)
 ```
 
-
+####################################
 1. Preparation
 
 Reading of the input files
@@ -29,12 +29,17 @@ data_path2 <- system.file("extdata", "experimentalDesignProcessed.txt", package 
 return_list <- read_files(data_path1, data_path2)
 ```
 
-Grab the three data frames out of the returned list
+Grab the three data frames and a suggestion of batch colors and condition symbols out of the returned list
 ```{r}
 lowest_level_df <- return_list[["lowest_level_df"]]
 exp_design <- return_list[["exp_design"]]
 additional_cols <- return_list[["additional_cols"]]
+pca_colors <- return_list[["pca_colors"]]
+pca_symbols <- return_list[["pca_symbols"]]
 ```
+
+####################################
+2. Optional pre-processing steps
 
 Log2 transformation
 ```{r}
@@ -46,13 +51,18 @@ Filtering out rows
 lowest_level_df <- filter_rows(lowest_level_df)
 ```
 
-Optionally do total sum normalization 
+Sum normalization 
 ```{r}
 lowest_level_df <- sum_normalize(lowest_level_df)
 ```
 
+Median normalization
+```{r}
+lowest_level_df <- median_normalize(lowest_level_df)
+```
 
-2. Normalization
+####################################
+3. Normalization
 
 Option 1: References get automatically set
 ```{r}
@@ -74,11 +84,11 @@ Option 4: Use 'sum' as refFunc
 lowest_level_df_norm <- normalize_row(lowest_level_df, exp_design, refFunc = "sum")
 ```
 
+####################################
+4. Output file
 
-3. Output file
-
-Default file name: 'output_rowwisenorm.csv' for lowest level, 
-                  'output_rowwisenorm_complete.csv' for complete data
+Default file name: 'output.csv' for lowest level, 
+                  'output_complete.csv' for complete data
 Default location: current working directory
 
 Option 1: Only write the lowest-level data frame with the desired columns into a file
@@ -96,10 +106,10 @@ Option 3: Set the name and the directory for the file
 write_outfile(lowest_level_df = lowest_level_df_norm, additional_cols = additional_cols, filename = "myfile", output_dir = "myout")
 ```
 
+####################################
+5. PDF file with plots
 
-4. PDF file with plots
-
-Default file name: 'result_rowwisenorm.pdf'
+Default file name: 'results.pdf'
 Default location: current working directory
 
 Option 1: Default values for name and location of the file
@@ -121,4 +131,44 @@ Option 4: Set the name with the file being saved in current directory
 ```{r}
 plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, filename = "my_rowwisenorm_result")
 ```
+
+Option 5: Include labels into the PCA plot
+```{r}
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, show_labels = T)
+```
+
+Option 6: Creation of SVG files in addition to the PDF file
+```{r}
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, svg = T)
+```
+
+Option 7: Specify the batch colors and condition symbols inside the PCA plot and heatmap plot
+```{r}
+plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, set_colors = pca_colors, set_symbols = pca_symbols)
+```
+
+####################################
+6. Display the plots directly
+
+Pearson correlation plot
+```{r}
+plot_correlations(lowest_level_df_norm)
+```
+
+Heatmap plot
+```{r}
+plot_heatmap(lowest_level_df_norm, exp_design, batch_colors = pca_colors)
+```
+
+Component plot of the first and second principal components
+```{r}
+pcaPlot(lowest_level_df_norm)
+```
+
+PCA plot
+```{r}
+pcaPlot2(lowest_level_df_norm, exp_design, show_labels = F, set_colors = pca_colors, set_symbols = pca_symbols)
+```
+
+
 
