@@ -170,5 +170,10 @@ PCA plot
 pcaPlot2(lowest_level_df_norm, exp_design, show_labels = F, set_colors = pca_colors, set_symbols = pca_symbols)
 ```
 
+All four plots at once
+```{r}
+plotStats(lowest_level_df_norm, exp_design, show_labels = F, pdf_mode = F, set_colors = pca_colors, set_symbols = pca_symbols)
+```
+
 
 
