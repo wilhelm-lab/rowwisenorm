@@ -18,7 +18,7 @@
 #' @importFrom stats biplot cor median na.omit prcomp princomp
 #'
 
-plotStats <- function(data, exp_design,  show_labels=T, pdf_mode=F, set_colors=NULL, set_symbols=NULL) {
+plotStats <- function(data, exp_design,  show_labels=F, pdf_mode=F, set_colors=NULL, set_symbols=NULL) {
   data <- data[, !colnames(data) %in% "row.number"]
 
   # calling the four helper functions
