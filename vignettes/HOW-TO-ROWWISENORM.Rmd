@@ -152,27 +152,27 @@ plot_results(lowest_level_df = lowest_level_df_norm, exp_design = exp_design, se
 
 Pearson correlation plot
 ```{r}
-plot_correlations(lowest_level_df_norm)
+# plot_correlations(lowest_level_df_norm)
 ```
 
 Heatmap plot
 ```{r}
-plot_heatmap(lowest_level_df_norm, exp_design, batch_colors = pca_colors)
+# plot_heatmap(lowest_level_df_norm, exp_design, batch_colors = pca_colors)
 ```
 
 Component plot of the first and second principal components
 ```{r}
-pcaPlot(lowest_level_df_norm)
+# pcaPlot(lowest_level_df_norm)
 ```
 
 PCA plot
 ```{r}
-pcaPlot2(lowest_level_df_norm, exp_design, show_labels = F, set_colors = pca_colors, set_symbols = pca_symbols)
+# pcaPlot2(lowest_level_df_norm, exp_design, show_labels = F, set_colors = pca_colors, set_symbols = pca_symbols)
 ```
 
 All four plots at once
 ```{r}
-plotStats(lowest_level_df_norm, exp_design, show_labels = F, pdf_mode = F, set_colors = pca_colors, set_symbols = pca_symbols)
+# plotStats(lowest_level_df_norm, exp_design, show_labels = F, pdf_mode = F, set_colors = pca_colors, set_symbols = pca_symbols)
 ```
 
 

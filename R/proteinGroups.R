@@ -6,7 +6,7 @@
 #'
 #' @format An object of class \code{"data.frame"}
 #' \describe{
-#'  Contains all columns of the data
+#'  Contains all columns of the data.
 #' }
 #'
 #' @references reference

@@ -1,7 +1,7 @@
 #' @title log2_transform
 #'
 #' @description
-#' Logarithmic transformation that can optionally be applied to the lowest-level data
+#' Logarithmic transformation. This represents as an optional pre-processing step.
 #'
 #' @param lowest_level_df lowest-level data frame
 #'

@@ -1,13 +1,13 @@
 #' @title normalize_row_ref
 #'
 #' @description
-#' Helper function to perform row-wise normalization
+#' Helper function to perform row-wise normalization. References must be specified.
 #'
 #' @param lowest_level_df lowest-level data frame
 #' @param exp_design experimental design data frame
-#' @param ref references can be set here as Strings inside a vector
-#' @param refFunc String that can be set as "median" or "sum"
-#' @param na.rm Boolean that tells whether NA values are removed
+#' @param ref the reference conditions as Strings inside a vector
+#' @param refFunc String that can be set as "median" or "sum" to define the reference function inside the calculation
+#' @param na.rm Boolean that tells whether NA values are removed inside the reference function
 #'
 #' @return row-wise normalized lowest-level data frame
 #'
@@ -40,7 +40,6 @@ normalize_row_ref <- function(lowest_level_df, exp_design, ref, refFunc="median"
   for (i in 2:ncol(exp_design)) {
     j <- i-1
     cols <- exp_design[row_indices_refs, i] # column names for the current batch with condition being a ref
-    #cols <- gsub("\\s", ".", cols)  # replace white space with dots
     cols <- cols[cols != ""]  # only safety - missing fields are not allowed for reference conditions so should not occur here
 
     if (length(cols) > 1) {  # (otherwise only one ref, median must not be calculated)
@@ -58,7 +57,6 @@ normalize_row_ref <- function(lowest_level_df, exp_design, ref, refFunc="median"
   for (i in 2:ncol(exp_design)) {
     j <- i-1
     cols <- exp_design[, i]  # column names for respective batch
-    #cols <- gsub("\\s", ".", cols)  # replace white space with dots
     cols <- cols[cols != ""]  # exclude missing fields, otherwise might be an error when trying to access
 
     intensities_normalized[, cols] <- intensities[, cols]/(smeans[,j]/bmeans)

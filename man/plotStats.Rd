@@ -7,7 +7,7 @@
 plotStats(
   data,
   exp_design,
-  show_labels = T,
+  show_labels = F,
   pdf_mode = F,
   set_colors = NULL,
   set_symbols = NULL
@@ -18,17 +18,17 @@ plotStats(
 
 \item{exp_design}{experimental design data frame}
 
-\item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
+\item{show_labels}{Boolean that states whether the labels for the data points are shown inside the PCA plot}
 
-\item{pdf_mode}{used for adjusting the PCA plot for the PDF when generated in plot_results}
+\item{pdf_mode}{Boolean used for adjusting the PCA plot for the PDF when generated in plot_results}
 
-\item{set_colors}{optionally set colors for the batches inside the PCA plot and inside the heatmap}
+\item{set_colors}{optionally set colors for the batches inside the PCA plot and inside the heatmap as a vector of Strings}
 
-\item{set_symbols}{optionally set symbols for the conditions inside the PCA plot}
+\item{set_symbols}{optionally set symbols for the conditions inside the PCA plot as a vector of numerics}
 }
 \value{
-creates correlation plot, heatmap, component plot, and PCA plot
+displays the correlation plot, the heatmap plot, the component plot, the and PCA plot
 }
 \description{
-Generates plots
+Generation of all four plots at once. The plots are a correlation plot, a heatmap plot, a component plot, and a PCA plot.
 }

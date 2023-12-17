@@ -13,21 +13,21 @@ read_files(
 )
 }
 \arguments{
-\item{data}{data}
+\item{data}{file of the data}
 
 \item{design}{file of the experimental design}
 
-\item{rm_only_by_site}{remove rows being positive for only by site}
+\item{rm_only_by_site}{Boolean that states whether rows being positive for only by site are removed}
 
-\item{rm_reverse}{remove rows being positive for reverse}
+\item{rm_reverse}{Boolean that states whether rows being positive for reverse are removed}
 
-\item{rm_contaminant}{remove rows being positive for a contaminant}
+\item{rm_contaminant}{Boolean that states whether rows being positive for a contaminant are removed}
 }
 \value{
-A list storing the lowest-level data frame, the data frame for the experimental design,
- a data frame with the remaining columns if present, a vector of colors that can be used for the batches in the PCA plot,
+list storing the lowest-level data frame, the data frame for the experimental design,
+ a data frame with the remaining columns if present, a vector of colors that can be used for the batches in the PCA plot and the heatmap plot,
  and a vector of symbols that can be used for the conditions in the PCA plot
 }
 \description{
-Reading of the input files
+Reading of the input files.
 }

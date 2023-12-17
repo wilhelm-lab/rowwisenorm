@@ -1,7 +1,8 @@
 #' @title median_normalize
 #'
 #' @description
-#' Median normalization of the lowest-level data frame
+#' Median normalization. This represents as an optional pre-processing step.
+#' NA values are ignored inside the calculation of the median.
 #'
 #' @param data lowest-level data frame
 #'

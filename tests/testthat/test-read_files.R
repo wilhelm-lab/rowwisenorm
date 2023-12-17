@@ -131,6 +131,7 @@ test_that("read_files() makes a warning when feature 'contaminant' should be fil
 })
 
 
+
 # setwd("C:/Users/User/Documents/rowwisenorm")
 
 # --> call 'devtools::test()' in console to run these tests

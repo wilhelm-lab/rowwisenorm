@@ -1,7 +1,9 @@
 #' @title filter_rows
 #'
 #' @description
-#' Filtering out rows with too many NA values
+#' Filtering out rows that do not contain more real values than the specified ratio.
+#' The ratio symbolizes an exclusive lower bound.
+#' Exceptions: ratio = 0 means no filtering is done, ratio = 1 means keeping only rows with 100 percent real values.
 #'
 #' @param data lowest-level data frame
 #' @param keep_only_rows_with_x_valid_ratio only keep rows with more than this ratio of non-NA-values

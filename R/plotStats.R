@@ -1,16 +1,16 @@
 #' @title plotStats
 #'
 #' @description
-#' Generates plots
+#' Generation of all four plots at once. The plots are a correlation plot, a heatmap plot, a component plot, and a PCA plot.
 #'
 #' @param data lowest-level data frame
 #' @param exp_design experimental design data frame
-#' @param show_labels states whether the labels for the data points are shown inside the PCA plot
-#' @param pdf_mode used for adjusting the PCA plot for the PDF when generated in plot_results
-#' @param set_colors optionally set colors for the batches inside the PCA plot and inside the heatmap
-#' @param set_symbols optionally set symbols for the conditions inside the PCA plot
+#' @param show_labels Boolean that states whether the labels for the data points are shown inside the PCA plot
+#' @param pdf_mode Boolean used for adjusting the PCA plot for the PDF when generated in plot_results
+#' @param set_colors optionally set colors for the batches inside the PCA plot and inside the heatmap as a vector of Strings
+#' @param set_symbols optionally set symbols for the conditions inside the PCA plot as a vector of numerics
 #'
-#' @return creates correlation plot, heatmap, component plot, and PCA plot
+#' @return displays the correlation plot, the heatmap plot, the component plot, the and PCA plot
 #'
 #' @export
 #' @importFrom pheatmap pheatmap

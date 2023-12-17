@@ -1,9 +1,9 @@
 #' @title remove_common_prefix
 #'
 #' @description
-#' Helper function to remove the common prefix of a set of strings
+#' Helper function to remove the common prefix of a set of Strings.
 #'
-#' @param strings set of strings
+#' @param strings vector of Strings
 #'
 #' @return list of the common prefix and the set of strings without the common prefix
 #'

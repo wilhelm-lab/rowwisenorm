@@ -7,11 +7,11 @@
 remove_common_prefix(strings)
 }
 \arguments{
-\item{strings}{set of strings}
+\item{strings}{vector of Strings}
 }
 \value{
 list of the common prefix and the set of strings without the common prefix
 }
 \description{
-Helper function to remove the common prefix of a set of strings
+Helper function to remove the common prefix of a set of Strings.
 }

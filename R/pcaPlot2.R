@@ -1,16 +1,17 @@
 #' @title pcaPlot2
 #'
 #' @description
-#' Helper function for generating PCA plot with principal components
+#' PCA plot including the first and second principal components.The data points are colored by batch, while their symbols represent the conditions.
+#' In addition, the score of the PCA plot is returned. The score describes how strictly the data points are clustered by condition.
 #'
 #' @param data lowest-level data frame
 #' @param exp_design experimental design data frame
-#' @param show_labels states whether the labels for the data points are shown
-#' @param pdf_mode used for adjusting the plot for the PDF when generated in plot_results
-#' @param set_colors optionally set colors for the batches as a vector
-#' @param set_symbols optionally set symbols for the conditions as a vector
+#' @param show_labels Boolean that states whether the labels for the data points are shown
+#' @param pdf_mode Boolean that can be set as T to adjust the plot for the PDF when generated in plot_results
+#' @param set_colors optionally set colors for the batches as a vector of Strings
+#' @param set_symbols optionally set symbols for the conditions as a vector of numerics
 #'
-#' @return the returned value is the score of the PCA plot, which is displayed by the function. The score describes how strictly the data points are clustered by condition.
+#' @return the returned value is the score of the PCA plot. The PCA plot is displayed.
 #'
 #' @export
 #' @importFrom stats biplot cor median na.omit prcomp princomp

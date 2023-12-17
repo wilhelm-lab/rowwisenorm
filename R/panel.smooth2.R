@@ -1,8 +1,7 @@
 #' @title panel.smooth2
 #'
 #' @description
-#' Panel function used in the pairs() plot (correlation plot)
-#' - Used as lower.panel
+#' Panel function used in the pairs plot (correlation plot) as lower.panel.
 #'
 #' @param x numeric vector of the same length as y
 #' @param y numeric vector of the same length as x
@@ -10,9 +9,9 @@
 #' @param bg background color for symbol used for the points
 #' @param pch symbol used for the points
 #' @param cex expansion factor used for the points
-#' @param col.smooth color to be used by lines for drawing the smooths
-#' @param span smoothing parameter f for lowess()
-#' @param iter number of robustness iterations for lowess()
+#' @param col.smooth color to be used by lines function for drawing the smooths
+#' @param span smoothing parameter f for lowess function
+#' @param iter number of robustness iterations for lowess function
 #' @param ... further arguments
 #'
 #' @importFrom stats biplot cor median na.omit prcomp princomp
@@ -26,6 +25,7 @@ panel.smooth2 <- function(x, y, col = par("col"), bg = NA, pch = ".", cex = 1, c
   if (any(ok))
     lines(stats::lowess(x[ok], y[ok], f = span, iter = iter), col = col.smooth, ...)
 }
+
 
 # panel.smooth2 <- function(x, y, col = par("col"), bg = NA, pch = ".", cex = 1, col.smooth = "red", span = 2/3, iter = 3, ...) {
 #   idxs <- sample(1:length(x), max(length(x)*0.10, min(1000, length(x))))

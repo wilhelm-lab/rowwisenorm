@@ -1,11 +1,11 @@
 #' @title sum_normalize
 #'
 #' @description
-#' Total sum normalization of the lowest-level data frame
+#' Total sum normalization. This represents as an optional pre-processing step.
 #'
 #' @param data lowest-level data frame
-#' @param refFunc String that can be set as "sum" or "median" defining the reference function
-#' @param norm scaling of values
+#' @param refFunc String that can be set as "sum" or "median" to define the reference function inside the calculation
+#' @param norm Boolean that states whether the values are scaled
 #' @param na.rm Boolean that tells whether NA values are removed inside the reference function
 #'
 #' @return sum normalized lowest-level data frame

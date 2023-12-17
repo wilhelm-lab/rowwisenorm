@@ -24,17 +24,17 @@ plot_results(
 
 \item{output_dir}{optionally specify the directory in which the output file will be saved}
 
-\item{show_labels}{states whether the labels for the data points are shown inside the PCA plot}
+\item{show_labels}{Boolean that states whether the labels for the data points are shown inside the PCA plot}
 
-\item{svg}{states whether a svg file is created for each of the plots additionally}
+\item{svg}{states Boolean that defines whether a svg file is created for each of the plots additionally}
 
-\item{set_colors}{optionally set colors for the batches inside the PCA plot and inside the heatmap}
+\item{set_colors}{optionally set colors for the batches inside the PCA plot and inside the heatmap as a vector of Strings}
 
-\item{set_symbols}{optionally set symbols for the conditions inside the PCA plot}
+\item{set_symbols}{optionally set symbols for the conditions inside the PCA plot as a vector of numerics}
 }
 \value{
-Creates an output pdf file containing the generated plots
+Creates and downloads an output pdf file containing the generated plots
 }
 \description{
-Function to be called to generate all plots and save them inside an output pdf file
+Generation and download of all plots inside an output pdf file. Additionally, an SVG file can be generated for each plot.
 }

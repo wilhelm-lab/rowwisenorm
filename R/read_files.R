@@ -1,16 +1,16 @@
 #' @title read_files
 #'
 #' @description
-#' Reading of the input files
+#' Reading of the input files.
 #'
-#' @param data data
+#' @param data file of the data
 #' @param design file of the experimental design
-#' @param rm_only_by_site remove rows being positive for only by site
-#' @param rm_reverse remove rows being positive for reverse
-#' @param rm_contaminant remove rows being positive for a contaminant
+#' @param rm_only_by_site Boolean that states whether rows being positive for only by site are removed
+#' @param rm_reverse Boolean that states whether rows being positive for reverse are removed
+#' @param rm_contaminant Boolean that states whether rows being positive for a contaminant are removed
 #'
-#' @return A list storing the lowest-level data frame, the data frame for the experimental design,
-#'  a data frame with the remaining columns if present, a vector of colors that can be used for the batches in the PCA plot,
+#' @return list storing the lowest-level data frame, the data frame for the experimental design,
+#'  a data frame with the remaining columns if present, a vector of colors that can be used for the batches in the PCA plot and the heatmap plot,
 #'  and a vector of symbols that can be used for the conditions in the PCA plot
 #'
 #' @export

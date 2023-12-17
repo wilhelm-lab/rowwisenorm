@@ -1,18 +1,18 @@
 #' @title plot_results
 #'
 #' @description
-#' Function to be called to generate all plots and save them inside an output pdf file
+#' Generation and download of all plots inside an output pdf file. Additionally, an SVG file can be generated for each plot.
 #'
 #' @param lowest_level_df lowest-level data frame
 #' @param exp_design experimental design data frame
 #' @param filename optionally specify the name of the output file
 #' @param output_dir optionally specify the directory in which the output file will be saved
-#' @param show_labels states whether the labels for the data points are shown inside the PCA plot
-#' @param svg states whether a svg file is created for each of the plots additionally
-#' @param set_colors optionally set colors for the batches inside the PCA plot and inside the heatmap
-#' @param set_symbols optionally set symbols for the conditions inside the PCA plot
+#' @param show_labels Boolean that states whether the labels for the data points are shown inside the PCA plot
+#' @param svg states Boolean that defines whether a svg file is created for each of the plots additionally
+#' @param set_colors optionally set colors for the batches inside the PCA plot and inside the heatmap as a vector of Strings
+#' @param set_symbols optionally set symbols for the conditions inside the PCA plot as a vector of numerics
 #'
-#' @return Creates an output pdf file containing the generated plots
+#' @return Creates and downloads an output pdf file containing the generated plots
 #'
 #' @export
 #' @importFrom grDevices dev.off pdf svg
@@ -48,7 +48,7 @@ plot_results <- function(lowest_level_df, exp_design, filename="", output_dir=""
 
   # SVG
   if(svg){
-    svg_filename <- paste(f, "%02d.svg", sep="")  # to get multiple files, e.g. "myplots%02d.svg"
+    svg_filename <- paste(f, "%02d.svg", sep="")  # to get multiple numbered files
     svg(svg_filename, width = 10, height = 10)  # Set SVG-specific options
     plotStats(data, exp_design, show_labels=show_labels, pdf_mode=F,
               set_colors=set_colors, set_symbols=set_symbols)  # set here pdf_mode F

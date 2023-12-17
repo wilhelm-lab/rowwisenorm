@@ -17,15 +17,15 @@ normalize_row_ref(
 
 \item{exp_design}{experimental design data frame}
 
-\item{ref}{references can be set here as Strings inside a vector}
+\item{ref}{the reference conditions as Strings inside a vector}
 
-\item{refFunc}{String that can be set as "median" or "sum"}
+\item{refFunc}{String that can be set as "median" or "sum" to define the reference function inside the calculation}
 
-\item{na.rm}{Boolean that tells whether NA values are removed}
+\item{na.rm}{Boolean that tells whether NA values are removed inside the reference function}
 }
 \value{
 row-wise normalized lowest-level data frame
 }
 \description{
-Helper function to perform row-wise normalization
+Helper function to perform row-wise normalization. References must be specified.
 }

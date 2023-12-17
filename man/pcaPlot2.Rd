@@ -18,17 +18,18 @@ pcaPlot2(
 
 \item{exp_design}{experimental design data frame}
 
-\item{show_labels}{states whether the labels for the data points are shown}
+\item{show_labels}{Boolean that states whether the labels for the data points are shown}
 
-\item{pdf_mode}{used for adjusting the plot for the PDF when generated in plot_results}
+\item{pdf_mode}{Boolean that can be set as T to adjust the plot for the PDF when generated in plot_results}
 
-\item{set_colors}{optionally set colors for the batches as a vector}
+\item{set_colors}{optionally set colors for the batches as a vector of Strings}
 
-\item{set_symbols}{optionally set symbols for the conditions as a vector}
+\item{set_symbols}{optionally set symbols for the conditions as a vector of numerics}
 }
 \value{
-the returned value is the score of the PCA plot, which is displayed by the function. The score describes how strictly the data points are clustered by condition.
+the returned value is the score of the PCA plot. The PCA plot is displayed.
 }
 \description{
-Helper function for generating PCA plot with principal components
+PCA plot including the first and second principal components.The data points are colored by batch, while their symbols represent the conditions.
+In addition, the score of the PCA plot is returned. The score describes how strictly the data points are clustered by condition.
 }

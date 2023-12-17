@@ -14,15 +14,15 @@ write_outfile(
 \arguments{
 \item{lowest_level_df}{lowest-level data frame}
 
-\item{additional_cols}{optionally append the additional columns from the input file}
+\item{additional_cols}{optionally append the additional columns from the input file as a data frame}
 
 \item{filename}{optionally specify the name of the output file}
 
 \item{output_dir}{optionally specify the directory in which the output file will be saved}
 }
 \value{
-Creating an output file
+Creates and downloads an output file
 }
 \description{
-Write the normalized values into a file
+Download of the normalized values written into a file with comma-separated values.
 }

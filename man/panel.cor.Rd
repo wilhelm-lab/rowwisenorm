@@ -11,7 +11,7 @@ panel.cor(x, y, digits = 2, prefix = "", cex.cor, ...)
 
 \item{y}{numeric vector, the second variable, provided by pairs}
 
-\item{digits}{how many digits to use on the pairs plot for the correlations}
+\item{digits}{number of digits to use on the pairs plot for the correlations}
 
 \item{prefix}{text to prefix the correlation coefficients}
 
@@ -23,6 +23,5 @@ panel.cor(x, y, digits = 2, prefix = "", cex.cor, ...)
 correlation coefficients for pairs
 }
 \description{
-Panel function used in the pairs() plot (correlation plot)
-- Used as upper.panel
+Panel function used in the pairs plot (correlation plot) as upper.panel.
 }

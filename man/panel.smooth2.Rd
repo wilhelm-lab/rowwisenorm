@@ -30,15 +30,14 @@ panel.smooth2(
 
 \item{cex}{expansion factor used for the points}
 
-\item{col.smooth}{color to be used by lines for drawing the smooths}
+\item{col.smooth}{color to be used by lines function for drawing the smooths}
 
-\item{span}{smoothing parameter f for lowess()}
+\item{span}{smoothing parameter f for lowess function}
 
-\item{iter}{number of robustness iterations for lowess()}
+\item{iter}{number of robustness iterations for lowess function}
 
 \item{...}{further arguments}
 }
 \description{
-Panel function used in the pairs() plot (correlation plot)
-- Used as lower.panel
+Panel function used in the pairs plot (correlation plot) as lower.panel.
 }

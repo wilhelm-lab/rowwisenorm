@@ -1,14 +1,14 @@
 #' @title normalize_row
 #'
 #' @description
-#' Row-wise normalization of the lowest-level data
+#' Row-wise normalization.
 #'
 #' @param lowest_level_df lowest-level data frame
 #' @param exp_design experimental design data frame
 #' @param active Boolean that can be set as TRUE for interactive mode
-#' @param ref references can be set here as Strings inside a vector
-#' @param refFunc String that can be set as "median" or "sum"
-#' @param na.rm Boolean that tells whether NA values are removed
+#' @param ref references can optionally be set here as Strings inside a vector
+#' @param refFunc String that can be set as "median" or "sum" to define the reference function inside the calculation
+#' @param na.rm Boolean that tells whether NA values are removed inside the reference function
 #'
 #' @return row-wise normalized lowest-level data frame
 #'

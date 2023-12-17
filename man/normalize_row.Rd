@@ -20,15 +20,15 @@ normalize_row(
 
 \item{active}{Boolean that can be set as TRUE for interactive mode}
 
-\item{ref}{references can be set here as Strings inside a vector}
+\item{ref}{references can optionally be set here as Strings inside a vector}
 
-\item{refFunc}{String that can be set as "median" or "sum"}
+\item{refFunc}{String that can be set as "median" or "sum" to define the reference function inside the calculation}
 
-\item{na.rm}{Boolean that tells whether NA values are removed}
+\item{na.rm}{Boolean that tells whether NA values are removed inside the reference function}
 }
 \value{
 row-wise normalized lowest-level data frame
 }
 \description{
-Row-wise normalization of the lowest-level data
+Row-wise normalization.
 }
