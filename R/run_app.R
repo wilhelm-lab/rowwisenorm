@@ -29,7 +29,7 @@ run_app <- function(local = FALSE) {
   # alternatively: use app.R inside R/shiny_app, then working dir needs to be rowwisenorm
   # BUT: not sure where this is when user installs, the files in R folder are not installed -> will not be working
   # shiny::shinyAppDir(
-  #   file.path("./R/shiny_app/"),  # assumes rowwisenorm as getwd()
+  #   file.path("./R/shiny_app/"),  # assumes rowwisenorm as getwd() - R scripts not in user's installation!
   # )
 
 }
