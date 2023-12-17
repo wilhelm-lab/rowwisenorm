@@ -130,36 +130,3 @@ test_that("read_files() makes a warning when feature 'contaminant' should be fil
   expect_warning(read_files(data_path1, data_path2, rm_reverse = F, rm_only_by_site = F, rm_contaminant = T))
 })
 
-
-
-# setwd("C:/Users/User/Documents/rowwisenorm")
-
-# --> call 'devtools::test()' in console to run these tests
-# -> or e.g. 'devtools::test_file("./tests/testthat/test-read_files.R")' for this file
-# csv files need to be stored in inst/extdata and not in /data, in /data use the rda format for any files
-
-# --> call 'devtools::check()' to check if package works on various operating systems
-# -> this shows what exactly needs to be modified in the code
-
-# --> call 'rhub::check_for_cran()' to check for CRAN specific requirements:
-# ----> use this: rhub::check_for_cran(path="C:/Users/User/Documents/rowwisenorm", email="sina.mohrenweis@t-online.de")
-# -> needs validated email
-# -> validate_email(), get token via this email
-# -> list_validated_emails() shows validated emails with their token
-
-
-# ! --> always devtools::document() when modified the code, so that the changes are accepted
-
-# --> call 'devtools::build(path="C:/Users/User/Documents/rowwisenorm")' to build the package
-# -> .tar.gz folder gets created
-
-# remove.packages("rowwisenorm")
-# detach("package:rowwisenorm", unload = TRUE)
-
-# --> install with: install.packages("C:/Users/User/Documents/rowwisenorm/rowwisenorm_0.1.0.tar.gz", repos = NULL, type = 'source')
-# -> then: library(rowwisenorm)
-
-# -> when changes not there: restart R, load the package new with library
-# -> maybe unloadNamespace("rowwisenorm") before newly loading library
-
-# MAY add '@keywords internal' to the functions that should be internal
