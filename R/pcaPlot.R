@@ -6,7 +6,7 @@
 #'
 #' @param data lowest-level data frame
 #'
-#' @return displays a component plot
+#' @return Displays a component plot.
 #'
 #' @export
 #' @importFrom stats biplot cor median na.omit prcomp princomp

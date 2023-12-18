@@ -10,7 +10,7 @@ log2_transform(lowest_level_df)
 \item{lowest_level_df}{lowest-level data frame}
 }
 \value{
-log2 transformed lowest-level data frame
+Log2 transformed lowest-level data frame.
 }
 \description{
 Logarithmic transformation. This represents as an optional pre-processing step.

@@ -16,7 +16,7 @@ sum_normalize(data, refFunc = "sum", norm = T, na.rm = T)
 \item{na.rm}{Boolean that tells whether NA values are removed inside the reference function}
 }
 \value{
-sum normalized lowest-level data frame
+Sum normalized lowest-level data frame.
 }
 \description{
 Total sum normalization. This represents as an optional pre-processing step.

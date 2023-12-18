@@ -10,7 +10,7 @@ median_normalize(data)
 \item{data}{lowest-level data frame}
 }
 \value{
-median normalized lowest-level data frame
+Median normalized lowest-level data frame.
 }
 \description{
 Median normalization. This represents as an optional pre-processing step.

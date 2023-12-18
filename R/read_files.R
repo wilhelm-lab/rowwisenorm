@@ -9,9 +9,9 @@
 #' @param rm_reverse Boolean that states whether rows being positive for reverse are removed
 #' @param rm_contaminant Boolean that states whether rows being positive for a contaminant are removed
 #'
-#' @return list storing the lowest-level data frame, the data frame for the experimental design,
+#' @return List storing the lowest-level data frame, the data frame for the experimental design,
 #'  a data frame with the remaining columns if present, a vector of colors that can be used for the batches in the PCA plot and the heatmap plot,
-#'  and a vector of symbols that can be used for the conditions in the PCA plot
+#'  and a vector of symbols that can be used for the conditions in the PCA plot.
 #'
 #' @export
 #' @importFrom utils read.csv read.table

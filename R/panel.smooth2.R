@@ -14,6 +14,8 @@
 #' @param iter number of robustness iterations for lowess function
 #' @param ... further arguments
 #'
+#' @return Lower panel (scatter plots) for pairs.
+#'
 #' @importFrom stats biplot cor median na.omit prcomp princomp
 #' @importFrom graphics lines pairs par points strwidth text
 #'

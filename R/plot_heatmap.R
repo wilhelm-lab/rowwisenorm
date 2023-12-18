@@ -7,7 +7,7 @@
 #' @param exp_design experimental design data frame
 #' @param batch_colors optionally set colors for the batches as a vector of Strings
 #'
-#' @return displays a heatmap plot
+#' @return Displays a heatmap plot.
 #'
 #' @export
 #' @importFrom pheatmap pheatmap

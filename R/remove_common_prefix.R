@@ -5,7 +5,7 @@
 #'
 #' @param strings vector of Strings
 #'
-#' @return list of the common prefix and the set of strings without the common prefix
+#' @return List of the common prefix and the set of strings without the common prefix.
 #'
 
 remove_common_prefix <- function(strings){

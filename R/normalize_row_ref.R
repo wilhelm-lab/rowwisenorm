@@ -9,7 +9,7 @@
 #' @param refFunc String that can be set as "median" or "sum" to define the reference function inside the calculation
 #' @param na.rm Boolean that tells whether NA values are removed inside the reference function
 #'
-#' @return row-wise normalized lowest-level data frame
+#' @return Row-wise normalized lowest-level data frame.
 #'
 #' @importFrom stats median na.omit
 #'

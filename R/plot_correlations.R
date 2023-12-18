@@ -7,7 +7,7 @@
 #'
 #' @param data lowest-level data frame
 #'
-#' @return displays a correlation plot
+#' @return Displays a correlation plot.
 #'
 #' @export
 #' @importFrom stats biplot cor median na.omit prcomp princomp

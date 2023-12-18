@@ -10,7 +10,7 @@
 #' @param cex.cor character expansion factor
 #' @param ... further arguments
 #'
-#' @return correlation coefficients for pairs
+#' @return Upper panel (correlation coefficients) for pairs.
 #'
 #' @importFrom stats biplot cor median na.omit prcomp princomp
 #' @importFrom graphics lines pairs par points strwidth text

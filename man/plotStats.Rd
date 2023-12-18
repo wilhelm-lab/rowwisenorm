@@ -27,7 +27,7 @@ plotStats(
 \item{set_symbols}{optionally set symbols for the conditions inside the PCA plot as a vector of numerics}
 }
 \value{
-displays the correlation plot, the heatmap plot, the component plot, the and PCA plot
+Displays the correlation plot, the heatmap plot, the component plot, the and PCA plot.
 }
 \description{
 Generation of all four plots at once. The plots are a correlation plot, a heatmap plot, a component plot, and a PCA plot.

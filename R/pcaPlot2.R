@@ -11,7 +11,7 @@
 #' @param set_colors optionally set colors for the batches as a vector of Strings
 #' @param set_symbols optionally set symbols for the conditions as a vector of numerics
 #'
-#' @return the returned value is the score of the PCA plot. The PCA plot is displayed.
+#' @return The returned value is the score of the PCA plot. The PCA plot is displayed.
 #'
 #' @export
 #' @importFrom stats biplot cor median na.omit prcomp princomp

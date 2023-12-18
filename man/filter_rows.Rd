@@ -12,7 +12,7 @@ filter_rows(data, keep_only_rows_with_x_valid_ratio = 0.5)
 \item{keep_only_rows_with_x_valid_ratio}{only keep rows with more than this ratio of non-NA-values}
 }
 \value{
-filtered lowest-level data frame
+Filtered lowest-level data frame.
 }
 \description{
 Filtering out rows that do not contain more real values than the specified ratio.

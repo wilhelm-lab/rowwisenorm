@@ -27,7 +27,7 @@ normalize_row(
 \item{na.rm}{Boolean that tells whether NA values are removed inside the reference function}
 }
 \value{
-row-wise normalized lowest-level data frame
+Row-wise normalized lowest-level data frame.
 }
 \description{
 Row-wise normalization.

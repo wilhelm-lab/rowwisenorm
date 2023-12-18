@@ -33,8 +33,9 @@ plot_results(
 \item{set_symbols}{optionally set symbols for the conditions inside the PCA plot as a vector of numerics}
 }
 \value{
-Creates and downloads an output pdf file containing the generated plots
+Downloads an output pdf file containing the generated plots.
 }
 \description{
 Generation and download of all plots inside an output pdf file. Additionally, an SVG file can be generated for each plot.
+The plots are a correlation plot, a heatmap plot, a component plot, and a PCA plot.
 }

@@ -6,7 +6,7 @@
 #'
 #' @param data lowest-level data frame
 #'
-#' @return median normalized lowest-level data frame
+#' @return Median normalized lowest-level data frame.
 #'
 #' @export
 #'

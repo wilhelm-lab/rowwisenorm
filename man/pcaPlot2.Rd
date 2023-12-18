@@ -27,7 +27,7 @@ pcaPlot2(
 \item{set_symbols}{optionally set symbols for the conditions as a vector of numerics}
 }
 \value{
-the returned value is the score of the PCA plot. The PCA plot is displayed.
+The returned value is the score of the PCA plot. The PCA plot is displayed.
 }
 \description{
 PCA plot including the first and second principal components.The data points are colored by batch, while their symbols represent the conditions.

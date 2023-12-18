@@ -3,10 +3,13 @@
 #' @description
 #' Execution of the shiny application. The application includes the performance of row-wise normalization,
 #' as well as the total sum normalization, VST, VSN, quantile normalization, ComBat, and M-ComBat.
+#' In addition, the application includes multiple pre-processing steps.
+#' Moreover, it contains download options for the normalized values, as well as the resulting plots.
+#' The plots and the normalized values can also be viewed directly together with the PCA plot score.
 #'
 #' @param local Boolean that states whether the app is called locally. If set, further options for manual downloads are included in the app.
 #'
-#' @return executes the shiny application
+#' @return Executes the shiny application.
 #'
 #' @export
 #'

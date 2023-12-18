@@ -12,7 +12,7 @@ write_outfile(
 )
 }
 \arguments{
-\item{lowest_level_df}{lowest-level data frame}
+\item{lowest_level_df}{lowest-level data frame, normalized or not normalized}
 
 \item{additional_cols}{optionally append the additional columns from the input file as a data frame}
 
@@ -21,8 +21,10 @@ write_outfile(
 \item{output_dir}{optionally specify the directory in which the output file will be saved}
 }
 \value{
-Creates and downloads an output file
+Downloads an output file.
 }
 \description{
 Download of the normalized values written into a file with comma-separated values.
+Optionally, additional columns from the data can be appended.
+Note: It is also possible to enter the lowest-level data frame not normalized.
 }

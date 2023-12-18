@@ -38,6 +38,9 @@ panel.smooth2(
 
 \item{...}{further arguments}
 }
+\value{
+Lower panel (scatter plots) for pairs.
+}
 \description{
 Panel function used in the pairs plot (correlation plot) as lower.panel.
 }

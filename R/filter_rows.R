@@ -8,7 +8,7 @@
 #' @param data lowest-level data frame
 #' @param keep_only_rows_with_x_valid_ratio only keep rows with more than this ratio of non-NA-values
 #'
-#' @return filtered lowest-level data frame
+#' @return Filtered lowest-level data frame.
 #'
 #' @export
 #'

@@ -2,6 +2,7 @@
 #'
 #' @description
 #' Generation and download of all plots inside an output pdf file. Additionally, an SVG file can be generated for each plot.
+#' The plots are a correlation plot, a heatmap plot, a component plot, and a PCA plot.
 #'
 #' @param lowest_level_df lowest-level data frame
 #' @param exp_design experimental design data frame
@@ -12,7 +13,7 @@
 #' @param set_colors optionally set colors for the batches inside the PCA plot and inside the heatmap as a vector of Strings
 #' @param set_symbols optionally set symbols for the conditions inside the PCA plot as a vector of numerics
 #'
-#' @return Creates and downloads an output pdf file containing the generated plots
+#' @return Downloads an output pdf file containing the generated plots.
 #'
 #' @export
 #' @importFrom grDevices dev.off pdf svg

@@ -20,7 +20,7 @@ panel.cor(x, y, digits = 2, prefix = "", cex.cor, ...)
 \item{...}{further arguments}
 }
 \value{
-correlation coefficients for pairs
+Upper panel (correlation coefficients) for pairs.
 }
 \description{
 Panel function used in the pairs plot (correlation plot) as upper.panel.

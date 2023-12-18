@@ -5,7 +5,7 @@
 #'
 #' @param lowest_level_df lowest-level data frame
 #'
-#' @return log2 transformed lowest-level data frame
+#' @return Log2 transformed lowest-level data frame.
 #'
 #' @export
 #'

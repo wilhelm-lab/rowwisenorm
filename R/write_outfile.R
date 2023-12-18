@@ -2,13 +2,15 @@
 #'
 #' @description
 #' Download of the normalized values written into a file with comma-separated values.
+#' Optionally, additional columns from the data can be appended.
+#' Note: It is also possible to enter the lowest-level data frame not normalized.
 #'
-#' @param lowest_level_df lowest-level data frame
+#' @param lowest_level_df lowest-level data frame, normalized or not normalized
 #' @param additional_cols optionally append the additional columns from the input file as a data frame
 #' @param filename optionally specify the name of the output file
 #' @param output_dir optionally specify the directory in which the output file will be saved
 #'
-#' @return Creates and downloads an output file
+#' @return Downloads an output file.
 #'
 #' @export
 #' @importFrom utils write.table

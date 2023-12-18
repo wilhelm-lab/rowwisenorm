@@ -8,7 +8,7 @@
 #' @param norm Boolean that states whether the values are scaled
 #' @param na.rm Boolean that tells whether NA values are removed inside the reference function
 #'
-#' @return sum normalized lowest-level data frame
+#' @return Sum normalized lowest-level data frame.
 #'
 #' @export
 #'
