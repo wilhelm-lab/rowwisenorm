@@ -18,7 +18,8 @@ library(rowwisenorm)  # make available
 library(pheatmap)
 
 library(edgeR)  # for VST
-library(lumi)  # for VSN
+# library(lumi)  # for VSN
+library(limma)  # for VSN
 library(preprocessCore)  # for Quantile normalization
 library(sva)  # for ComBat
 
@@ -1303,6 +1304,7 @@ server <- function(input, output, session) {
                                     do_sum = input$sum_norm, do_median = input$median_norm)
 
       lowest_level_df_matrix <- as.matrix(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])  # convert to matrix and exclude ID column
+      # calculation
       quantile_normalized <- preprocessCore::normalize.quantiles(lowest_level_df_matrix)
       # back convert and set column names back
       quantile_normalized <- as.data.frame(quantile_normalized)
