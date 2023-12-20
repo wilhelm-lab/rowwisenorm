@@ -18,7 +18,7 @@
 #' @importFrom edgeR DGEList calcNormFactors cpm
 #' @importFrom limma normalizeVSN
 #' @importFrom preprocessCore normalize.quantiles
-#' @importFrom sva
+#' @importFrom sva ComBat
 #'
 
 run_app <- function(local = FALSE) {
