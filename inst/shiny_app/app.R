@@ -21,9 +21,9 @@ library(edgeR)  # for VST
 # library(lumi)  # for VSN
 library(limma)  # for VSN
 library(preprocessCore)  # for Quantile normalization
-library(sva)  # for ComBat
+library(sva)  # for ComBat + some sva functions part of M-ComBat code
 
-library(shinyjs)  # to handle command line parameter
+# library(shinyjs)  # to handle command line parameter
 
 # setting upload size to 100 MB max
 options(shiny.maxRequestSize=100*1024^2)
@@ -32,7 +32,7 @@ options(shiny.maxRequestSize=100*1024^2)
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
-    useShinyjs(),  # used to handle command line parameter
+    # useShinyjs(),  # used to handle command line parameter
 
     # graphic adjustment
     tags$head(
