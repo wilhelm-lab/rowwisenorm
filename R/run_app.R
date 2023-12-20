@@ -13,6 +13,12 @@
 #'
 #' @export
 #'
+#' @import shiny
+#' @importFrom pheatmap pheatmap
+#' @importFrom edgeR DGEList calcNormFactors cpm
+#' @importFrom limma normalizeVSN
+#' @importFrom preprocessCore normalize.quantiles
+#' @importFrom sva
 #'
 
 run_app <- function(local = FALSE) {
@@ -28,11 +34,4 @@ run_app <- function(local = FALSE) {
   shiny::shinyAppFile(
     file.path(app_r_path),
   )
-
-  # alternatively: use app.R inside R/shiny_app, then working dir needs to be rowwisenorm
-  # BUT: not sure where this is when user installs, the files in R folder are not installed -> will not be working
-  # shiny::shinyAppDir(
-  #   file.path("./R/shiny_app/"),  # assumes rowwisenorm as getwd() - R scripts not in user's installation!
-  # )
-
 }
