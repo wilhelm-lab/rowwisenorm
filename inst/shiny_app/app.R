@@ -1391,7 +1391,9 @@ server <- function(input, output, session) {
       center <- input$m.combat_center
       m.combat_notification_text(paste("Batch ", center, " was used as center."))
 
-      source("M-ComBat.R")  # file that stores M.COMBAT function
+      # source("M-ComBat.R")  # file that stores M.COMBAT function
+      source(system.file("shiny_app", "M-ComBat.R", package = "rowwisenorm"))
+
       m.combat_data <- M.COMBAT(ms_data_matrix, batch = as.factor(batches), mod = as.factor(conditions),
                                 center = center)
 
