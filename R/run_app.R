@@ -19,6 +19,7 @@
 #' @importFrom limma normalizeVSN
 #' @importFrom preprocessCore normalize.quantiles
 #' @importFrom sva ComBat
+#' @importFrom shinyjs show hide
 #'
 
 run_app <- function(local = FALSE) {
