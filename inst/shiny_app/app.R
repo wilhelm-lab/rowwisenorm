@@ -1,17 +1,10 @@
 #
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
+# This is a Shiny web application. You can run the application by calling
+# the function 'run_app' from the package rowwisenorm.
 #
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
+# OMICS DATA NORMALIZATION
 #
 
-# setwd("C:/Users/User/Documents/rowwisenorm_shiny")
-
-# command line argument: 'local' can be set to include manual download options
-# run in terminal: Rscript app.R local
-# -> open link, stop with ctrl c
 
 library(shiny)
 library(rowwisenorm)  # make available
@@ -23,16 +16,15 @@ library(limma)  # for VSN
 library(preprocessCore)  # for Quantile normalization
 library(sva)  # for ComBat + some sva functions part of M-ComBat code
 
-# library(shinyjs)  # to handle command line parameter
+library(shinyjs)  # to handle local parameter: shinyjs::show and shinyjs::hide to adjust the options for downloads
 
 # setting upload size to 100 MB max
 options(shiny.maxRequestSize=100*1024^2)
 
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
 
-    # useShinyjs(),  # used to handle command line parameter
+    useShinyjs(),  # must be called in the UI in order for all shinyjs functions to work (such as show/hide)
 
     # graphic adjustment
     tags$head(
@@ -81,52 +73,6 @@ ui <- fluidPage(
     tags$style(HTML("#onlyBySiteCheckbox { color: green;}")),
     tags$style(HTML("#reverseCheckbox { color: green; }")),
     tags$style(HTML("#contaminantCheckbox { color: green; }")),
-
-    # background
-    # tags$style(HTML('
-    #   body {
-    #     background: linear-gradient(135deg, rgba(135, 206, 235, 0.3), rgba(0, 191, 255, 0.6), rgba(30, 144, 255, 0.6), rgba(173, 216, 230, 0.6), rgba(135, 206, 235, 0.4));
-    #     background-size: 200% 200%; /* Increase the size to make the background fit the whole window */
-    #   }
-    # ')),
-    # bright grey, dark grey tabs:
-    # tags$style(HTML('
-    #   body {
-    #     background: #f5f5f5; /* Light gray background */
-    #   }
-    #   .navbar {
-    #     background: #ccc; /* Subtle accent color for the navigation bar */
-    #   }
-    #   .nav-tabs li a {
-    #     background: #ccc; /* Subtle accent color for tab headers */
-    #   }
-    #   .nav-tabs li.active a {
-    #     background: #bbb; /* Slightly darker accent for the active tab */
-    #   }
-    #   .column {  /* can be set as class ="column" into specific elements */
-    #     background: #e0e0e0; /* Light tint for column backgrounds */
-    #     border: 1px solid #ddd; /* Delicate gray border */
-    #   }
-    # ')),
-    # same green:
-    # tags$style(HTML('
-    #   body {
-    #     background: #e6ffcc; /* Very bright pastel green for the general background */
-    #   }
-    #   .navbar {
-    #     background: #ccff99; /* Slightly darker but still light green for the navigation bar */
-    #   }
-    #   .nav-tabs li a {
-    #     background: #ccff99; /* Slightly darker but still light green for tab headers */
-    #   }
-    #   .nav-tabs li.active a {
-    #     background: #aaff66; /* Slightly darker but still light green for the active tab */
-    #   }
-    #   .column {
-    #     background: #e0e0e0; /* Light tint for column backgrounds */
-    #     border: 1px solid #ddd; /* Delicate gray border */
-    #   }
-    # ')),
 
     # overall appearance
     tags$style(HTML('
@@ -666,7 +612,7 @@ ui <- fluidPage(
 
 )
 
-# Define server logic required to draw a histogram
+
 server <- function(input, output, session) {
 
     # command line argument: 'local' can be set to include manual download options
@@ -1200,7 +1146,6 @@ server <- function(input, output, session) {
         }
       )
     })
-
 
 
     # NORMALIZATION row-wise
