@@ -8,16 +8,22 @@ Description: R Package for the performance of row-wise normalization.
     The package also includes the reading of the data, preprocessing functions, and a function for generating an output file.
     Moreover, it contains functions to generate a correlation plot, a heatmap, a component plot and a PCA plot.
     There is also a function provided to save the plots as a PDF file and optionally SVG files. 
-License: MIT
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    devtools
 Imports:
-    devtools,
-    pheatmap
+    pheatmap,
+    edgeR,
+    limma,
+    preprocessCore,
+    shiny,
+    shinyjs,
+    sva
 VignetteBuilder: knitr
 Config/testthat/edition: 3

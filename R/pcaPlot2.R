@@ -14,7 +14,7 @@
 #' @return The returned value is the score of the PCA plot. The PCA plot is displayed.
 #'
 #' @export
-#' @importFrom stats biplot cor median na.omit prcomp princomp
+#' @importFrom stats biplot cor median na.omit prcomp princomp aggregate
 #' @importFrom graphics lines pairs par points strwidth text legend
 #' @importFrom grDevices colors
 #'
