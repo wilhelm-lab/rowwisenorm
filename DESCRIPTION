@@ -3,7 +3,7 @@ Type: Package
 Title: Row-Wise Normalization
 Version: 0.1.0
 Author: Sina Mohrenweis
-Maintainer: Sina Mohrenweis <sina.mohrenweis@web.de>
+Maintainer: Sina Mohrenweis <sina.mohrenweis@t-online.de>
 Description: R Package for the performance of row-wise normalization.
     The package also includes the reading of the data, preprocessing functions, and a function for generating an output file.
     Moreover, it contains functions to generate a correlation plot, a heatmap, a component plot and a PCA plot.
