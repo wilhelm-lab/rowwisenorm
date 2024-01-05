@@ -9,7 +9,7 @@
 #' @param filename optionally specify the name of the output file
 #' @param output_dir optionally specify the directory in which the output file will be saved
 #' @param show_labels Boolean that states whether the labels for the data points are shown inside the PCA plot
-#' @param svg states Boolean that defines whether a svg file is created for each of the plots additionally
+#' @param svg Boolean that defines whether a svg file is created for each of the plots additionally
 #' @param set_colors optionally set colors for the batches inside the PCA plot and inside the heatmap as a vector of Strings
 #' @param set_symbols optionally set symbols for the conditions inside the PCA plot as a vector of numerics
 #'

@@ -20,7 +20,7 @@ pcaPlot2(
 
 \item{show_labels}{Boolean that states whether the labels for the data points are shown}
 
-\item{pdf_mode}{Boolean that can be set as T to adjust the plot for the PDF when generated in plot_results}
+\item{pdf_mode}{Boolean that can be set as T to adjust the plot margins for the PDF}
 
 \item{set_colors}{optionally set colors for the batches as a vector of Strings}
 

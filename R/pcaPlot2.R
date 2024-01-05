@@ -7,7 +7,7 @@
 #' @param data lowest-level data frame
 #' @param exp_design experimental design data frame
 #' @param show_labels Boolean that states whether the labels for the data points are shown
-#' @param pdf_mode Boolean that can be set as T to adjust the plot for the PDF when generated in plot_results
+#' @param pdf_mode Boolean that can be set as T to adjust the plot margins for the PDF
 #' @param set_colors optionally set colors for the batches as a vector of Strings
 #' @param set_symbols optionally set symbols for the conditions as a vector of numerics
 #'

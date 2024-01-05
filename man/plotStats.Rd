@@ -20,7 +20,7 @@ plotStats(
 
 \item{show_labels}{Boolean that states whether the labels for the data points are shown inside the PCA plot}
 
-\item{pdf_mode}{Boolean used for adjusting the PCA plot for the PDF when generated in plot_results}
+\item{pdf_mode}{Boolean used for adjusting the PCA plot margins for the PDF}
 
 \item{set_colors}{optionally set colors for the batches inside the PCA plot and inside the heatmap as a vector of Strings}
 
