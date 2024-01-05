@@ -213,18 +213,6 @@ ui <- fluidPage(
                             class = "title-div"
                           ),
                           hr(class = "title-hr"),
-                          # choose method
-                          div(
-                            h3("Normalization Method", style = "font-size: 17px; font-weight:550;"),
-                            class = "title-div"
-                          ),
-                          hr(),
-                          selectInput(inputId = "method", label = "Method",
-                                      choices = c("row-wise-normalization" = "row-wise-normalization",
-                                                  "total-sum" = "total-sum", "VST" = "VST", "VSN" = "VSN",
-                                                  "quantile-normalization" = "quantile-normalization",
-                                                  "ComBat" = "ComBat", "M-ComBat" = "M-ComBat")),
-                          textOutput("selected_method"),
                           # Preprocessing possible for all methods: - but log2 not for VST allowed (no negative values allowed)
                           div(
                             h3("Preprocessing", style = "font-size: 17px; font-weight:550;"),
@@ -281,6 +269,18 @@ ui <- fluidPage(
                           # median normalize
                           checkboxInput(inputId = "median_norm", label = "Median normalize", value = FALSE),
 
+                          # choice of normalization method
+                          div(
+                            h3("Normalization Method", style = "font-size: 17px; font-weight:550;"),
+                            class = "title-div"
+                          ),
+                          hr(),
+                          selectInput(inputId = "method", label = "Method",
+                                      choices = c("row-wise-normalization" = "row-wise-normalization",
+                                                  "total-sum" = "total-sum", "VST" = "VST", "VSN" = "VSN",
+                                                  "quantile-normalization" = "quantile-normalization",
+                                                  "ComBat" = "ComBat", "M-ComBat" = "M-ComBat")),
+                          textOutput("selected_method"),
 
                           ### Setups for specific methods: - only for row-wise, total sum, and M-Combat
                           conditionalPanel(
