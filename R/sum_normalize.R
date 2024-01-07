@@ -32,7 +32,7 @@ sum_normalize <- function(data, refFunc = "sum", norm=T, na.rm=T) {
   data_id <- data$row.number
   data <- data[, !colnames(data) %in% "row.number"]  # exclude ID column
 
-  tsums <- apply(data, 2, function(d) refFunc(d, na.rm=na.rm))  # total sums for each column summed up
+  tsums <- apply(data, 2, function(d) refFunc(d, na.rm=na.rm))  # total sum for each column (values summed up) or column medians
   ts <- refFunc(tsums, na.rm=na.rm)  # total sum of complete data
   if (norm) {
     ts <- ts / dim(data)[2]
