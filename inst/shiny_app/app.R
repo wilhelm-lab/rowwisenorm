@@ -331,7 +331,7 @@ ui <- fluidPage(
                           # parameter center for M-ComBat
                           conditionalPanel(
                             condition = "input.method == 'M-ComBat' ",
-                            numericInput("m.combat_center", label = "Center at this batch number:", value = 1, step = 1, min = 1),
+                            numericInput("m.combat_center", label = "Center batch:", value = 1, step = 1, min = 1),
                             textOutput("m.combat_center_note")
                           ),
 
