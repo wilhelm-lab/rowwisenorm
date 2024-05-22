@@ -374,12 +374,16 @@ ui <- fluidPage(
                             class = "title-div"
                           ),
                           tags$hr(style="border-color: darkblue;"),  # horizontal line
+                          tags$style(HTML("
+                            #generate_features_note {color: darkblue;}")),  # color for note
 
                           textOutput("reading_error"),  # handle stop() call inside reading
                           textOutput("reading_warning"),  # handle warning() inside reading
                           textOutput("normalize_row_warning"),  # not valid reference entered
                           textOutput("datafile_error"),
                           textOutput("designfile_error"),
+                          textOutput("generate_features_error"),
+                          textOutput("generate_features_note"),
 
                           # notifications for PCA colors, symbols, and M-ComBat center
                           textOutput("batch_colors_manually_notification"),
@@ -836,13 +840,32 @@ server <- function(input, output, session) {
       features <- c("only by site", "reverse", "contaminant")
       available_features_data <- character(0)
       df <- uploaded_data()  # currently uploaded data
+      multiple_matches <- c() # only for an extra note for the user
 
       for (feat in features) {
         regex_pattern <- gsub("\\s+", ".*", feat)
-        matching_col <- grep(regex_pattern, colnames(df), value = TRUE, ignore.case = TRUE, perl = TRUE)
+        matching_col <- c()
+        tryCatch({
+          matching_col <- grep(regex_pattern, colnames(df), value = TRUE, ignore.case = TRUE, perl = TRUE)
+        },  error = function(e) {  # safety
+          output$generate_features_error <- renderText({
+            paste("Error searching for available features:", e$message)
+          })
+        })
         if (length(matching_col) == 1) {  # if exactly one column matches
           available_features_data <- append(available_features_data, feat)  # add the feature as a choice
         }
+        else if (length(matching_col) > 1){  # if more than 1 matching column
+          multiple_matches <- append(multiple_matches, feat) # append current feature name (only used for the note)
+        }
+      }
+
+      # note in case some features have multiple matching columns - could leave this out
+      if (length(multiple_matches) > 0){
+        multiple_matches <- paste(multiple_matches, collapse = ", ")
+        output$generate_features_note <- renderText({
+          paste("Note: The feature(s) ", multiple_matches, " have multiple matching columns inside the data.")
+        })
       }
 
       # Update the available features using the reactiveVal
