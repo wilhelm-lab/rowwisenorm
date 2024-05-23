@@ -932,7 +932,7 @@ server <- function(input, output, session) {
       # read the uploaded file
       design <- uploaded_design()
 
-      # maximum numbers of choices for batches and conditions
+      # maximum numbers of choices for batches and conditions (global variables)
       max_choices_batches <<- ncol(design) -1
       max_choices_conds <<- nrow(design)
 
