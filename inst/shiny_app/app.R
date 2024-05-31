@@ -384,6 +384,11 @@ ui <- fluidPage(
                           textOutput("designfile_error"),
                           textOutput("generate_features_error"),
                           textOutput("generate_features_note"),
+                          # errors in preprocessing
+                          textOutput("pre_log_error"),
+                          textOutput("pre_filter_error"),
+                          textOutput("pre_sum_error"),
+                          textOutput("pre_median_error"),
 
                           # notifications for PCA colors, symbols, and M-ComBat center
                           textOutput("batch_colors_manually_notification"),
@@ -1020,28 +1025,52 @@ server <- function(input, output, session) {
     })
 
 
-    # helper function preprocessing
+    # helper function preprocessing - tryCatch only for safety
     preprocess <- function(lowest_level_df, do_log=F, do_filter=F, do_sum=F, do_median=F){
       # preprocessing: when log2 is set
       if(do_log){
-        lowest_level_df <- rowwisenorm::log2_transform(lowest_level_df = lowest_level_df)
+        tryCatch({
+          lowest_level_df <- rowwisenorm::log2_transform(lowest_level_df = lowest_level_df)
+        }, error = function(e) {
+          output$pre_log_error <- renderText({
+            paste("Error in log transformation: ", e$message)
+          })
+        })
       }
 
       # preprocessing: when filter rows is set
       if(do_filter){
-        # slider input is automatically a numeric between 0 and 1 - no warnings possible
-        lowest_level_df <- rowwisenorm::filter_rows(lowest_level_df, input$filterrowsratio)
+        tryCatch({
+          # slider input is automatically a numeric between 0 and 1 - no warnings possible
+          lowest_level_df <- rowwisenorm::filter_rows(lowest_level_df, input$filterrowsratio)
+        }, error = function(e) {
+          output$pre_filter_error <- renderText({
+            paste("Error in filtering rows: ", e$message)
+          })
+        })
       }
 
       # preprocessing: when sum normalize is set
       if(do_sum){
-        lowest_level_df <- rowwisenorm::sum_normalize(lowest_level_df, refFunc = input$refFunc_sum,
-                                                      norm = input$norm_sum, na.rm = input$na_rm_sum)
+        tryCatch({
+          lowest_level_df <- rowwisenorm::sum_normalize(lowest_level_df, refFunc = input$refFunc_sum,
+                                                        norm = input$norm_sum, na.rm = input$na_rm_sum)
+        }, error = function(e) {
+          output$pre_sum_error <- renderText({
+            paste("Error in preprocessing with sum normalization: ", e$message)
+          })
+        })
       }
 
       # preprocessing: when median normalize is set
       if(do_median){
-        lowest_level_df <- rowwisenorm::median_normalize(lowest_level_df)
+        tryCatch({
+          lowest_level_df <- rowwisenorm::median_normalize(lowest_level_df)
+        }, error = function(e) {
+          output$pre_median_error <- renderText({
+            paste("Error in preprocessing with median normalization: ", e$message)
+          })
+        })
       }
       return(lowest_level_df)
     }
