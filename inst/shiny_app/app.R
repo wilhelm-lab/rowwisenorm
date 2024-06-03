@@ -763,6 +763,10 @@ server <- function(input, output, session) {
       m.combat_notification_text(NULL)
       output$datafile_error <- renderText({ NULL })
       output$reading_error <- renderText({ NULL })
+      output$reading_warning <- renderText({ NULL })
+      output$generate_features_error <- renderText({ NULL })
+      output$generate_features_note <- renderText({ NULL })
+      output$normalize_row_warning <- renderText({ NULL })
 
     })
 
@@ -778,6 +782,8 @@ server <- function(input, output, session) {
       m.combat_notification_text(NULL)
       output$designfile_error <- renderText({ NULL })
       output$reading_error <- renderText({ NULL })
+      output$reading_warning <- renderText({ NULL })
+      output$normalize_row_warning <- renderText({ NULL })
       # clear notes about number of colors/symbols to be set
       output$batch_colors_manually_note <- renderText({ NULL })
       output$condition_symbols_manually_note <- renderText({ NULL })
@@ -1097,7 +1103,6 @@ server <- function(input, output, session) {
           output$process_status <- renderUI({
             HTML('')
           })
-          output$normalize_row_warning <- renderText({ })  # warning of normalize_row when no valid refs
           output$data_output <- renderUI({ })  # show data field
           output$show_data_note <- renderText({ })  # show data note
           output$plot1_raw <- renderUI({ })
@@ -1122,6 +1127,17 @@ server <- function(input, output, session) {
           output$batch_colors_manually_notification <- renderText({ })
           output$condition_symbols_manually_notification <- renderText({ })
           m.combat_notification_text(NULL)
+          output$datafile_error <- renderText({ NULL })
+          output$designfile_error <- renderText({ NULL })
+          output$reading_error <- renderText({ NULL })
+          output$reading_warning <- renderText({ NULL })
+          output$generate_features_error <- renderText({ NULL })
+          output$generate_features_note <- renderText({ NULL })
+          output$normalize_row_warning <- renderText({ })  # warning of normalize_row when no valid refs
+          output$pre_log_error <- renderText({ NULL })   # errors of pre-processing steps
+          output$pre_filter_error <- renderText({ NULL })
+          output$pre_sum_error <- renderText({ NULL })
+          output$pre_median_error <- renderText({ NULL })
 
           return_list <- readin()
           if (! is.null(return_list)){
