@@ -35,13 +35,7 @@ ui <- fluidPage(
     tags$head(tags$style("#reading_warning{color: orange; margin-bottom: 20px;")),
     tags$head(tags$style("#reading_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#normalize_row_warning{color: red; margin-bottom: 20px;}")),
-    tags$head(tags$style("#normalize_row_error{color: red; margin-bottom: 20px;}")),
-    tags$head(tags$style("#normalize_totalsum_error{color: red; margin-bottom: 20px;}")),
-    tags$head(tags$style("#normalize_vst_error{color: red; margin-bottom: 20px;}")),
-    tags$head(tags$style("#normalize_vsn_error{color: red; margin-bottom: 20px;}")),
-    tags$head(tags$style("#normalize_quantile_error{color: red; margin-bottom: 20px;}")),
-    tags$head(tags$style("#normalize_combat_error{color: red; margin-bottom: 20px;}")),
-    tags$head(tags$style("#normalize_m.combat_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#normalization_error{color: red; margin-bottom: 20px;}")),  # used in each normalization to catch an error
 
     tags$head(tags$style("#datafile_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#designfile_error{color: red; margin-bottom: 20px;}")),
@@ -393,14 +387,8 @@ ui <- fluidPage(
                           textOutput("generate_features_error"),
                           textOutput("generate_features_note"),
 
-                          #possible errors in normalization
-                          textOutput("normalize_row_error"),
-                          textOutput("normalize_totalsum_error"),
-                          textOutput("normalize_vst_error"),
-                          textOutput("normalize_vsn_error"),
-                          textOutput("normalize_quantile_error"),
-                          textOutput("normalize_combat_error"),
-                          textOutput("normalize_m.combat_error"),
+                          # possible error in normalization
+                          textOutput("normalization_error"),  # used in each normalization to catch an error
 
                           # errors in preprocessing
                           textOutput("pre_log_error"),
@@ -785,13 +773,7 @@ server <- function(input, output, session) {
       output$generate_features_error <- renderText({ NULL })
       output$generate_features_note <- renderText({ NULL })
       output$normalize_row_warning <- renderText({ NULL })
-      output$normalize_row_error <- renderText({ NULL })
-      output$normalize_totalsum_error <- renderText({ NULL })
-      output$normalize_vst_error <- renderText({ NULL })
-      output$normalize_vsn_error <- renderText({ NULL })
-      output$normalize_quantile_error <- renderText({ NULL })
-      output$normalize_combat_error <- renderText({ NULL })
-      output$normalize_m.combat_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
     })
 
@@ -809,13 +791,7 @@ server <- function(input, output, session) {
       output$reading_error <- renderText({ NULL })
       output$reading_warning <- renderText({ NULL })
       output$normalize_row_warning <- renderText({ NULL })
-      output$normalize_row_error <- renderText({ NULL })
-      output$normalize_totalsum_error <- renderText({ NULL })
-      output$normalize_vst_error <- renderText({ NULL })
-      output$normalize_vsn_error <- renderText({ NULL })
-      output$normalize_quantile_error <- renderText({ NULL })
-      output$normalize_combat_error <- renderText({ NULL })
-      output$normalize_m.combat_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
       # clear notes about number of colors/symbols to be set
       output$batch_colors_manually_note <- renderText({ NULL })
@@ -1167,13 +1143,7 @@ server <- function(input, output, session) {
           output$generate_features_error <- renderText({ NULL })
           output$generate_features_note <- renderText({ NULL })
           output$normalize_row_warning <- renderText({ })  # warning of normalize_row when no valid refs
-          output$normalize_row_error <- renderText({ NULL })
-          output$normalize_totalsum_error <- renderText({ NULL })
-          output$normalize_vst_error <- renderText({ NULL })
-          output$normalize_vsn_error <- renderText({ NULL })
-          output$normalize_quantile_error <- renderText({ NULL })
-          output$normalize_combat_error <- renderText({ NULL })
-          output$normalize_m.combat_error <- renderText({ NULL })
+          output$normalization_error <- renderText({ NULL })
 
           output$pre_log_error <- renderText({ NULL })   # errors of pre-processing steps
           output$pre_filter_error <- renderText({ NULL })
@@ -1261,7 +1231,7 @@ server <- function(input, output, session) {
     normalize_rowwise <- function(lowest_level_df, exp_design){
       # clear for every new call
       output$normalize_row_warning <- renderText({ NULL })
-      output$normalize_row_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
       # preprocessing
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = input$log2_t, do_filter = input$filterrows,
@@ -1291,7 +1261,7 @@ server <- function(input, output, session) {
         })
         return(lowest_level_norm)  # still return the empty data frame that normalize_row returns in case of warning
       }, error = function(e){
-        output$normalize_row_error <- renderText({
+        output$normalization_error <- renderText({
           paste(e$message)
         })
         return(data.frame())
@@ -1302,7 +1272,7 @@ server <- function(input, output, session) {
     # NORMALIZATION total sum
     normalize_totalsum <- function(lowest_level_df){
       # clear for every new call
-      output$normalize_totalsum_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
       # preprocessing - no sum normalize
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = input$log2_t, do_filter = input$filterrows,
@@ -1312,7 +1282,7 @@ server <- function(input, output, session) {
                                                         norm = input$norm_sum, na.rm = input$na_rm)
         return(lowest_level_norm)
       }, error = function(e){
-        output$normalize_totalsum_error <- renderText({
+        output$normalization_error <- renderText({
           paste(e$message)
         })
         return(data.frame())
@@ -1323,7 +1293,7 @@ server <- function(input, output, session) {
     # NORMALIZATION VST
     normalize_vst <- function(lowest_level_df){
       # clear for every new call
-      output$normalize_vst_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
       vst_normalized_data <- data.frame()
 
@@ -1345,7 +1315,7 @@ server <- function(input, output, session) {
 
         return(vst_normalized_data)
       }, error = function(e){
-        output$normalize_vst_error <- renderText({
+        output$normalization_error <- renderText({
           paste(e$message)
         })
         return(data.frame())
@@ -1356,7 +1326,7 @@ server <- function(input, output, session) {
     # NORMALIZATION VSN
     normalize_vsn <- function(lowest_level_df){
       # clear for every new call
-      output$normalize_vsn_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
       vsn_normalized_data <- data.frame()
 
@@ -1376,7 +1346,7 @@ server <- function(input, output, session) {
 
         return(vsn_normalized_data)
       }, error = function(e){
-        output$normalize_vsn_error <- renderText({
+        output$normalization_error <- renderText({
           paste(e$message)
         })
         return(data.frame())
@@ -1387,7 +1357,7 @@ server <- function(input, output, session) {
     # NORMALIZATION Quantile
     normalize_quantile <- function(lowest_level_df){
       # clear for every new call
-      output$normalize_quantile_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
       quantile_normalized <- data.frame()
 
@@ -1406,7 +1376,7 @@ server <- function(input, output, session) {
 
         return(quantile_normalized)
       }, error = function(e){
-        output$normalize_quantile_error <- renderText({
+        output$normalization_error <- renderText({
           paste(e$message)
         })
         return(data.frame())
@@ -1417,7 +1387,7 @@ server <- function(input, output, session) {
     # NORMALIZATION ComBat
     normalize_combat <- function(lowest_level_df, exp_design){
       # clear for every new call
-      output$normalize_combat_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
       combat_data <- data.frame()
 
@@ -1458,7 +1428,7 @@ server <- function(input, output, session) {
         combat_data <- cbind("row.number" = lowest_level_df_pre$row.number, combat_data)  # back append ID column
         return(combat_data)
       }, error = function(e){
-        output$normalize_combat_error <- renderText({
+        output$normalization_error <- renderText({
           paste(e$message)
         })
         return(data.frame())
@@ -1469,7 +1439,7 @@ server <- function(input, output, session) {
     # NORMALIZATION M-ComBat
     normalize_m.combat <- function(lowest_level_df, exp_design){
       # clear for every new call
-      output$normalize_m.combat_error <- renderText({ NULL })
+      output$normalization_error <- renderText({ NULL })
 
       m.combat_data <- data.frame()
 
@@ -1516,7 +1486,7 @@ server <- function(input, output, session) {
 
         return(m.combat_data)
       }, error = function(e){
-        output$normalize_m.combat_error <- renderText({
+        output$normalization_error <- renderText({
           paste(e$message)
         })
         return(data.frame())
