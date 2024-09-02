@@ -35,6 +35,14 @@ ui <- fluidPage(
     tags$head(tags$style("#reading_warning{color: orange; margin-bottom: 20px;")),
     tags$head(tags$style("#reading_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#normalize_row_warning{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#normalize_row_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#normalize_totalsum_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#normalize_vst_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#normalize_vsn_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#normalize_quantile_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#normalize_combat_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#normalize_m.combat_error{color: red; margin-bottom: 20px;}")),
+
     tags$head(tags$style("#datafile_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#designfile_error{color: red; margin-bottom: 20px;}")),
 
@@ -384,6 +392,16 @@ ui <- fluidPage(
                           textOutput("designfile_error"),
                           textOutput("generate_features_error"),
                           textOutput("generate_features_note"),
+
+                          #possible errors in normalization
+                          textOutput("normalize_row_error"),
+                          textOutput("normalize_totalsum_error"),
+                          textOutput("normalize_vst_error"),
+                          textOutput("normalize_vsn_error"),
+                          textOutput("normalize_quantile_error"),
+                          textOutput("normalize_combat_error"),
+                          textOutput("normalize_m.combat_error"),
+
                           # errors in preprocessing
                           textOutput("pre_log_error"),
                           textOutput("pre_filter_error"),
@@ -767,6 +785,13 @@ server <- function(input, output, session) {
       output$generate_features_error <- renderText({ NULL })
       output$generate_features_note <- renderText({ NULL })
       output$normalize_row_warning <- renderText({ NULL })
+      output$normalize_row_error <- renderText({ NULL })
+      output$normalize_totalsum_error <- renderText({ NULL })
+      output$normalize_vst_error <- renderText({ NULL })
+      output$normalize_vsn_error <- renderText({ NULL })
+      output$normalize_quantile_error <- renderText({ NULL })
+      output$normalize_combat_error <- renderText({ NULL })
+      output$normalize_m.combat_error <- renderText({ NULL })
 
     })
 
@@ -784,6 +809,14 @@ server <- function(input, output, session) {
       output$reading_error <- renderText({ NULL })
       output$reading_warning <- renderText({ NULL })
       output$normalize_row_warning <- renderText({ NULL })
+      output$normalize_row_error <- renderText({ NULL })
+      output$normalize_totalsum_error <- renderText({ NULL })
+      output$normalize_vst_error <- renderText({ NULL })
+      output$normalize_vsn_error <- renderText({ NULL })
+      output$normalize_quantile_error <- renderText({ NULL })
+      output$normalize_combat_error <- renderText({ NULL })
+      output$normalize_m.combat_error <- renderText({ NULL })
+
       # clear notes about number of colors/symbols to be set
       output$batch_colors_manually_note <- renderText({ NULL })
       output$condition_symbols_manually_note <- renderText({ NULL })
@@ -1134,6 +1167,14 @@ server <- function(input, output, session) {
           output$generate_features_error <- renderText({ NULL })
           output$generate_features_note <- renderText({ NULL })
           output$normalize_row_warning <- renderText({ })  # warning of normalize_row when no valid refs
+          output$normalize_row_error <- renderText({ NULL })
+          output$normalize_totalsum_error <- renderText({ NULL })
+          output$normalize_vst_error <- renderText({ NULL })
+          output$normalize_vsn_error <- renderText({ NULL })
+          output$normalize_quantile_error <- renderText({ NULL })
+          output$normalize_combat_error <- renderText({ NULL })
+          output$normalize_m.combat_error <- renderText({ NULL })
+
           output$pre_log_error <- renderText({ NULL })   # errors of pre-processing steps
           output$pre_filter_error <- renderText({ NULL })
           output$pre_sum_error <- renderText({ NULL })
@@ -1220,6 +1261,7 @@ server <- function(input, output, session) {
     normalize_rowwise <- function(lowest_level_df, exp_design){
       # clear for every new call
       output$normalize_row_warning <- renderText({ NULL })
+      output$normalize_row_error <- renderText({ NULL })
 
       # preprocessing
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = input$log2_t, do_filter = input$filterrows,
@@ -1248,172 +1290,238 @@ server <- function(input, output, session) {
           paste(w$message)
         })
         return(lowest_level_norm)  # still return the empty data frame that normalize_row returns in case of warning
+      }, error = function(e){
+        output$normalize_row_error <- renderText({
+          paste(e$message)
+        })
+        return(data.frame())
       })
 
     }
 
     # NORMALIZATION total sum
     normalize_totalsum <- function(lowest_level_df){
+      # clear for every new call
+      output$normalize_totalsum_error <- renderText({ NULL })
 
       # preprocessing - no sum normalize
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = input$log2_t, do_filter = input$filterrows,
                                     do_sum = F, do_median = input$median_norm)
-      lowest_level_norm <- rowwisenorm::sum_normalize(lowest_level_df_pre, refFunc = input$refFunc_sum,
-                                                      norm = input$norm_sum, na.rm = input$na_rm)
-      return(lowest_level_norm)
+      tryCatch({
+        lowest_level_norm <- rowwisenorm::sum_normalize(lowest_level_df_pre, refFunc = input$refFunc_sum,
+                                                        norm = input$norm_sum, na.rm = input$na_rm)
+        return(lowest_level_norm)
+      }, error = function(e){
+        output$normalize_totalsum_error <- renderText({
+          paste(e$message)
+        })
+        return(data.frame())
+      })
 
     }
 
     # NORMALIZATION VST
     normalize_vst <- function(lowest_level_df){
+      # clear for every new call
+      output$normalize_vst_error <- renderText({ NULL })
+
       vst_normalized_data <- data.frame()
 
       # preprocessing - no log2 (no negatives allowed)
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = F, do_filter = input$filterrows,
                                     do_sum = input$sum_norm, do_median = input$median_norm)
 
-      lowest_level_df_comp <- lowest_level_df_pre[complete.cases(lowest_level_df_pre), ]  # without missing values
-      lowest_level_df_matrix <- as.matrix(lowest_level_df_comp[! colnames(lowest_level_df_comp) %in% "row.number"])  # convert to matrix and exclude ID column
-      # calculation
-      dge_list <- DGEList(counts = lowest_level_df_matrix)  # allows no negative counts (do not log2)
-      vst_normalized_data <- calcNormFactors(dge_list)
-      vst_normalized_data <- cpm(vst_normalized_data)
-      # back convert and set column names back
-      vst_normalized_data <- as.data.frame(vst_normalized_data)
-      colnames(vst_normalized_data) <- colnames(lowest_level_df_comp[! colnames(lowest_level_df_comp) %in% "row.number"])
-      vst_normalized_data <- cbind("row.number" = lowest_level_df_comp$row.number, vst_normalized_data)  # back append ID column
+      tryCatch({
+        lowest_level_df_comp <- lowest_level_df_pre[complete.cases(lowest_level_df_pre), ]  # without missing values
+        lowest_level_df_matrix <- as.matrix(lowest_level_df_comp[! colnames(lowest_level_df_comp) %in% "row.number"])  # convert to matrix and exclude ID column
+        # calculation
+        dge_list <- DGEList(counts = lowest_level_df_matrix)  # allows no negative counts (do not log2)
+        vst_normalized_data <- calcNormFactors(dge_list)
+        vst_normalized_data <- cpm(vst_normalized_data)
+        # back convert and set column names back
+        vst_normalized_data <- as.data.frame(vst_normalized_data)
+        colnames(vst_normalized_data) <- colnames(lowest_level_df_comp[! colnames(lowest_level_df_comp) %in% "row.number"])
+        vst_normalized_data <- cbind("row.number" = lowest_level_df_comp$row.number, vst_normalized_data)  # back append ID column
 
-      return(vst_normalized_data)
+        return(vst_normalized_data)
+      }, error = function(e){
+        output$normalize_vst_error <- renderText({
+          paste(e$message)
+        })
+        return(data.frame())
+      })
 
     }
 
     # NORMALIZATION VSN
     normalize_vsn <- function(lowest_level_df){
+      # clear for every new call
+      output$normalize_vsn_error <- renderText({ NULL })
+
       vsn_normalized_data <- data.frame()
 
       # preprocessing
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = input$log2_t, do_filter = input$filterrows,
                                     do_sum = input$sum_norm, do_median = input$median_norm)
 
-      lowest_level_df_matrix <- as.matrix(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])  # convert to matrix and exclude ID column
-      lowest_level_df_matrix[is.nan(lowest_level_df_matrix)] <- NA  # safety check that no NaN but only NA present
-      # Perform VSN normalization
-      vsn_normalized_data <- normalizeVSN(lowest_level_df_matrix)
-      # back convert and set column names back
-      vsn_normalized_data <- as.data.frame(vsn_normalized_data)
-      colnames(vsn_normalized_data) <- colnames(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])
-      vsn_normalized_data <- cbind("row.number" = lowest_level_df_pre$row.number, vsn_normalized_data)  # back append ID column
+      tryCatch({
+        lowest_level_df_matrix <- as.matrix(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])  # convert to matrix and exclude ID column
+        lowest_level_df_matrix[is.nan(lowest_level_df_matrix)] <- NA  # safety check that no NaN but only NA present
+        # Perform VSN normalization
+        vsn_normalized_data <- normalizeVSN(lowest_level_df_matrix)
+        # back convert and set column names back
+        vsn_normalized_data <- as.data.frame(vsn_normalized_data)
+        colnames(vsn_normalized_data) <- colnames(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])
+        vsn_normalized_data <- cbind("row.number" = lowest_level_df_pre$row.number, vsn_normalized_data)  # back append ID column
 
-      return(vsn_normalized_data)
+        return(vsn_normalized_data)
+      }, error = function(e){
+        output$normalize_vsn_error <- renderText({
+          paste(e$message)
+        })
+        return(data.frame())
+      })
 
     }
 
     # NORMALIZATION Quantile
     normalize_quantile <- function(lowest_level_df){
+      # clear for every new call
+      output$normalize_quantile_error <- renderText({ NULL })
+
       quantile_normalized <- data.frame()
 
       # preprocessing
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = input$log2_t, do_filter = input$filterrows,
                                     do_sum = input$sum_norm, do_median = input$median_norm)
 
-      lowest_level_df_matrix <- as.matrix(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])  # convert to matrix and exclude ID column
-      # calculation
-      quantile_normalized <- preprocessCore::normalize.quantiles(lowest_level_df_matrix)
-      # back convert and set column names back
-      quantile_normalized <- as.data.frame(quantile_normalized)
-      colnames(quantile_normalized) <- colnames(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])
-      quantile_normalized <- cbind("row.number" = lowest_level_df_pre$row.number, quantile_normalized)  # back append ID column
+      tryCatch({
+        lowest_level_df_matrix <- as.matrix(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])  # convert to matrix and exclude ID column
+        # calculation
+        quantile_normalized <- preprocessCore::normalize.quantiles(lowest_level_df_matrix)
+        # back convert and set column names back
+        quantile_normalized <- as.data.frame(quantile_normalized)
+        colnames(quantile_normalized) <- colnames(lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"])
+        quantile_normalized <- cbind("row.number" = lowest_level_df_pre$row.number, quantile_normalized)  # back append ID column
 
-      return(quantile_normalized)
+        return(quantile_normalized)
+      }, error = function(e){
+        output$normalize_quantile_error <- renderText({
+          paste(e$message)
+        })
+        return(data.frame())
+      })
 
     }
 
     # NORMALIZATION ComBat
     normalize_combat <- function(lowest_level_df, exp_design){
+      # clear for every new call
+      output$normalize_combat_error <- renderText({ NULL })
+
       combat_data <- data.frame()
 
       # preprocessing
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = input$log2_t, do_filter = input$filterrows,
                                          do_sum = input$sum_norm, do_median = input$median_norm)
 
-      ms_data <- lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"]
+      tryCatch({
+        ms_data <- lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"]
 
-      # impute missing values with the mean of each column
-      ms_data_imputed <- apply(ms_data, 2, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x))
+        # impute missing values with the mean of each column
+        ms_data_imputed <- apply(ms_data, 2, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x))
 
-      # convert to a numeric matrix
-      ms_data_matrix <- as.matrix(ms_data_imputed)
+        # convert to a numeric matrix
+        ms_data_matrix <- as.matrix(ms_data_imputed)
 
-      # get the order of conditions and batches based on the exp_design and order of data columns
-      batches <- c()
-      conditions <- c()
-      # -> check for each column name which batch and which condition it is
-      for(col in colnames(ms_data_matrix)){
-        for (i in 1:nrow(exp_design)){
-          for(j in 2:ncol(exp_design)){
-            if (exp_design[i, j] == col){
-              batches <- append(batches, j-1)  # batch number
-              conditions <- append(conditions, i)  # condition number
+        # get the order of conditions and batches based on the exp_design and order of data columns
+        batches <- c()
+        conditions <- c()
+        # -> check for each column name which batch and which condition it is
+        for(col in colnames(ms_data_matrix)){
+          for (i in 1:nrow(exp_design)){
+            for(j in 2:ncol(exp_design)){
+              if (exp_design[i, j] == col){
+                batches <- append(batches, j-1)  # batch number
+                conditions <- append(conditions, i)  # condition number
+              }
             }
           }
         }
-      }
 
-      # ComBat from sva package
-      combat_data <- ComBat(ms_data_matrix, batch = as.factor(batches), mod = as.factor(conditions))
+        # ComBat from sva package
+        combat_data <- ComBat(ms_data_matrix, batch = as.factor(batches), mod = as.factor(conditions))
 
-      # convert to data frame
-      combat_data <- as.data.frame(combat_data)
+        # convert to data frame
+        combat_data <- as.data.frame(combat_data)
 
-      combat_data <- cbind("row.number" = lowest_level_df_pre$row.number, combat_data)  # back append ID column
-      return(combat_data)
+        combat_data <- cbind("row.number" = lowest_level_df_pre$row.number, combat_data)  # back append ID column
+        return(combat_data)
+      }, error = function(e){
+        output$normalize_combat_error <- renderText({
+          paste(e$message)
+        })
+        return(data.frame())
+      })
+
     }
 
     # NORMALIZATION M-ComBat
     normalize_m.combat <- function(lowest_level_df, exp_design){
+      # clear for every new call
+      output$normalize_m.combat_error <- renderText({ NULL })
+
       m.combat_data <- data.frame()
 
       # preprocessing
       lowest_level_df_pre <<- preprocess(lowest_level_df, do_log = input$log2_t, do_filter = input$filterrows,
                                          do_sum = input$sum_norm, do_median = input$median_norm)
 
-      ms_data <- lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"]
+      tryCatch({
+        ms_data <- lowest_level_df_pre[! colnames(lowest_level_df_pre) %in% "row.number"]
 
-      # impute missing values with the mean of each column
-      ms_data_imputed <- apply(ms_data, 2, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x))
+        # impute missing values with the mean of each column
+        ms_data_imputed <- apply(ms_data, 2, function(x) ifelse(is.na(x), mean(x, na.rm = TRUE), x))
 
-      # convert to a numeric matrix
-      ms_data_matrix <- as.matrix(ms_data_imputed)
+        # convert to a numeric matrix
+        ms_data_matrix <- as.matrix(ms_data_imputed)
 
-      # get the order of conditions and batches based on the exp_design and order of data columns
-      batches <- c()  # same as for ComBat
-      conditions <- c()  # same as for ComBat
-      # -> check for each column name which batch and which condition it is
-      for(col in colnames(ms_data_matrix)){
-        for (i in 1:nrow(exp_design)){
-          for(j in 2:ncol(exp_design)){
-            if (exp_design[i, j] == col){
-              batches <- append(batches, j-1)  # batch number
-              conditions <- append(conditions, i)  # condition number
+        # get the order of conditions and batches based on the exp_design and order of data columns
+        batches <- c()  # same as for ComBat
+        conditions <- c()  # same as for ComBat
+        # -> check for each column name which batch and which condition it is
+        for(col in colnames(ms_data_matrix)){
+          for (i in 1:nrow(exp_design)){
+            for(j in 2:ncol(exp_design)){
+              if (exp_design[i, j] == col){
+                batches <- append(batches, j-1)  # batch number
+                conditions <- append(conditions, i)  # condition number
+              }
             }
           }
         }
-      }
 
-      # center
-      center <- input$m.combat_center
-      m.combat_notification_text(paste("Batch ", center, " was used as center."))
+        # center
+        center <- input$m.combat_center
+        m.combat_notification_text(paste("Batch ", center, " was used as center."))
 
-      # file that stores M.COMBAT function
-      source(system.file("shiny_app", "M-ComBat.R", package = "rowwisenorm"))
+        # file that stores M.COMBAT function
+        source(system.file("shiny_app", "M-ComBat.R", package = "rowwisenorm"))
 
-      m.combat_data <- M.COMBAT(ms_data_matrix, batch = as.factor(batches), mod = as.factor(conditions),
-                                center = center)
+        m.combat_data <- M.COMBAT(ms_data_matrix, batch = as.factor(batches), mod = as.factor(conditions),
+                                  center = center)
 
-      m.combat_data <- as.data.frame(m.combat_data)
-      m.combat_data <- cbind("row.number" = lowest_level_df_pre$row.number, m.combat_data)  # back append ID column
+        m.combat_data <- as.data.frame(m.combat_data)
+        m.combat_data <- cbind("row.number" = lowest_level_df_pre$row.number, m.combat_data)  # back append ID column
 
-      return(m.combat_data)
+        return(m.combat_data)
+      }, error = function(e){
+        output$normalize_m.combat_error <- renderText({
+          paste(e$message)
+        })
+        return(data.frame())
+      })
+
     }
 
 
