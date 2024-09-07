@@ -1497,30 +1497,36 @@ server <- function(input, output, session) {
 
     # show data
     observeEvent(input$show_data, {
-      if(nrow(lowest_level_norm > 0)){
-        output$data_output <- renderTable({
-          beginning <- input$start_row
-          ending <- input$end_row
-          if (is.numeric(beginning) && is.numeric(ending) && beginning >= 0 && ending >= 0 && beginning%%1==0  && ending%%1==0){  # check that positive integers
-            if(ending > nrow(lowest_level_norm)){  # max ending is the number of rows that are present
-              ending <- nrow(lowest_level_norm)
+      tryCatch({
+        if(nrow(lowest_level_norm > 0)){
+          output$data_output <- renderTable({
+            beginning <- input$start_row
+            ending <- input$end_row
+            if (is.numeric(beginning) && is.numeric(ending) && beginning >= 0 && ending >= 0 && beginning%%1==0  && ending%%1==0){  # check that positive integers
+              if(ending > nrow(lowest_level_norm)){  # max ending is the number of rows that are present
+                ending <- nrow(lowest_level_norm)
+              }
+              lowest_level_norm[beginning:ending, ]
             }
-            lowest_level_norm[beginning:ending, ]
-          }
-          else {
-            if(5 > nrow(lowest_level_norm)){
-              lowest_level_norm[1:nrow(lowest_level_norm), ]  # default if not valid entry and less than 5 rows present
-            } else {
-              lowest_level_norm[1:5, ]  # default if not valid entry
+            else {
+              if(5 > nrow(lowest_level_norm)){
+                lowest_level_norm[1:nrow(lowest_level_norm), ]  # default if not valid entry and less than 5 rows present
+              } else {
+                lowest_level_norm[1:5, ]  # default if not valid entry
+              }
             }
-          }
-        })
-        # note
+          })
+          # note
+          output$show_data_note <- renderText({
+            "The first column stores the original row number inside the data."
+          })
+        }
+      }, error = function(e){
+        # display the error instead of the note
         output$show_data_note <- renderText({
-          "The first column stores the original row number inside the data."
+          paste(e$message)
         })
-      }
-
+      })
     })
 
 
