@@ -36,6 +36,7 @@ ui <- fluidPage(
     tags$head(tags$style("#reading_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#normalize_row_warning{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#normalization_error{color: red; margin-bottom: 20px;}")),  # used in each normalization to catch an error
+    tags$head(tags$style("#show_data_error{color: red; margin-bottom: 20px;}")),
 
     tags$head(tags$style("#datafile_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#designfile_error{color: red; margin-bottom: 20px;}")),
@@ -389,6 +390,9 @@ ui <- fluidPage(
 
                           # possible error in normalization
                           textOutput("normalization_error"),  # used in each normalization to catch an error
+
+                          # possible error in show data
+                          textOutput("show_data_error"),
 
                           # errors in preprocessing
                           textOutput("pre_log_error"),
@@ -774,6 +778,7 @@ server <- function(input, output, session) {
       output$generate_features_note <- renderText({ NULL })
       output$normalize_row_warning <- renderText({ NULL })
       output$normalization_error <- renderText({ NULL })
+      output$show_data_error <- renderText({ NULL })
 
     })
 
@@ -1144,6 +1149,7 @@ server <- function(input, output, session) {
           output$generate_features_note <- renderText({ NULL })
           output$normalize_row_warning <- renderText({ })  # warning of normalize_row when no valid refs
           output$normalization_error <- renderText({ NULL })
+          output$show_data_error <- renderText({ NULL })
 
           output$pre_log_error <- renderText({ NULL })   # errors of pre-processing steps
           output$pre_filter_error <- renderText({ NULL })
@@ -1497,6 +1503,9 @@ server <- function(input, output, session) {
 
     # show data
     observeEvent(input$show_data, {
+      # clear for every new call
+      output$show_data_error <- renderText({ NULL })
+
       tryCatch({
         if(nrow(lowest_level_norm > 0)){
           output$data_output <- renderTable({
@@ -1522,8 +1531,7 @@ server <- function(input, output, session) {
           })
         }
       }, error = function(e){
-        # display the error instead of the note
-        output$show_data_note <- renderText({
+        output$show_data_error <- renderText({
           paste(e$message)
         })
       })
