@@ -44,6 +44,8 @@ ui <- fluidPage(
     tags$head(tags$style("#show_plots_raw_pre_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#show_plots_norm_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#save_outfile_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#download_outfile_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#download_outfile_comp_error{color: red; margin-bottom: 20px;}")),
 
     tags$head(tags$style("#datafile_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#designfile_error{color: red; margin-bottom: 20px;}")),
@@ -411,8 +413,12 @@ ui <- fluidPage(
                           textOutput("show_plots_raw_pre_error"),
                           textOutput("show_plots_norm_error"),
 
-                          # possible errors in save outfile
+                          # possible errors in save outfile manually
                           textOutput("save_outfile_error"),
+
+                          # possible errors in download outfile
+                          textOutput("download_outfile_error"),
+                          textOutput("download_outfile_comp_error"),
 
                           # errors in preprocessing
                           textOutput("pre_log_error"),
@@ -806,6 +812,8 @@ server <- function(input, output, session) {
       output$show_plots_raw_pre_error <- renderText({ NULL })
       output$show_plots_norm_error <- renderText({ NULL })
       output$save_outfile_error <- renderText({ NULL })
+      output$download_outfile_error <- renderText({ NULL })
+      output$download_outfile_comp_error <- renderText({ NULL })
 
     })
 
@@ -1184,6 +1192,8 @@ server <- function(input, output, session) {
           output$show_plots_raw_pre_error <- renderText({ NULL })
           output$show_plots_norm_error <- renderText({ NULL })
           output$save_outfile_error <- renderText({ NULL })
+          output$download_outfile_error <- renderText({ NULL })
+          output$download_outfile_comp_error <- renderText({ NULL })
 
           output$pre_log_error <- renderText({ NULL })   # errors of pre-processing steps
           output$pre_filter_error <- renderText({ NULL })
@@ -2044,37 +2054,46 @@ server <- function(input, output, session) {
         "output.csv"
       },
       content = function(file) {
-        # only do when data was processed (data frame not empty)
-        if (nrow(lowest_level_norm) != 0){
+        # clear for every new call
+        output$download_outfile_error <- renderText({ NULL })
 
-          # Save file with a progress indicator
-          withProgress(
-            message = 'Generating file...',
-            detail = 'This may take a moment...',
-            value = 0, {
+        tryCatch({
+          # only do when data was processed (data frame not empty)
+          if (nrow(lowest_level_norm) != 0){
 
-              original_working_directory <- getwd()
+            # Save file with a progress indicator
+            withProgress(
+              message = 'Generating file...',
+              detail = 'This may take a moment...',
+              value = 0, {
 
-              # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
-              mytemp <- paste0("download_", format(Sys.time(), "%Y%m%d%H%M%S"), "_", sample(1:9999, 1))
-              dir.create(mytemp)
+                original_working_directory <- getwd()
 
-              # Generate the file in the temporary directory
-              rowwisenorm::write_outfile(lowest_level_norm, output_dir = mytemp)
-              Sys.sleep(0.5)  # Simulate some work for the progress bar
+                # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
+                mytemp <- paste0("download_", format(Sys.time(), "%Y%m%d%H%M%S"), "_", sample(1:9999, 1))
+                dir.create(mytemp)
 
-              setwd(mytemp)
+                # Generate the file in the temporary directory
+                rowwisenorm::write_outfile(lowest_level_norm, output_dir = mytemp)
+                Sys.sleep(0.5)  # Simulate some work for the progress bar
 
-              # Move the generated file to the specified location
-              file.rename("output.csv", file)
+                setwd(mytemp)
 
-              setwd(original_working_directory)  # set back to original working directory
+                # Move the generated file to the specified location
+                file.rename("output.csv", file)
 
-              # remove the temporary directory
-              unlink(mytemp, recursive = TRUE)
-            }
-          )
-        }
+                setwd(original_working_directory)  # set back to original working directory
+
+                # remove the temporary directory
+                unlink(mytemp, recursive = TRUE)
+              }
+            )
+          }
+        }, error = function(e) {
+          output$download_outfile_error <- renderText({
+            paste(e$message)
+          })
+        })
       }
     )
 
@@ -2084,37 +2103,46 @@ server <- function(input, output, session) {
         "output_complete.csv"
       },
       content = function(file) {
-        # only do when data was processed (data frame not empty)
-        if (nrow(lowest_level_norm) != 0){
+        # clear for every new call
+        output$download_outfile_comp_error <- renderText({ NULL })
 
-          # Save file with a progress indicator
-          withProgress(
-            message = 'Generating file...',
-            detail = 'This may take a moment...',
-            value = 0, {
+        tryCatch({
+          # only do when data was processed (data frame not empty)
+          if (nrow(lowest_level_norm) != 0){
 
-              original_working_directory <- getwd()
+            # Save file with a progress indicator
+            withProgress(
+              message = 'Generating file...',
+              detail = 'This may take a moment...',
+              value = 0, {
 
-              # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
-              mytemp <- paste0("download_", format(Sys.time(), "%Y%m%d%H%M%S"), "_", sample(1:9999, 1))
-              dir.create(mytemp)
+                original_working_directory <- getwd()
 
-              # Generate the file in the temporary directory
-              rowwisenorm::write_outfile(lowest_level_norm, additional_cols = additional_cols, output_dir = mytemp)
-              Sys.sleep(0.5)  # Simulate some work for the progress bar
+                # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
+                mytemp <- paste0("download_", format(Sys.time(), "%Y%m%d%H%M%S"), "_", sample(1:9999, 1))
+                dir.create(mytemp)
 
-              setwd(mytemp)
+                # Generate the file in the temporary directory
+                rowwisenorm::write_outfile(lowest_level_norm, additional_cols = additional_cols, output_dir = mytemp)
+                Sys.sleep(0.5)  # Simulate some work for the progress bar
 
-              # Move the generated file to the specified location
-              file.rename("output_complete.csv", file)
+                setwd(mytemp)
 
-              setwd(original_working_directory)  # set back to original working directory
+                # Move the generated file to the specified location
+                file.rename("output_complete.csv", file)
 
-              # remove the temporary directory
-              unlink(mytemp, recursive = TRUE)
-            }
-          )
-        }
+                setwd(original_working_directory)  # set back to original working directory
+
+                # remove the temporary directory
+                unlink(mytemp, recursive = TRUE)
+              }
+            )
+          }
+        }, error = function(e) {
+          output$download_outfile_comp_error <- renderText({
+            paste(e$message)
+          })
+        })
       }
     )
 
