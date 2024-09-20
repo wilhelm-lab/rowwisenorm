@@ -43,6 +43,7 @@ ui <- fluidPage(
     tags$head(tags$style("#show_plots_raw_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#show_plots_raw_pre_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#show_plots_norm_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#save_outfile_error{color: red; margin-bottom: 20px;}")),
 
     tags$head(tags$style("#datafile_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#designfile_error{color: red; margin-bottom: 20px;}")),
@@ -409,6 +410,9 @@ ui <- fluidPage(
                           textOutput("show_plots_raw_error"),
                           textOutput("show_plots_raw_pre_error"),
                           textOutput("show_plots_norm_error"),
+
+                          # possible errors in save outfile
+                          textOutput("save_outfile_error"),
 
                           # errors in preprocessing
                           textOutput("pre_log_error"),
@@ -801,6 +805,7 @@ server <- function(input, output, session) {
       output$show_plots_raw_error <- renderText({ NULL })
       output$show_plots_raw_pre_error <- renderText({ NULL })
       output$show_plots_norm_error <- renderText({ NULL })
+      output$save_outfile_error <- renderText({ NULL })
 
     })
 
@@ -1178,6 +1183,7 @@ server <- function(input, output, session) {
           output$show_plots_raw_error <- renderText({ NULL })
           output$show_plots_raw_pre_error <- renderText({ NULL })
           output$show_plots_norm_error <- renderText({ NULL })
+          output$save_outfile_error <- renderText({ NULL })
 
           output$pre_log_error <- renderText({ NULL })   # errors of pre-processing steps
           output$pre_filter_error <- renderText({ NULL })
@@ -2000,28 +2006,36 @@ server <- function(input, output, session) {
 
     # save outfile manually
     observeEvent(input$save_outfile, {
-      # only do when data was processed (data frame not empty)
-      if (nrow(lowest_level_norm) != 0){
+      # clear for every new call
+      output$save_outfile_error <- renderText({ NULL })
 
-        if(input$outfile_level == "lowest-level"){
-          rowwisenorm::write_outfile(lowest_level_df = lowest_level_norm,
-                                     filename = input$filename_outfile, output_dir = input$dir_outfile)
-          # output message
-          if (input$dir_outfile != "")  dir_path <- input$dir_outfile else dir_path <- "current working directory"
-          if (input$filename_outfile != "") file_name <- paste(input$filename_outfile, ".csv", sep = "") else file_name <- "output.csv"  # note: hard coded as stated in write_outfile
+      tryCatch({
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_norm) != 0){
+
+          if(input$outfile_level == "lowest-level"){
+            rowwisenorm::write_outfile(lowest_level_df = lowest_level_norm,
+                                       filename = input$filename_outfile, output_dir = input$dir_outfile)
+            # output message
+            if (input$dir_outfile != "")  dir_path <- input$dir_outfile else dir_path <- "current working directory"
+            if (input$filename_outfile != "") file_name <- paste(input$filename_outfile, ".csv", sep = "") else file_name <- "output.csv"  # note: hard coded as stated in write_outfile
+          }
+          else if(input$outfile_level == "all-columns"){
+            rowwisenorm::write_outfile(lowest_level_df = lowest_level_norm, additional_cols = additional_cols,
+                                       filename = input$filename_outfile, output_dir = input$dir_outfile)
+            # output message
+            if (input$dir_outfile != "")  dir_path <- input$dir_outfile else dir_path <- "current working directory"
+            if (input$filename_outfile != "") file_name <- paste(input$filename_outfile, ".csv", sep = "") else file_name <- "output_complete.csv"  # note: hard coded as stated in write_outfile
+          }
+          output$outfile_path <- renderText({
+            paste("Output saved to ", dir_path, " with file name ", file_name)
+          })
         }
-        else if(input$outfile_level == "all-columns"){
-          rowwisenorm::write_outfile(lowest_level_df = lowest_level_norm, additional_cols = additional_cols,
-                                     filename = input$filename_outfile, output_dir = input$dir_outfile)
-          # output message
-          if (input$dir_outfile != "")  dir_path <- input$dir_outfile else dir_path <- "current working directory"
-          if (input$filename_outfile != "") file_name <- paste(input$filename_outfile, ".csv", sep = "") else file_name <- "output_complete.csv"  # note: hard coded as stated in write_outfile
-        }
-        output$outfile_path <- renderText({
-          paste("Output saved to ", dir_path, " with file name ", file_name)
+      }, error = function(e) {
+        output$save_outfile_error <- renderText({
+          paste(e$message)
         })
-      }
-
+      })
     })
 
     # download outfile lowest level
