@@ -1723,10 +1723,8 @@ server <- function(input, output, session) {
                   setwd(original_working_directory)
                   unlink(mytemp, recursive = TRUE)
                 })
-
               }
           )
-
         }
       }
     )
@@ -1804,7 +1802,6 @@ server <- function(input, output, session) {
               })
             }
           )
-
         }
       }
     )
@@ -2057,16 +2054,16 @@ server <- function(input, output, session) {
         # clear for every new call
         output$download_outfile_error <- renderText({ NULL })
 
-        tryCatch({
-          # only do when data was processed (data frame not empty)
-          if (nrow(lowest_level_norm) != 0){
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_norm) != 0){
 
-            # Save file with a progress indicator
-            withProgress(
-              message = 'Generating file...',
-              detail = 'This may take a moment...',
-              value = 0, {
+          # Save file with a progress indicator
+          withProgress(
+            message = 'Generating file...',
+            detail = 'This may take a moment...',
+            value = 0, {
 
+              tryCatch({
                 original_working_directory <- getwd()
 
                 # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
@@ -2086,14 +2083,19 @@ server <- function(input, output, session) {
 
                 # remove the temporary directory
                 unlink(mytemp, recursive = TRUE)
-              }
-            )
-          }
-        }, error = function(e) {
-          output$download_outfile_error <- renderText({
-            paste(e$message)
-          })
-        })
+
+              }, error = function(e) {
+                output$download_outfile_error <- renderText({
+                  paste(e$message)
+                })
+              }, finally = {
+                # ensure the working directory is restored even if an error occurs
+                setwd(original_working_directory)
+                unlink(mytemp, recursive = TRUE)
+              })
+            }
+          )
+        }
       }
     )
 
@@ -2106,16 +2108,16 @@ server <- function(input, output, session) {
         # clear for every new call
         output$download_outfile_comp_error <- renderText({ NULL })
 
-        tryCatch({
-          # only do when data was processed (data frame not empty)
-          if (nrow(lowest_level_norm) != 0){
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_norm) != 0){
 
-            # Save file with a progress indicator
-            withProgress(
-              message = 'Generating file...',
-              detail = 'This may take a moment...',
-              value = 0, {
+          # Save file with a progress indicator
+          withProgress(
+            message = 'Generating file...',
+            detail = 'This may take a moment...',
+            value = 0, {
 
+              tryCatch({
                 original_working_directory <- getwd()
 
                 # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
@@ -2135,14 +2137,19 @@ server <- function(input, output, session) {
 
                 # remove the temporary directory
                 unlink(mytemp, recursive = TRUE)
-              }
-            )
-          }
-        }, error = function(e) {
-          output$download_outfile_comp_error <- renderText({
-            paste(e$message)
-          })
-        })
+
+              }, error = function(e) {
+                output$download_outfile_comp_error <- renderText({
+                  paste(e$message)
+                })
+              }, finally = {
+                # ensure the working directory is restored even if an error occurs
+                setwd(original_working_directory)
+                unlink(mytemp, recursive = TRUE)
+              })
+            }
+          )
+        }
       }
     )
 
