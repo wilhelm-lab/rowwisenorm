@@ -37,6 +37,9 @@ ui <- fluidPage(
     tags$head(tags$style("#normalize_row_warning{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#normalization_error{color: red; margin-bottom: 20px;}")),  # used in each normalization to catch an error
     tags$head(tags$style("#show_data_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#download_pdf_raw_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#download_pdf_raw_pre_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#download_pdf_norm_error{color: red; margin-bottom: 20px;}")),
 
     tags$head(tags$style("#datafile_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#designfile_error{color: red; margin-bottom: 20px;}")),
@@ -393,6 +396,11 @@ ui <- fluidPage(
 
                           # possible error in show data
                           textOutput("show_data_error"),
+
+                          # possible error in downloads of PDF
+                          textOutput("download_pdf_raw_error"),
+                          textOutput("download_pdf_raw_pre_error"),
+                          textOutput("download_pdf_norm_error"),
 
                           # errors in preprocessing
                           textOutput("pre_log_error"),
@@ -779,6 +787,9 @@ server <- function(input, output, session) {
       output$normalize_row_warning <- renderText({ NULL })
       output$normalization_error <- renderText({ NULL })
       output$show_data_error <- renderText({ NULL })
+      output$download_pdf_raw_error <- renderText({ NULL })
+      output$download_pdf_raw_pre_error <- renderText({ NULL })
+      output$download_pdf_norm_error <- renderText({ NULL })
 
     })
 
@@ -1150,6 +1161,9 @@ server <- function(input, output, session) {
           output$normalize_row_warning <- renderText({ })  # warning of normalize_row when no valid refs
           output$normalization_error <- renderText({ NULL })
           output$show_data_error <- renderText({ NULL })
+          output$download_pdf_raw_error <- renderText({ NULL })
+          output$download_pdf_raw_pre_error <- renderText({ NULL })
+          output$download_pdf_norm_error <- renderText({ NULL })
 
           output$pre_log_error <- renderText({ NULL })   # errors of pre-processing steps
           output$pre_filter_error <- renderText({ NULL })
@@ -1619,6 +1633,9 @@ server <- function(input, output, session) {
         }
       },
       content = function(file) {
+        # clear for every new call
+        output$download_pdf_raw_error <- renderText({ NULL })
+
         # only do when data was processed (data frame not empty)
         if (nrow(lowest_level_df_raw) != 0){
           # show labels parameter
@@ -1633,6 +1650,86 @@ server <- function(input, output, session) {
               detail = 'This may take a moment...',
               value = 0, {
 
+                tryCatch({
+                  original_working_directory <- getwd()
+
+                  # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
+                  mytemp <- paste0("download_", format(Sys.time(), "%Y%m%d%H%M%S"), "_", sample(1:9999, 1))
+                  dir.create(mytemp)
+
+                  # Generate the PDF and SVG files in the temporary directory
+                  rowwisenorm::plot_results(lowest_level_df_raw, exp_design,
+                                            output_dir = mytemp, show_labels = show_lab, svg = make_svg,
+                                            set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+                  Sys.sleep(0.5)
+
+                  setwd(mytemp)
+
+                  if (make_svg){
+                    # make zip of the files inside temporary directory
+                    zip_file <- "results.zip"
+                    zip(zip_file, files = c(paste("results", "pdf", sep = "."), paste("results", "01.svg", sep = ""),
+                                            paste("results", "02.svg", sep = ""), paste("results", "03.svg", sep = ""),
+                                            paste("results", "04.svg", sep = "")))
+
+                    # Move the ZIP archive to the chosen location
+                    file.rename(zip_file, file)
+                  }
+                  else {
+                    file.rename("results.pdf", file)
+                  }
+
+                  setwd(original_working_directory)  # set back to original working directory
+
+                  # remove the temporary directory
+                  unlink(mytemp, recursive = TRUE)
+
+                }, error = function(e) {
+                  output$download_pdf_raw_error <- renderText({
+                    paste(e$message)
+                  })
+                }, finally = {
+                  # ensure the working directory is restored even if an error occurs
+                  setwd(original_working_directory)
+                  unlink(mytemp, recursive = TRUE)
+                })
+
+              }
+          )
+
+        }
+      }
+    )
+
+    # same but with pre-processed data
+    output$download_pdf_raw_pre <- downloadHandler(
+      filename = function(){
+        if (input$svg){
+          "results.zip"
+        }
+        else {
+          "results.pdf"
+        }
+      },
+      content = function(file) {
+        # clear for every new call
+        output$download_pdf_raw_pre_error <- renderText({ NULL })
+
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_df_pre) != 0){
+          # show labels parameter
+          if (input$show_labels) show_lab <- T else show_lab <- F
+
+          # svg parameter
+          if (input$svg) make_svg <- T else make_svg <- F
+
+          # Save file with a progress indicator (only to get progress message, also works to just generate and save)
+          withProgress(
+            message = 'Generating file(s)...',
+            detail = 'This may take a moment...',
+            value = 0, {
+
+              tryCatch({
                 original_working_directory <- getwd()
 
                 # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
@@ -1640,7 +1737,7 @@ server <- function(input, output, session) {
                 dir.create(mytemp)
 
                 # Generate the PDF and SVG files in the temporary directory
-                rowwisenorm::plot_results(lowest_level_df_raw, exp_design,
+                rowwisenorm::plot_results(lowest_level_df_pre, exp_design,
                                           output_dir = mytemp, show_labels = show_lab, svg = make_svg,
                                           set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
                 Sys.sleep(0.5)
@@ -1665,70 +1762,16 @@ server <- function(input, output, session) {
 
                 # remove the temporary directory
                 unlink(mytemp, recursive = TRUE)
-              }
-          )
 
-        }
-      }
-    )
-
-    # same but with pre-processed data
-    output$download_pdf_raw_pre <- downloadHandler(
-      filename = function(){
-        if (input$svg){
-          "results.zip"
-        }
-        else {
-          "results.pdf"
-        }
-      },
-      content = function(file) {
-        # only do when data was processed (data frame not empty)
-        if (nrow(lowest_level_df_pre) != 0){
-          # show labels parameter
-          if (input$show_labels) show_lab <- T else show_lab <- F
-
-          # svg parameter
-          if (input$svg) make_svg <- T else make_svg <- F
-
-          # Save file with a progress indicator (only to get progress message, also works to just generate and save)
-          withProgress(
-            message = 'Generating file(s)...',
-            detail = 'This may take a moment...',
-            value = 0, {
-
-              original_working_directory <- getwd()
-
-              # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
-              mytemp <- paste0("download_", format(Sys.time(), "%Y%m%d%H%M%S"), "_", sample(1:9999, 1))
-              dir.create(mytemp)
-
-              # Generate the PDF and SVG files in the temporary directory
-              rowwisenorm::plot_results(lowest_level_df_pre, exp_design,
-                                        output_dir = mytemp, show_labels = show_lab, svg = make_svg,
-                                        set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
-              Sys.sleep(0.5)
-
-              setwd(mytemp)
-
-              if (make_svg){
-                # make zip of the files inside temporary directory
-                zip_file <- "results.zip"
-                zip(zip_file, files = c(paste("results", "pdf", sep = "."), paste("results", "01.svg", sep = ""),
-                                        paste("results", "02.svg", sep = ""), paste("results", "03.svg", sep = ""),
-                                        paste("results", "04.svg", sep = "")))
-
-                # Move the ZIP archive to the chosen location
-                file.rename(zip_file, file)
-              }
-              else {
-                file.rename("results.pdf", file)
-              }
-
-              setwd(original_working_directory)  # set back to original working directory
-
-              # remove the temporary directory
-              unlink(mytemp, recursive = TRUE)
+              }, error = function(e) {
+                output$download_pdf_raw_pre_error <- renderText({
+                  paste(e$message)
+                })
+              }, finally = {
+                # ensure the working directory is restored even if an error occurs
+                setwd(original_working_directory)
+                unlink(mytemp, recursive = TRUE)
+              })
             }
           )
 
@@ -1746,6 +1789,9 @@ server <- function(input, output, session) {
         }
       },
       content = function(file) {
+        # clear for every new call
+        output$download_pdf_norm_error <- renderText({ NULL })
+
         # only do when data was processed (data frame not empty)
         if (nrow(lowest_level_norm) != 0){
           # show labels parameter
@@ -1760,38 +1806,49 @@ server <- function(input, output, session) {
             detail = 'This may take a moment...',
             value = 0, {
 
-              original_working_directory <- getwd()
+              tryCatch({
+                original_working_directory <- getwd()
 
-              # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
-              mytemp <- paste0("download_", format(Sys.time(), "%Y%m%d%H%M%S"), "_", sample(1:9999, 1))
-              dir.create(mytemp)
+                # artificial temporary directory inside current working directory to save the files in the first place (otherwise files would be automatically saved in wd which could cause overwriting other files)
+                mytemp <- paste0("download_", format(Sys.time(), "%Y%m%d%H%M%S"), "_", sample(1:9999, 1))
+                dir.create(mytemp)
 
-              # Generate the PDF and SVG files in the temporary directory
-              rowwisenorm::plot_results(lowest_level_norm, exp_design,
-                                        output_dir = mytemp, show_labels = show_lab, svg = make_svg,
-                                        set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
-              Sys.sleep(0.5)
+                # Generate the PDF and SVG files in the temporary directory
+                rowwisenorm::plot_results(lowest_level_norm, exp_design,
+                                          output_dir = mytemp, show_labels = show_lab, svg = make_svg,
+                                          set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+                Sys.sleep(0.5)
 
-              setwd(mytemp)
+                setwd(mytemp)
 
-              if (make_svg){
-                # make zip of the files inside temporary directory
-                zip_file <- "results.zip"
-                zip(zip_file, files = c(paste("results", "pdf", sep = "."), paste("results", "01.svg", sep = ""),
-                                        paste("results", "02.svg", sep = ""), paste("results", "03.svg", sep = ""),
-                                        paste("results", "04.svg", sep = "")))
+                if (make_svg){
+                  # make zip of the files inside temporary directory
+                  zip_file <- "results.zip"
+                  zip(zip_file, files = c(paste("results", "pdf", sep = "."), paste("results", "01.svg", sep = ""),
+                                          paste("results", "02.svg", sep = ""), paste("results", "03.svg", sep = ""),
+                                          paste("results", "04.svg", sep = "")))
 
-                # Move the ZIP archive to the chosen location
-                file.rename(zip_file, file)
-              }
-              else {
-                file.rename("results.pdf", file)
-              }
+                  # Move the ZIP archive to the chosen location
+                  file.rename(zip_file, file)
+                }
+                else {
+                  file.rename("results.pdf", file)
+                }
 
-              setwd(original_working_directory)  # set back to original working directory
+                setwd(original_working_directory)  # set back to original working directory
 
-              # remove the temporary directory
-              unlink(mytemp, recursive = TRUE)
+                # remove the temporary directory
+                unlink(mytemp, recursive = TRUE)
+
+              }, error = function(e) {
+                output$download_pdf_norm_error <- renderText({
+                  paste(e$message)
+                })
+              }, finally = {
+                # ensure the working directory is restored even if an error occurs
+                setwd(original_working_directory)
+                unlink(mytemp, recursive = TRUE)
+              })
             }
           )
 
