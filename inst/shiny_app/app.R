@@ -40,6 +40,9 @@ ui <- fluidPage(
     tags$head(tags$style("#download_pdf_raw_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#download_pdf_raw_pre_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#download_pdf_norm_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#show_plots_raw_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#show_plots_raw_pre_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#show_plots_norm_error{color: red; margin-bottom: 20px;}")),
 
     tags$head(tags$style("#datafile_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#designfile_error{color: red; margin-bottom: 20px;}")),
@@ -401,6 +404,11 @@ ui <- fluidPage(
                           textOutput("download_pdf_raw_error"),
                           textOutput("download_pdf_raw_pre_error"),
                           textOutput("download_pdf_norm_error"),
+
+                          # possible errors in showing plots
+                          textOutput("show_plots_raw_error"),
+                          textOutput("show_plots_raw_pre_error"),
+                          textOutput("show_plots_norm_error"),
 
                           # errors in preprocessing
                           textOutput("pre_log_error"),
@@ -790,6 +798,9 @@ server <- function(input, output, session) {
       output$download_pdf_raw_error <- renderText({ NULL })
       output$download_pdf_raw_pre_error <- renderText({ NULL })
       output$download_pdf_norm_error <- renderText({ NULL })
+      output$show_plots_raw_error <- renderText({ NULL })
+      output$show_plots_raw_pre_error <- renderText({ NULL })
+      output$show_plots_norm_error <- renderText({ NULL })
 
     })
 
@@ -1164,6 +1175,9 @@ server <- function(input, output, session) {
           output$download_pdf_raw_error <- renderText({ NULL })
           output$download_pdf_raw_pre_error <- renderText({ NULL })
           output$download_pdf_norm_error <- renderText({ NULL })
+          output$show_plots_raw_error <- renderText({ NULL })
+          output$show_plots_raw_pre_error <- renderText({ NULL })
+          output$show_plots_norm_error <- renderText({ NULL })
 
           output$pre_log_error <- renderText({ NULL })   # errors of pre-processing steps
           output$pre_filter_error <- renderText({ NULL })
@@ -1858,103 +1872,129 @@ server <- function(input, output, session) {
 
     # show plots - completely raw, raw pre-processed, normalized
     observeEvent(input$show_plots_raw, {
-      # only do when data was processed (data frame not empty)
-      if (nrow(lowest_level_df_raw) != 0){
-        output$plot1_raw <- renderPlot({
-          rowwisenorm::plot_correlations(lowest_level_df_raw)
-        })
-        output$plot2_raw <- renderPlot({
-          rowwisenorm::plot_heatmap(lowest_level_df_raw, exp_design, batch_colors = pca_colors)
-        })
-        output$plot3_raw <- renderPlot({
-          rowwisenorm::pcaPlot(lowest_level_df_raw)
-        })
-        output$plot4_raw <- renderPlot({
-          # show labels parameter
-          if (input$show_labels_raw) show_lab <- T else show_lab <- F
-          rowwisenorm::pcaPlot2(lowest_level_df_raw, exp_design, show_labels = show_lab,
-                                set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
-        })
-        output$score_title_raw <- renderText({
-          "Data-specific Score of the PCA plot:"
-        })
-        # catch score of PCA (not possible inside renderPlot)
-        score <- rowwisenorm::pcaPlot2(lowest_level_df_raw, exp_design, show_labels = F,
-                                       set_colors = pca_colors, set_symbols = pca_symbols)
-        if(length(dev.list())!=0) {
-          dev.off()
+      # clear for every new call
+      output$show_plots_raw_error <- renderText({ NULL })
+
+      tryCatch({
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_df_raw) != 0){
+          output$plot1_raw <- renderPlot({
+            rowwisenorm::plot_correlations(lowest_level_df_raw)
+          })
+          output$plot2_raw <- renderPlot({
+            rowwisenorm::plot_heatmap(lowest_level_df_raw, exp_design, batch_colors = pca_colors)
+          })
+          output$plot3_raw <- renderPlot({
+            rowwisenorm::pcaPlot(lowest_level_df_raw)
+          })
+          output$plot4_raw <- renderPlot({
+            # show labels parameter
+            if (input$show_labels_raw) show_lab <- T else show_lab <- F
+            rowwisenorm::pcaPlot2(lowest_level_df_raw, exp_design, show_labels = show_lab,
+                                  set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+          })
+          output$score_title_raw <- renderText({
+            "Data-specific Score of the PCA plot:"
+          })
+          # catch score of PCA (not possible inside renderPlot)
+          score <- rowwisenorm::pcaPlot2(lowest_level_df_raw, exp_design, show_labels = F,
+                                         set_colors = pca_colors, set_symbols = pca_symbols)
+          if(length(dev.list())!=0) {
+            dev.off()
+          }
+          output$score_raw <- renderText({
+            score
+          })
         }
-        output$score_raw <- renderText({
-          score
+      }, error = function(e) {
+        output$show_plots_raw_error <- renderText({
+          paste(e$message)
         })
-      }
+      })
     })
 
     observeEvent(input$show_plots_raw_pre, {
-      # only do when data was processed (data frame not empty)
-      if (nrow(lowest_level_df_pre) != 0){
-        output$plot1_raw_pre <- renderPlot({
-          rowwisenorm::plot_correlations(lowest_level_df_pre)
-        })
-        output$plot2_raw_pre <- renderPlot({
-          rowwisenorm::plot_heatmap(lowest_level_df_pre, exp_design, batch_colors = pca_colors)
-        })
-        output$plot3_raw_pre <- renderPlot({
-          rowwisenorm::pcaPlot(lowest_level_df_pre)
-        })
-        output$plot4_raw_pre <- renderPlot({
-          # show labels parameter
-          if (input$show_labels_raw_pre) show_lab <- T else show_lab <- F
-          rowwisenorm::pcaPlot2(lowest_level_df_pre, exp_design, show_labels = show_lab,
-                                set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
-        })
-        output$score_title_raw_pre <- renderText({
-          "Data-specific Score of the PCA plot:"
-        })
-        # catch score of PCA (not possible inside renderPlot)
-        score <- rowwisenorm::pcaPlot2(lowest_level_df_pre, exp_design, show_labels = F,
-                                       set_colors = pca_colors, set_symbols = pca_symbols)
-        if(length(dev.list())!=0) {
-          dev.off()
+      # clear for every new call
+      output$show_plots_raw_pre_error <- renderText({ NULL })
+
+      tryCatch({
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_df_pre) != 0){
+          output$plot1_raw_pre <- renderPlot({
+            rowwisenorm::plot_correlations(lowest_level_df_pre)
+          })
+          output$plot2_raw_pre <- renderPlot({
+            rowwisenorm::plot_heatmap(lowest_level_df_pre, exp_design, batch_colors = pca_colors)
+          })
+          output$plot3_raw_pre <- renderPlot({
+            rowwisenorm::pcaPlot(lowest_level_df_pre)
+          })
+          output$plot4_raw_pre <- renderPlot({
+            # show labels parameter
+            if (input$show_labels_raw_pre) show_lab <- T else show_lab <- F
+            rowwisenorm::pcaPlot2(lowest_level_df_pre, exp_design, show_labels = show_lab,
+                                  set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+          })
+          output$score_title_raw_pre <- renderText({
+            "Data-specific Score of the PCA plot:"
+          })
+          # catch score of PCA (not possible inside renderPlot)
+          score <- rowwisenorm::pcaPlot2(lowest_level_df_pre, exp_design, show_labels = F,
+                                         set_colors = pca_colors, set_symbols = pca_symbols)
+          if(length(dev.list())!=0) {
+            dev.off()
+          }
+          output$score_raw_pre <- renderText({
+            score
+          })
         }
-        output$score_raw_pre <- renderText({
-          score
+      }, error = function(e) {
+        output$show_plots_raw_pre_error <- renderText({
+          paste(e$message)
         })
-      }
+      })
     })
 
     observeEvent(input$show_plots_norm, {
-      # only do when data was processed (data frame not empty)
-      if (nrow(lowest_level_norm) != 0){
-        output$plot1_norm <- renderPlot({
-          rowwisenorm::plot_correlations(lowest_level_norm)
-        })
-        output$plot2_norm <- renderPlot({
-          rowwisenorm::plot_heatmap(lowest_level_norm, exp_design, batch_colors = pca_colors)
-        })
-        output$plot3_norm <- renderPlot({
-          rowwisenorm::pcaPlot(lowest_level_norm)
-        })
-        output$plot4_norm <- renderPlot({
-          # show labels parameter
-          if (input$show_labels_norm) show_lab <- T else show_lab <- F
-          rowwisenorm::pcaPlot2(lowest_level_norm, exp_design, show_labels = show_lab,
-                                set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
-        })
-        output$score_title_norm <- renderText({
-          "Data-specific Score of the PCA plot:"
-        })
-        # catch score of PCA (not possible inside renderPlot)
-        score <- rowwisenorm::pcaPlot2(lowest_level_norm, exp_design, show_labels = F,
-                                       set_colors = pca_colors, set_symbols = pca_symbols)
-        if(length(dev.list())!=0) {
-          dev.off()
-        }
-        output$score_norm <- renderText({
-          score
-        })
+      # clear for every new call
+      output$show_plots_norm_error <- renderText({ NULL })
 
-      }
+      tryCatch({
+      # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_norm) != 0){
+          output$plot1_norm <- renderPlot({
+            rowwisenorm::plot_correlations(lowest_level_norm)
+          })
+          output$plot2_norm <- renderPlot({
+            rowwisenorm::plot_heatmap(lowest_level_norm, exp_design, batch_colors = pca_colors)
+          })
+          output$plot3_norm <- renderPlot({
+            rowwisenorm::pcaPlot(lowest_level_norm)
+          })
+          output$plot4_norm <- renderPlot({
+            # show labels parameter
+            if (input$show_labels_norm) show_lab <- T else show_lab <- F
+            rowwisenorm::pcaPlot2(lowest_level_norm, exp_design, show_labels = show_lab,
+                                  set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+          })
+          output$score_title_norm <- renderText({
+            "Data-specific Score of the PCA plot:"
+          })
+          # catch score of PCA (not possible inside renderPlot)
+          score <- rowwisenorm::pcaPlot2(lowest_level_norm, exp_design, show_labels = F,
+                                         set_colors = pca_colors, set_symbols = pca_symbols)
+          if(length(dev.list())!=0) {
+            dev.off()
+          }
+          output$score_norm <- renderText({
+            score
+          })
+        }
+      }, error = function(e) {
+        output$show_plots_norm_error <- renderText({
+          paste(e$message)
+        })
+      })
     })
 
 
