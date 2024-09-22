@@ -37,7 +37,10 @@ ui <- fluidPage(
     tags$head(tags$style("#normalize_row_warning{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#normalization_error{color: red; margin-bottom: 20px;}")),  # used in each normalization to catch an error
     tags$head(tags$style("#show_data_error{color: red; margin-bottom: 20px;}")),
-    tags$head(tags$style("#download_pdf_raw_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#save_pdf_raw_error{color: red; margin-bottom: 20px;}")),  # handle errors in manually saving PDF
+    tags$head(tags$style("#save_pdf_raw_pre_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#save_pdf_norm_error{color: red; margin-bottom: 20px;}")),
+    tags$head(tags$style("#download_pdf_raw_error{color: red; margin-bottom: 20px;}")),  # handle errors in download PDF
     tags$head(tags$style("#download_pdf_raw_pre_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#download_pdf_norm_error{color: red; margin-bottom: 20px;}")),
     tags$head(tags$style("#show_plots_raw_error{color: red; margin-bottom: 20px;}")),
@@ -402,6 +405,11 @@ ui <- fluidPage(
 
                           # possible error in show data
                           textOutput("show_data_error"),
+
+                          # possible errors in manually saving PDF
+                          textOutput("save_pdf_raw_error"),
+                          textOutput("save_pdf_raw_pre_error"),
+                          textOutput("save_pdf_norm_error"),
 
                           # possible error in downloads of PDF
                           textOutput("download_pdf_raw_error"),
@@ -805,6 +813,9 @@ server <- function(input, output, session) {
       output$normalize_row_warning <- renderText({ NULL })
       output$normalization_error <- renderText({ NULL })
       output$show_data_error <- renderText({ NULL })
+      output$save_pdf_raw_error <- renderText({ NULL })
+      output$save_pdf_raw_pre_error <- renderText({ NULL })
+      output$save_pdf_norm_error <- renderText({ NULL })
       output$download_pdf_raw_error <- renderText({ NULL })
       output$download_pdf_raw_pre_error <- renderText({ NULL })
       output$download_pdf_norm_error <- renderText({ NULL })
@@ -1185,6 +1196,9 @@ server <- function(input, output, session) {
           output$normalize_row_warning <- renderText({ })  # warning of normalize_row when no valid refs
           output$normalization_error <- renderText({ NULL })
           output$show_data_error <- renderText({ NULL })
+          output$save_pdf_raw_error <- renderText({ NULL })
+          output$save_pdf_raw_pre_error <- renderText({ NULL })
+          output$save_pdf_norm_error <- renderText({ NULL })
           output$download_pdf_raw_error <- renderText({ NULL })
           output$download_pdf_raw_pre_error <- renderText({ NULL })
           output$download_pdf_norm_error <- renderText({ NULL })
@@ -1584,72 +1598,99 @@ server <- function(input, output, session) {
 
     # save PDF manually
     observeEvent(input$save_pdf_raw, {
-      # only do when data was processed (data frame not empty)
-      if (nrow(lowest_level_df_raw) != 0){
-        # show labels parameter
-        if (input$show_labels) show_lab <- T else show_lab <- F
+      # clear for every new call
+      output$save_pdf_raw_error <- renderText({ NULL })
 
-        # svg parameter
-        if (input$svg) make_svg <- T else make_svg <- F
+      tryCatch({
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_df_raw) != 0){
+          # show labels parameter
+          if (input$show_labels) show_lab <- T else show_lab <- F
 
-        rowwisenorm::plot_results(lowest_level_df = lowest_level_df_raw, exp_design = exp_design,
-                                  filename = trimws(input$filename_raw), output_dir = trimws(input$dir_raw),
-                                  show_labels = show_lab, svg = make_svg,
-                                  set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+          # svg parameter
+          if (input$svg) make_svg <- T else make_svg <- F
 
-        # output message stating where the file was saved
-        if (trimws(input$dir_raw) != "")  dir_path <- trimws(input$dir_raw) else dir_path <- "current working directory"
-        if (trimws(input$filename_raw) != "") file_name <- paste(trimws(input$filename_raw), ".pdf", sep = "") else file_name <- "results.pdf"  # note: hard coded as stated in plot_results
-        output$pdf_path_raw <- renderText({
-          paste("PDF saved to ", dir_path, " with file name ", file_name)
+          rowwisenorm::plot_results(lowest_level_df = lowest_level_df_raw, exp_design = exp_design,
+                                    filename = trimws(input$filename_raw), output_dir = trimws(input$dir_raw),
+                                    show_labels = show_lab, svg = make_svg,
+                                    set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+
+          # output message stating where the file was saved
+          if (trimws(input$dir_raw) != "")  dir_path <- trimws(input$dir_raw) else dir_path <- "current working directory"
+          if (trimws(input$filename_raw) != "") file_name <- paste(trimws(input$filename_raw), ".pdf", sep = "") else file_name <- "results.pdf"  # note: hard coded as stated in plot_results
+          output$pdf_path_raw <- renderText({
+            paste("PDF saved to ", dir_path, " with file name ", file_name)
+          })
+        }
+      }, error = function(e){
+        output$save_pdf_raw_error <- renderText({
+          paste(e$message)
         })
-      }
+      })
     })
 
     observeEvent(input$save_pdf_raw_pre, {
-      # only do when data was processed (data frame not empty)
-      if (nrow(lowest_level_df_pre) != 0){
-        # show labels parameter
-        if (input$show_labels) show_lab <- T else show_lab <- F
+      # clear for every new call
+      output$save_pdf_raw_pre_error <- renderText({ NULL })
 
-        # svg parameter
-        if (input$svg) make_svg <- T else make_svg <- F
+      tryCatch({
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_df_pre) != 0){
+          # show labels parameter
+          if (input$show_labels) show_lab <- T else show_lab <- F
 
-        rowwisenorm::plot_results(lowest_level_df = lowest_level_df_pre, exp_design = exp_design,
-                                  filename = trimws(input$filename_raw_pre), output_dir = trimws(input$dir_raw_pre),
-                                  show_labels = show_lab, svg = make_svg,
-                                  set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+          # svg parameter
+          if (input$svg) make_svg <- T else make_svg <- F
 
-        # output message stating where the file was saved
-        if (trimws(input$dir_raw_pre) != "")  dir_path <- trimws(input$dir_raw_pre) else dir_path <- "current working directory"
-        if (trimws(input$filename_raw_pre) != "") file_name <- paste(trimws(input$filename_raw_pre), ".pdf", sep = "") else file_name <- "results.pdf"  # note: hard coded as stated in plot_results
-        output$pdf_path_raw <- renderText({
-          paste("PDF saved to ", dir_path, " with file name ", file_name)
+          rowwisenorm::plot_results(lowest_level_df = lowest_level_df_pre, exp_design = exp_design,
+                                    filename = trimws(input$filename_raw_pre), output_dir = trimws(input$dir_raw_pre),
+                                    show_labels = show_lab, svg = make_svg,
+                                    set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+
+          # output message stating where the file was saved
+          if (trimws(input$dir_raw_pre) != "")  dir_path <- trimws(input$dir_raw_pre) else dir_path <- "current working directory"
+          if (trimws(input$filename_raw_pre) != "") file_name <- paste(trimws(input$filename_raw_pre), ".pdf", sep = "") else file_name <- "results.pdf"  # note: hard coded as stated in plot_results
+          output$pdf_path_raw <- renderText({
+            paste("PDF saved to ", dir_path, " with file name ", file_name)
+          })
+        }
+      }, error = function(e){
+        output$save_pdf_raw_pre_error <- renderText({
+          paste(e$message)
         })
-      }
+      })
     })
 
     observeEvent(input$save_pdf_norm, {
-      # only do when data was processed (data frame not empty)
-      if (nrow(lowest_level_norm) != 0){
-        # show labels parameter
-        if (input$show_labels) show_lab <- T else show_lab <- F
+      # clear for every new call
+      output$save_pdf_norm_error <- renderText({ NULL })
 
-        # svg parameter
-        if (input$svg) make_svg <- T else make_svg <- F
+      tryCatch({
+        # only do when data was processed (data frame not empty)
+        if (nrow(lowest_level_norm) != 0){
+          # show labels parameter
+          if (input$show_labels) show_lab <- T else show_lab <- F
 
-        rowwisenorm::plot_results(lowest_level_df = lowest_level_norm, exp_design = exp_design,
-                                  filename = trimws(input$filename_norm), output_dir = trimws(input$dir_norm),
-                                  show_labels = show_lab, svg = make_svg,
-                                  set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+          # svg parameter
+          if (input$svg) make_svg <- T else make_svg <- F
 
-        # output message stating where the file was saved
-        if (trimws(input$dir_norm) != "")  dir_path <- trimws(input$dir_norm) else dir_path <- "current working directory"
-        if (trimws(input$filename_norm) != "") file_name <- paste(trimws(input$filename_norm), ".pdf", sep = "") else file_name <- "results.pdf"  # note: hard coded as stated in plot_results
-        output$pdf_path_norm <- renderText({
-          paste("PDF saved to ", dir_path, " with file name ", file_name)
+          rowwisenorm::plot_results(lowest_level_df = lowest_level_norm, exp_design = exp_design,
+                                    filename = trimws(input$filename_norm), output_dir = trimws(input$dir_norm),
+                                    show_labels = show_lab, svg = make_svg,
+                                    set_colors = pca_colors, set_symbols = pca_symbols)  # set colors and symbols
+
+          # output message stating where the file was saved
+          if (trimws(input$dir_norm) != "")  dir_path <- trimws(input$dir_norm) else dir_path <- "current working directory"
+          if (trimws(input$filename_norm) != "") file_name <- paste(trimws(input$filename_norm), ".pdf", sep = "") else file_name <- "results.pdf"  # note: hard coded as stated in plot_results
+          output$pdf_path_norm <- renderText({
+            paste("PDF saved to ", dir_path, " with file name ", file_name)
+          })
+        }
+      }, error = function(e){
+        output$save_pdf_norm_error <- renderText({
+          paste(e$message)
         })
-      }
+      })
     })
 
     # download PDFs
